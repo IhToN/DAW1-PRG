@@ -1,5 +1,5 @@
 """
-    1- Escribir un programa queimprima lo números pares hasta el 200
+    Escribir un programa queimprima lo números pares hasta el 200
 """
 print("UpCounter from 0 to 200")
 x = 0
