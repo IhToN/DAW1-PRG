@@ -10,3 +10,4 @@ while True:  # Hacemos que el while esté SIEMPRE ejecutándose
     else:  # Si no es ni uno ni otro, es cero, por lo tanto acabamos el while
         print('Okay, I\'ll stop making questions.')
         break  # Lanzamos el mágico break para que ROMPA el while
+print('\033[93m*** IA has stopped working.')
