@@ -8,4 +8,5 @@ while True:  # Hacemos que el while esté SIEMPRE ejecutándose
     elif x < 0:  # Si no es positivo, miramos si es negativo
         print(x, '- It\'s negative.')
     else:  # Si no es ni uno ni otro, es cero, por lo tanto acabamos el while
+        print('Okay, I\'ll stop making questions.')
         break  # Lanzamos el mágico break para que ROMPA el while
