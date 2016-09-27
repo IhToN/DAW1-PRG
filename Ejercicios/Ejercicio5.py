@@ -6,7 +6,7 @@ while True:  # Hacemos que el while esté SIEMPRE ejecutándose
     if x > 0:  # Miramos si es positivo
         print(x, '- It\'s a positive number.')
     elif x < 0:  # Si no es positivo, miramos si es negativo
-        print(x, '- It\'s negative.')
+        print(x, '- It\'s a negative number.')
     else:  # Si no es ni uno ni otro, es cero, por lo tanto acabamos el while
         print('Okay, I\'ll stop making questions.')
         break  # Lanzamos el mágico break para que ROMPA el while
