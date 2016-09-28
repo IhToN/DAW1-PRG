@@ -17,8 +17,8 @@ i = 0
 
 # Entramos en el loop, procesamos los caracteres y luego preguntamos de nuevo al usuario por otra frase
 while repeatLoop:
-    while i <= len(inputString):
-        print(inputString[0:i])  # Usamos Slicing
+    while i < len(inputString):
+        print(inputString[0:i+])  # Usamos Slicing
         i += 1
     print('The String has', len(inputString), 'elements.')
 
