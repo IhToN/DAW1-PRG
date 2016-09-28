@@ -7,7 +7,7 @@ repeatLoop = True
 askMsg = 'Would you please intruduce a phrase?\n'
 bypassMsg = 'no me da la gana'
 stopMsg = 'Ok, don\'t hit me, I won\'t ask you anymore.'
-solucion = 'a'  # Puede ser 'a', 'b' y 'r'
+solution = 'a'  # Puede ser 'a', 'b' y 'r'
 
 # Pedimos la String, comprobamos si es el bypass message y si no inicializamos contador
 inputString = input(askMsg)
@@ -20,13 +20,13 @@ i = 0
 while repeatLoop:
     while i < len(inputString):
         # Solución A
-        if solucion == 'a':
+        if solution == 'a':
             print(inputString[0:i + 1])  # Usamos Slicing
         # Solución B
-        if solucion == 'b':
+        if solution == 'b':
             print(inputString[0:len(inputString) - i])
         # Solución Random, mostrarlo tipo árbol de navidad
-        if solucion == 'r':
+        if solution == 'r':
             print(' ' * ((len(inputString) - i) // 2), inputString[0:i + 1])
         i += 1
     print('The String has', len(inputString), 'elements.')
