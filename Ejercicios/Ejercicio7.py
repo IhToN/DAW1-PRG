@@ -3,9 +3,9 @@
 """
 # Declaramos las variables principales que vamos a usar, aquí si debemos repetir el loop y los mensajes estáticos
 repeatLoop = True
+askMsg = 'Would you please intruduce a phrase?\n'
 bypassMsg = 'no me da la gana'
 stopMsg = 'Ok, don\'t hit me, I won\'t ask you anymore.'
-askMsg = 'Would you please intruduce a phrase?\n'
 
 # Pedimos la String, comprobamos si es el bypass message y si no inicializamos contador
 inputString = input(askMsg)
