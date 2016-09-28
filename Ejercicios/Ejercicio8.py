@@ -19,10 +19,10 @@ i = 0
 while repeatLoop:
     while i < len(inputString):
         # Solución Real
-        print(inputString[0:i+1]) # Usamos Slicing
+        print(inputString[0:i + 1])  # Usamos Slicing
 
         # Solución Random, mostrarlo tipo árbol de navidad
-        #print(' '*((len(inputString)-i)//2), inputString[0:i+1])
+        # print(' '*((len(inputString)-i)//2), inputString[0:i+1])
         i += 1
     print('The String has', len(inputString), 'elements.')
 
