@@ -18,7 +18,11 @@ i = 0
 # Entramos en el loop, procesamos los caracteres y luego preguntamos de nuevo al usuario por otra frase
 while repeatLoop:
     while i < len(inputString):
-        print(inputString[0:i+1])  # Usamos Slicing
+        # Solución Real
+        print(inputString[0:i+1]) # Usamos Slicing
+
+        # Solución Random, mostrarlo tipo árbol de navidad
+        #print(' '*((len(inputString)-i)//2), inputString[0:i+1])
         i += 1
     print('The String has', len(inputString), 'elements.')
 
