@@ -12,13 +12,13 @@ inputString = input(askMsg)
 if str(inputString).casefold() == bypassMsg:
     print(stopMsg)
     repeatLoop = False
-upCounter = 0
+i = 0
 
 # Entramos en el loop, procesamos los caracteres y luego preguntamos de nuevo al usuario por otra frase
 while repeatLoop:
-    while upCounter < len(inputString):
-        print('The element', upCounter, 'of the String is "', inputString[upCounter], '"')
-        upCounter += 1
+    while i < len(inputString):
+        print('The element', i, 'of the String is "', inputString[i], '"')
+        i += 1
 
     print('The String has', len(inputString), 'elements.')
 
