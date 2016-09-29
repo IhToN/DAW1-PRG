@@ -7,5 +7,5 @@ x = int(input('Of which number do you want to check its multiples?\n'))
 # Cuántos múltiplos vamos a ver
 y = int(input('How many multiples do you want to see?\n'))
 
-for i in range(x, x*y + 1, x):
+for i in range(x, x * y + 1, x):
     print(i)
