@@ -6,27 +6,25 @@
 
 # Inicializamos las variables
 promptMsg = 'Introduce a number:\n'
-repeat = True
 totalTwo = 0
 totalThree = 0
 totalBoth = 0
 totalSum = 0
 totalCount = 0
 
+inNum = float(input(promptMsg))
+
 # Usamos el loop para preguntar cuantos números queremos, usamos float para admitir decimales
-while repeat:
+while inNum != 0:
+    if inNum % 2 == 0:  # Comprobamos los múltiplos de dos
+        totalTwo += 1
+    if inNum % 3 == 0:  # Comprobamos los múltiplos de tres
+        totalThree += 1
+    if inNum % 2 == 0 and inNum % 3 == 0:  # Comprobamos los múltiplos de los dos
+        totalBoth += 1
+    totalSum += inNum  # Sumamos el número al total
+    totalCount += 1  # Aumentamos en un el total de cuentas
     inNum = float(input(promptMsg))
-    if inNum == 0:
-        repeat = False
-    else:
-        if inNum % 2 == 0:  # Comprobamos los múltiplos de dos
-            totalTwo += 1
-        if inNum % 3 == 0:  # Comprobamos los múltiplos de tres
-            totalThree += 1
-        if inNum % 2 == 0 and inNum % 3 == 0:  # Comprobamos los múltiplos de los dos
-            totalBoth += 1
-        totalSum += inNum  # Sumamos el número al total
-        totalCount += 1  # Aumentamos en un el total de cuentas
 
 print('Total numbers: \n', totalCount)
 print('Total sum: \n', totalSum)
