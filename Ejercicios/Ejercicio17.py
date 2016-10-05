@@ -27,7 +27,7 @@ def leer():
     while string != '':
         string = input('Introduce a phrase to test:\n')
         print('Modified string:\n', invierte(sin_blancos(string)))
-        print('*** Task finished ***')
+    print('*** Task finished ***')
 
 
 leer()
