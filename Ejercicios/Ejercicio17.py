@@ -24,8 +24,7 @@ def leer():
     if string == '':
         print('*** Task finished ***')
         return
-    string = sin_blancos(string)
-    string = invierte(string)
+    string = invierte(sin_blancos(string))
     print('Modified string:\n', string)
     leer()
 
