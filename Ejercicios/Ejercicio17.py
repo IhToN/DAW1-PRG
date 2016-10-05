@@ -21,12 +21,10 @@ def invierte(string):
 
 def leer():
     string = input('Introduce a phrase to test:\n')
-    if string == '':
+    while string != '':
+        string = input('Introduce a phrase to test:\n')
+        print('Modified string:\n', invierte(sin_blancos(string)))
         print('*** Task finished ***')
-        return
-    string = invierte(sin_blancos(string))
-    print('Modified string:\n', string)
-    leer()
 
 
 leer()
