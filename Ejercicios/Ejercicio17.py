@@ -4,6 +4,7 @@
 """
 
 
+# Función de Valor
 def sin_blancos(string):
     ret = ''
     for c in string:
@@ -12,6 +13,7 @@ def sin_blancos(string):
     return ret
 
 
+# Función de Valor
 def invierte(string):
     ret = ''
     for c in string:
@@ -19,6 +21,7 @@ def invierte(string):
     return ret
 
 
+# Función Procedimental
 def leer():
     string = input('Introduce a phrase to test:\n')
     while string != '':
