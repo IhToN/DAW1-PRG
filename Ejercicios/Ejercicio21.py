@@ -5,7 +5,7 @@
 
 
 def rotar(message, nrots):
-    lenrot = len(message) - nrots  # Miramos en qué punto tenemos que cortar la cadena
+    lenrot = (len(message) - nrots) % len(message)  # Miramos en qué punto tenemos que cortar la cadena
     subMsg = message[0:lenrot]  # Subdividimos la parte izquierda de la cadena
     shifted = message[lenrot:]  # Subdividimos la parte derecha de la cadena
     return shifted + subMsg  # Invertimos la posición izquierda y la derecha y la devolvemos
