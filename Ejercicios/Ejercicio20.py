@@ -16,10 +16,7 @@ def codifica(message, jump):
 
 
 def decodifica(message, jump):
-    ret = ''
-    for c in message:
-        ret += chr(ord(c) - jump)
-    return ret
+    return codifica(message, -jump)
 
 
 if solution == 'a':
