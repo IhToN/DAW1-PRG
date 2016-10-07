@@ -11,6 +11,7 @@ def rotar(message, nrots):
     :param nrots - numero de veces:
     :return - cadena rotada:
     """
+
     lenrot = (len(message) - nrots) % len(message)  # Miramos en qué punto tenemos que cortar la cadena
     subMsg = message[0:lenrot]  # Subdividimos la parte izquierda de la cadena
     shifted = message[lenrot:]  # Subdividimos la parte derecha de la cadena
