@@ -1,6 +1,7 @@
 """
     Definir una función rotar a la que se le introduzca una cadena y un número.
-    Esta función devuelve una cadena la cual es la rotación a la derecha N veces de la cadena de entrada.ABC
+    Esta función devuelve una cadena la cual es la rotación a la derecha N veces de la cadena de entrada.
+    ABC =1> CBA
 """
 
 
