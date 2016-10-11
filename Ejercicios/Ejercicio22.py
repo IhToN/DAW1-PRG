@@ -8,15 +8,31 @@
 
 
 def introduce(lifo, elem):
-    lifo.append(elem)  # Añade el elemento al final de la pila
+    """
+    Añadimos elem al final de lifo
+    :param lifo:
+    :param elem:
+    :return:
+    """
+    lifo.append(elem)
 
 
 def saca(lifo):
-    if vacia(lifo):
-        return None  # Devolvemos el NoneType si la pila está vacía
+    """
+    Devuelve el último elemento de lifo. Si está vacía devuelve NoneType
+    :param lifo:
+    :return:
+    """
+    if vacia(lifo):  # Comprobamos si lifo está vacía
+        return None
     else:
-        return lifo.pop()  # Devolvemos el último elemento si NO está vacía
+        return lifo.pop()
 
 
 def vacia(lifo):
+    """
+    Devuelve True si lifo está vacía. En caso contrario devuelve False
+    :param lifo:
+    :return:
+    """
     return len(lifo) == 0  # True si la longitud es 0, False en cualquier otro caso
