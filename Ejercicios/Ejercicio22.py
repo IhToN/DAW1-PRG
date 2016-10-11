@@ -8,15 +8,15 @@
 
 
 def introduce(lifo, elem):
-    lifo.append(elem)
+    lifo.append(elem)  # Añade el elemento al final de la pila
 
 
 def saca(lifo):
     if vacia(lifo):
-        return None
+        return None  # Devolvemos el NoneType si la pila está vacía
     else:
-        return lifo.pop()
+        return lifo.pop()  # Devolvemos el último elemento si NO está vacía
 
 
 def vacia(lifo):
-    return len(lifo) == 0
+    return len(lifo) == 0  # True si la longitud es 0, False en cualquier otro caso
