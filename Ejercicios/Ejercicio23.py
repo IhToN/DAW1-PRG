@@ -61,15 +61,21 @@ def mueve(x, y):
     :param y:
     :return:
     """
-    if cima(x) > cima(y):
+    if vacia(x):
         print('You can\'t move from', x, 'to', y)
+        return
+    elif vacia(y):
+        introduce(y, saca(x))
+    elif cima(x) > cima(y):
+        print('You can\'t move from', x, 'to', y)
+        return
     else:
         introduce(y, saca(x))
 
 
 def solucion():
     """
-    Soluciona la Torre de Hanoi
+    Soluciona la Torre de Hanoi de tres elementos
     :return:
     """
     mueve(a, c)
