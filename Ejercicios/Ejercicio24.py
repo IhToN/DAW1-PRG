@@ -6,6 +6,11 @@
 
 
 def duplicList(list1):
+    """
+    Duplica los elementos de una lista en su posición correspondiente
+    :param list1:
+    :return:
+    """
     idx = 0
     for elem in list1.copy():
         list1.insert(idx, elem)

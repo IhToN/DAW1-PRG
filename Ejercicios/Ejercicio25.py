@@ -9,6 +9,12 @@
 
 
 def inserta_ordenado(lista, elemento):
+    """
+    Inserta el elemento dentro de la lista en la posición ordenada que le toca
+    :param lista:
+    :param elemento:
+    :return:
+    """
     numcheck = True
     if len(lista) == 0:
         lista.insert(0, elemento)
