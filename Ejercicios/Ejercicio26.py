@@ -11,21 +11,21 @@ def cont_vocales(cadena):
     """
     res = 0
     for c in cadena:
-        if vocal(c):
+        if es_vocal(c):
             res += 1
     return res
 
 
-def vocal(char):
+def es_vocal(char):
     """
     Devuelve True si la cadena es un caracter vocálico
     :param char:
     :return:
     """
     ret = False
-    if len(char) != 1:
+    if len(char) != 1:  # Hoyga, 'pe' NO es una es_vocal, de momento será es_vocal cuando sólo haya 1 letra en la cadena
         return ret
-    else:
+    else:   # Toda esta perorata se puede hacer en una línea como lo ha hecho Blas, así se ve un poco más claro
         if char in 'aeiou' \
                 or char in 'áéíóú' \
                 or char in 'äëïöü' \
