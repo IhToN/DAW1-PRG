@@ -11,8 +11,7 @@ def cont_vocales(cadena):
     """
     res = 0
     for c in cadena:
-        if c == 'a' or c == 'e' or c == 'i' or c == 'o' or c == 'u' \
-                or c == 'A' or c == 'E' or c == 'I' or c == 'O' or c == 'U':
+        if c in 'aeiou' or c in 'AEIOU':
             res += 1
     return res
 

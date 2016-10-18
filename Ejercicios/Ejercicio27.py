@@ -12,15 +12,15 @@ def cont_vocales(cadena):
     """
     res = [0, 0, 0, 0, 0]
     for c in cadena:
-        if c == 'a' or c == 'A':
+        if c in 'Aa':
             res[0] += 1
-        elif c == 'e' or c == 'E':
+        elif c in 'Ee':
             res[1] += 1
-        elif c == 'i' or c == 'I':
+        elif c in 'Ii':
             res[2] += 1
-        elif c == 'o' or c == 'O':
+        elif c in 'Oo':
             res[3] += 1
-        elif c == 'u' or c == 'U':
+        elif c in 'Uu':
             res[4] += 1
     return res
 
