@@ -6,21 +6,21 @@
 
 def cont_vocales(cadena):
     """
-    Devuelve la cantidad de vocales desglosadas (mayúsculas o minúsculas, no tildadas) de la cadena
+    Devuelve la cantidad de vocales desglosadas de la cadena
     :param cadena:
     :return:
     """
     res = [0, 0, 0, 0, 0]
     for c in cadena:
-        if c in 'Aa':
+        if c in 'AÁÄÀÂaáäàâ':
             res[0] += 1
-        elif c in 'Ee':
+        elif c in 'EÉËÈÊeéëèê':
             res[1] += 1
-        elif c in 'Ii':
+        elif c in 'IÍÏÌÎiíïìî':
             res[2] += 1
-        elif c in 'Oo':
+        elif c in 'OÓÖÒÔoóöòô':
             res[3] += 1
-        elif c in 'Uu':
+        elif c in 'UÚÜÙÛuúüùû':
             res[4] += 1
     return res
 

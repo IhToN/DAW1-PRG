@@ -5,7 +5,7 @@
 
 def cont_vocales(cadena):
     """
-    Devuelve la cantidad de vocales (mayúsculas o minúsculas, no tildadas) de la cadena
+    Devuelve la cantidad de vocales de la cadena
     :param cadena:
     :return:
     """
