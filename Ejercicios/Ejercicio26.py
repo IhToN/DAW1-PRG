@@ -11,9 +11,33 @@ def cont_vocales(cadena):
     """
     res = 0
     for c in cadena:
-        if c in 'aeiou' or c in 'AEIOU':
+        if vocal(c):
             res += 1
     return res
+
+
+def vocal(char):
+    """
+    Devuelve True si la cadena es un caracter vocálico
+    :param char:
+    :return:
+    """
+    ret = False
+    if len(char) != 1:
+        return ret
+    else:
+        if char in 'aeiou' \
+                or char in 'áéíóú' \
+                or char in 'äëïöü' \
+                or char in 'àèìòù' \
+                or char in 'âêîôû' \
+                or char in 'AEIOU' \
+                or char in 'ÁÉÍÓÚ' \
+                or char in 'ÄËÏÖÜ' \
+                or char in 'ÀÈÌÒÙ' \
+                or char in 'ÂÊÎÔÛ':
+            ret = True
+    return ret
 
 
 print(cont_vocales('uiuaabangbangramalamadingdong'))
