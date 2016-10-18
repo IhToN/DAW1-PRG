@@ -16,7 +16,7 @@ def inserta_ordenado(lista, elemento):
     :return:
     """
     for num in lista.copy():
-        if num >= elemento:
+        if elemento <= num:
             lista.insert(lista.index(num), elemento)
             return
     lista.append(elemento)
