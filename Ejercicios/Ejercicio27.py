@@ -40,4 +40,4 @@ def mostrar(cadena):
     print("     U =", shw[4])
 
 
-mostrar('uiuaabangbangramalamadingdong')
+mostrar('uiuaadingdangramalamadingdong')

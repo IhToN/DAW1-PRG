@@ -40,4 +40,4 @@ def es_vocal(char):
     return ret
 
 
-print(cont_vocales('uiuaabangbangramalamadingdong'))
+print(cont_vocales('uiuaadingdangramalamadingdong'))
