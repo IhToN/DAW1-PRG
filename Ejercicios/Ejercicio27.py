@@ -25,4 +25,19 @@ def cont_vocales(cadena):
     return res
 
 
-print(cont_vocales('uiuaabangbangramalamadingdong'))
+def mostrar(cadena):
+    """
+    Muestra el desglose de vocales de la cadena
+    :param cadena:
+    :return:
+    """
+    shw = cont_vocales(cadena)
+    print("Desglose de Vocales:")
+    print("     A =", shw[0])
+    print("     E =", shw[1])
+    print("     I =", shw[2])
+    print("     O =", shw[3])
+    print("     U =", shw[4])
+
+
+mostrar('uiuaabangbangramalamadingdong')
