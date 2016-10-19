@@ -12,7 +12,7 @@ def concat_text(cadena):
     :param cadena:
     :return:
     """
-    return [cadena[0:i] for i in range(1, len(cadena) + 1)]
+    return [cadena[:i] for i in range(1, len(cadena) + 1)]
 
 
 print(concat_text('hijo de puta, hay que decirlo más... hijo de puta más...'))
