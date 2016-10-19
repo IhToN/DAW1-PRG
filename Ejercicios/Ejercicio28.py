@@ -3,10 +3,9 @@
     a. Primera solución
         'Hola Pepe' => ['H', 'Ho', 'Hol', …, 'Hola Pepe']
     b. Invertir las cadenas
-        'Hola Pepe' => ['Hola Pepe', 'Hola Pep', 'Hola Pe', …, 'H']
+            'Hola Pepe' => ['H', 'oH', 'loH', …, 'epeP olaH']
 """
 
-solucion = 'b'
 
 def concat_text(cadena):
     """
@@ -16,12 +15,14 @@ def concat_text(cadena):
     :param cadena:
     :return:
     """
-    if solucion == 'a':
-        return [cadena[:i] for i in range(1, len(cadena) + 1)]
-    elif solucion == 'b':
-        return [cadena[:i] for i in range(len(cadena), 0, -1)]
-    else:
-        return 'Solución Inválida'
+    return [cadena[:i] for i in range(1, len(cadena) + 1)]
 
 
-print(concat_text('hijo de puta, hay que decirlo más... hijo de puta más...'))
+def invert_concat_text(cadena):
+    return [x[::-1] for x in concat_text(cadena)]
+
+
+test_cadena = 'hijo de puta, hay que decirlo más... hijo de puta más...'
+
+print(concat_text(test_cadena))
+print(invert_concat_text(test_cadena))
