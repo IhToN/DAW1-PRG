@@ -8,6 +8,11 @@ trabajadores = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T1
 
 
 def partidas(participantes):
+    """
+    Devuelve una lista con las posibles parejas de participantes
+    :param participantes:
+    :return:
+    """
     return [(p1, p2) for p1 in trabajadores for p2 in trabajadores if p1 != p2]
 
 
