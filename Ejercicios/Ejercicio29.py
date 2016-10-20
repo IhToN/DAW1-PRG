@@ -5,6 +5,7 @@
     c. Incluir sólo los múltiplos de 3 y 7
 """
 
+# Solución que vamos a testear
 sol = 'c'
 
 
