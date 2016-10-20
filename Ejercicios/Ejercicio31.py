@@ -16,4 +16,4 @@ def partidas(participantes):
     return [(p1, p2) for p1 in trabajadores for p2 in trabajadores if p1 != p2]
 
 
-print(partidas(trabajadores))
+print(len(partidas(trabajadores)), partidas(trabajadores))
