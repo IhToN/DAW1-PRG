@@ -5,7 +5,7 @@
     c. Incluir sólo los múltiplos de 3 y 7
 """
 
-sol = 'b'
+sol = 'c'
 
 
 def multiplos_tres(numero):
