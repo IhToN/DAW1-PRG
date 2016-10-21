@@ -15,11 +15,13 @@ def inserta_ordenado(lista, elemento):
     :param elemento:
     :return:
     """
-    for num in lista.copy():
-        if elemento <= num:
-            lista.insert(lista.index(num), elemento)
-            return
-    lista.append(elemento)
+    pos = 0
+    if not lista:
+        lista.append(elemento)
+    else:
+        while pos < len(lista) and elemento > lista[pos]:
+            pos += 1
+        lista.insert(pos, elemento)
 
 
 testlist = []
