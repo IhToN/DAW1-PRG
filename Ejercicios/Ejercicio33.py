@@ -9,31 +9,19 @@ from math import hypot
 
 
 def suma_vectorial(p1, p2):
-    """
-    Devuelve la suma vectorial de dos puntos
-    :param p1:
-    :param p2:
-    :return:
+    """ Devuelve la suma vectorial de dos puntos
     """
     return p1[0] + p2[0], p1[1] + p2[1]  # Sumamos ambas X y sumamos ambas Y, devolviendo una tupla
 
 
 def resta_vectorial(p1, p2):
-    """
-    Devuelve la resta vectorial de dos puntos
-    :param p1:
-    :param p2:
-    :return:
+    """ Devuelve la resta vectorial de dos puntos
     """
     return p1[0] - p2[0], p1[1] - p2[1]  # restamos ambas X y restamos ambas Y, devolviendo una tupla
 
 
 def modulo(punto):
-    """
-    Devuelve el modulo del vector suma de dos puntos.
-    :param p1:
-    :param p2:
-    :return:
+    """ Devuelve el módulo del vector punto
     """
     return sqrt(punto[0] ** 2 + punto[1] ** 2)
     # También se puede hacer con la función "hypot"
