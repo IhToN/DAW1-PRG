@@ -1,6 +1,11 @@
 """
     Escribe una función a la que se suman dos puntos y se hace la suma vectorial de dichos puntos.
+    a. Solución Original
+    b. Definir la resta vectorial
+    c. Definir el módulo del vector de un punto (distancia al origen)
 """
+from math import sqrt
+from math import hypot
 
 
 def suma_vectorial(p1, p2):
@@ -11,6 +16,28 @@ def suma_vectorial(p1, p2):
     :return:
     """
     return p1[0] + p2[0], p1[1] + p2[1]  # Sumamos ambas X y sumamos ambas Y, devolviendo una tupla
+
+
+def resta_vectorial(p1, p2):
+    """
+    Devuelve la resta vectorial de dos puntos
+    :param p1:
+    :param p2:
+    :return:
+    """
+    return p1[0] - p2[0], p1[1] - p2[1]  # restamos ambas X y restamos ambas Y, devolviendo una tupla
+
+
+def modulo(punto):
+    """
+    Devuelve el modulo del vector suma de dos puntos.
+    :param p1:
+    :param p2:
+    :return:
+    """
+    # return sqrt(punto[0] ** 2 + punto[1] ** 2)
+    # También se puede hacer con la función "hypot"
+    return hypot(punto[0], punto[1])
 
 
 # Preguntamos e inicializamos los puntos, el primer punto preguntamos valor a valor
@@ -27,3 +54,5 @@ punto1 = x1, y1
 punto2 = tuple(int(x) for x in input('Introduce el segundo punto (x,y):\n').split(","))
 
 print('Suma vectorial de', punto1, 'y', punto2, '=', suma_vectorial(punto1, punto2))
+print('Resta vectorial de', punto1, 'y', punto2, '=', resta_vectorial(punto1, punto2))
+print('Módulo de', punto1, '=', modulo(punto1))
