@@ -4,8 +4,7 @@
     b. Definir la resta vectorial
     c. Definir el módulo del vector de un punto (distancia al origen)
 """
-from math import sqrt
-from math import hypot
+from math import sqrt, hypot
 
 
 def suma_vectorial(p1, p2):
