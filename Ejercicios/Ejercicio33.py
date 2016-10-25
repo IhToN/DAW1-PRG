@@ -35,9 +35,9 @@ def modulo(punto):
     :param p2:
     :return:
     """
-    # return sqrt(punto[0] ** 2 + punto[1] ** 2)
+    return sqrt(punto[0] ** 2 + punto[1] ** 2)
     # También se puede hacer con la función "hypot"
-    return hypot(punto[0], punto[1])
+    # return hypot(punto[0], punto[1])
 
 
 # Preguntamos e inicializamos los puntos, el primer punto preguntamos valor a valor
