@@ -64,4 +64,4 @@ print('Total notas:', resumen(test)[1])
 print('Media notas:', resumen(test)[2])
 
 print('-----')
-print(imprimir_notas())
+imprimir_notas()
