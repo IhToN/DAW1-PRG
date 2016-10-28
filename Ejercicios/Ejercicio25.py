@@ -9,11 +9,7 @@
 
 
 def inserta_ordenado(lista, elemento):
-    """
-    Inserta el elemento dentro de la lista en la posición ordenada que le toca
-    :param lista:
-    :param elemento:
-    :return:
+    """ Inserta el elemento dentro de la lista en la posición ordenada que le toca
     """
     pos = 0
     if not lista:

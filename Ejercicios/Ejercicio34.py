@@ -51,11 +51,11 @@ def gen_alumnos(cant):
 def imprimir_notas():
     """ Imprime las notas aleatorias de 40 alumnos
     """
-    id = 1
+    idx = 1
     for i in gen_alumnos(40):
-        print('Notas del alumno ', id)
+        print('Notas del alumno ', idx)
         print(i, resumen(i))
-        id += 1
+        idx += 1
 
 
 test = 1, 2, 3, 4, 5, 6, 7
