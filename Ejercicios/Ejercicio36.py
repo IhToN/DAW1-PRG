@@ -22,7 +22,7 @@ def codifica(*message, jump=1):
 def decodifica(*message, jump=1):
     """ Devuelve una lista de mensajes decodificados por desplazamiento jump
     """
-    return codifica(*message, jump=jump)
+    return codifica(*message, jump=-jump)
 
 
 if solution == 'a':
