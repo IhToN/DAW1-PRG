@@ -4,7 +4,7 @@
     La función devuelve una lista todas las cadenas codificadas.
 """
 
-solution = 'b'
+solution = 'a'
 
 
 def codifica(*message, jump=1):
