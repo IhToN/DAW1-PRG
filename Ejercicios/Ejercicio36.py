@@ -11,9 +11,9 @@ def codifica(*message, jump=1):
     """ Devuelve una lista de mensajes codificados por desplazamiento jump
     """
     ret = []
-    for e in message:
+    for elem in message:
         coded = ''
-        for c in e:
+        for c in elem:
             coded += chr(ord(c) + jump)
         ret.append(coded)
     return ret

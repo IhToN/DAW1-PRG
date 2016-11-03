@@ -12,4 +12,4 @@ def homer_muellin(numero_muelles=1000):
               'que el retrete se ha tragado.')
 
 
-homer_muellin(2000)
+homer_muellin(999999999999999)
