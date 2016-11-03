@@ -3,7 +3,6 @@
     además para la cadena se le pasará una sucesión indefinida de cadenas a codificar.
     La función devuelve una lista todas las cadenas codificadas.
 """
-
 solution = 'a'
 
 
@@ -12,10 +11,14 @@ def codifica(*message, jump=1):
     """
     ret = []
     for elem in message:
-        coded = ''
-        for c in elem:
-            coded += chr(ord(c) + jump)
-        ret.append(coded)
+        ret.append(cod_msg(elem, jump))
+    return ret
+
+
+def cod_msg(message, jump):
+    ret = ''
+    for c in message:
+        ret += chr(ord(c) + jump)
     return ret
 
 
