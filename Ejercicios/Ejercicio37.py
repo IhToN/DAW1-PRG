@@ -22,7 +22,7 @@ def divisores(numero):
 def es_primo(numero):
     """ Comprueba si el numero es primo o no, devuelve un boolean
     """
-    return len(divisores(sqrt(numero))) == 2
+    return len(divisores(sqrt(numero))) == 2 and numero > 1
 
 
 def primos_hasta(numero):
