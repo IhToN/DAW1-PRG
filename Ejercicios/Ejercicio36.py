@@ -1,6 +1,6 @@
 """
-    Modificar el ejercicio 20 para que el desplazamiento tome por defecto el valor por omisión 1 en el
-    desplazamiento, además para la cadena se le pasará una sucesión indefinida de cadenas a codificar.
+    Modificar el ejercicio 20 para que el desplazamiento tome por defecto el valor por omisión 1 en el,
+    además para la cadena se le pasará una sucesión indefinida de cadenas a codificar.
     La función devuelve una lista todas las cadenas codificadas.
 """
 

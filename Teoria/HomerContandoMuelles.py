@@ -5,11 +5,11 @@
 
 def homer_muellin(numero_muelles=1000):
     for i in range(1, numero_muelles + 1):
-        estrin = 'un', 'muelle'
+        estrin = 'un', 'es', 'muelle el'
         if i > 1:
-            estrin = 'otro', 'muelles'
-        print('Cojo', estrin[0], 'muelle, lo tiro por el retrete y ya son', i, estrin[1],
-              'los que el retrete se ha tragado.')
+            estrin = 'otro', 'son', 'muelles los'
+        print('Cojo', estrin[0], 'muelle, lo tiro por el retrete y ya', estrin[1], i, estrin[2],
+              'que el retrete se ha tragado.')
 
 
 homer_muellin(2000)
