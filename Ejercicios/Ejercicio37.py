@@ -6,7 +6,6 @@
     c. Crear una función a la que se le pasa un límite y nos devuelve una lista con todos los
         números primos por debajo de ese límite.
 """
-from math import sqrt, floor
 
 
 def divisores(numero):
