@@ -13,9 +13,10 @@ def divisores(numero):
     """ Devuelve una tupla con los divisores de numero
     """
     ret = ()
-    for i in range(1, ceil(numero + 1 / 2)):
+    for i in range(1, ceil((numero + 1) / 2)):
         if numero % i == 0:
             ret += i,
+    ret += numero,
     return ret
 
 
@@ -40,6 +41,6 @@ def primos_hasta(numero):
     return ret
 
 
-print(divisores(13))
+print(divisores(22))
 print(es_primo(4))
 print(primos_hasta(300))
