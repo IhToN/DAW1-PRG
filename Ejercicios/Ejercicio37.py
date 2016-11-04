@@ -21,7 +21,7 @@ def divisores(numero):
 def es_primo(numero):
     """ Comprueba si el numero es primo o no, devuelve un boolean
     """
-    return len(divisores(numero)) == 2 and numero > 1
+    return len(divisores(numero)) == 2
 
 
 def primos_hasta(numero):
@@ -35,5 +35,5 @@ def primos_hasta(numero):
 
 
 print(divisores(4))
-print(es_primo(13))
+print(es_primo(1))
 print(primos_hasta(300))
