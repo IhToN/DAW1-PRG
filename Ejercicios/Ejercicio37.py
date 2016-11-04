@@ -6,15 +6,15 @@
     c. Crear una función a la que se le pasa un límite y nos devuelve una lista con todos los
         números primos por debajo de ese límite.
 """
-from math import sqrt
+from math import sqrt, floor
 
 
 def divisores(numero):
     """ Devuelve una tupla con los divisores de numero
     """
     ret = ()
-    for i in range(numero + 1):
-        if i % numero:
+    for i in range(1, numero + 1):
+        if numero % i == 0:
             ret += i,
     return ret
 
@@ -22,7 +22,7 @@ def divisores(numero):
 def es_primo(numero):
     """ Comprueba si el numero es primo o no, devuelve un boolean
     """
-    return len(divisores(sqrt(numero))) == 2 and numero > 1
+    return len(divisores(numero)) == 2 and numero > 1
 
 
 def primos_hasta(numero):
@@ -33,3 +33,8 @@ def primos_hasta(numero):
         if es_primo(i):
             ret.append(i)
     return ret
+
+
+print(divisores(4))
+print(es_primo(13))
+print(primos_hasta(300))
