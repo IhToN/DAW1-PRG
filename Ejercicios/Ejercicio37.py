@@ -14,7 +14,7 @@ def divisores(numero):
     """
     ret = ()
     for i in range(numero + 1):
-        if i % numero == 0:
+        if i % numero:
             ret += i,
     return ret
 
