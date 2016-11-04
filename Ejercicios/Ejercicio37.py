@@ -28,7 +28,7 @@ def es_primo(numero):
         if numero % loop == 0:
             return False
         loop += 1
-    return True
+    return True and numero > 1
 
 
 def primos_hasta(numero):
@@ -42,5 +42,5 @@ def primos_hasta(numero):
 
 
 print(divisores(22))
-print(es_primo(4))
+print(es_primo(1))
 print(primos_hasta(300))
