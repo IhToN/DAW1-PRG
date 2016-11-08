@@ -58,5 +58,5 @@ def criba_eratostenes(numero):
 
 print(divisores(22))
 print(es_primo(13))
-print(primos_hasta(300))
-print(criba_eratostenes(300))
+print(primos_hasta(3000))
+print(criba_eratostenes(3000))
