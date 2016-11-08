@@ -8,6 +8,7 @@
     d. Seguir el método de la Criba de Eratóstenes.
 """
 from math import ceil, sqrt
+import time
 
 
 def divisores(numero):
@@ -48,16 +49,25 @@ def criba_eratostenes(numero):
     """ Devuelve una lista con todos los primos menores o iguales que numero
     Usando el método de la Criba de Eratóstenes
     """
-    ret = []
-    mults = []
-    for elem in range(2, numero + 1):
-        if elem not in mults:
-            ret.append(elem)
-            mults += [x for x in range(elem ** 2, numero + 1, elem)]
-    return ret
+    primos = [x for x in range(2, numero + 1)]
+    for index in range(0, (numero + 1) // 2):
+        primos = criba(index, primos)
+    return [x for x in primos if x]
+
+
+def criba(index, lista_criba):
+    salto = lista_criba[index]
+    if salto:
+        for mul in range(index + salto, len(lista_criba), salto):
+            lista_criba[mul] = False
+    return lista_criba
 
 
 print(divisores(22))
 print(es_primo(13))
+t1 = time.time()
 print(primos_hasta(3000))
+t2 = time.time()
+print(t2 - t1)
 print(criba_eratostenes(3000))
+print(time.time() - t2)
