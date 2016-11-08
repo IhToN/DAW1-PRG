@@ -24,11 +24,13 @@ def es_primo(numero):
     """ Comprueba si el numero es primo o no, devuelve un boolean
     """
     loop = 2
+    if numero < 2:
+        return False
     while loop < ceil(sqrt(numero + 1)):
         if numero % loop == 0:
             return False
         loop += 1
-    return True and numero > 1
+    return True
 
 
 def primos_hasta(numero):
@@ -41,6 +43,20 @@ def primos_hasta(numero):
     return ret
 
 
+def criba_eratostenes(numero):
+    """ Devuelve una lista con todos los primos menores o iguales que numero
+    Usando el método de la Criba de Eratóstenes
+    """
+    ret = []
+    mults = []
+    for elem in range(2, numero + 1):
+        if elem not in mults:
+            ret.append(elem)
+            mults += [x for x in range(elem ** 2, numero + 1, elem)]
+    return ret
+
+
 print(divisores(22))
-print(es_primo(1))
+print(es_primo(13))
 print(primos_hasta(300))
+print(criba_eratostenes(300))
