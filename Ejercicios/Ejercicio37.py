@@ -5,6 +5,7 @@
         Escribir una función que nos devuelva un True en caso de que ser un número primo.
     c. Crear una función a la que se le pasa un límite y nos devuelve una lista con todos los
         números primos por debajo de ese límite.
+    d. Seguir el método de la Criba de Eratóstenes.
 """
 from math import ceil, sqrt
 
