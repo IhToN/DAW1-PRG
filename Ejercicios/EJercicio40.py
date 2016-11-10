@@ -18,6 +18,6 @@ def es_primo(numero):
 
 
 ninp = {x for x in range(1, 1000, 2) if not es_primo(x)}
-npp = {x for x in range(0, 1000, 2) if es_primo(x)} # El único número Par Primo es 2.
+npp = {x for x in range(0, 1000, 2) if es_primo(x)}  # El único número Par Primo es 2.
 
-print(len(ninp), len(npp))
+print("Números impares NO primos menores que mil:", len(ninp), "\nNúmeros pares primos menores que mil:", len(npp))
