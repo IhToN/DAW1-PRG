@@ -6,6 +6,10 @@
     c. Crear una función a la que se le pasa un límite y nos devuelve una lista con todos los
         números primos por debajo de ese límite.
     d. Seguir el método de la Criba de Eratóstenes.
+    e. Escribir una función a la que le vamos a pasar como parámetro un número que indicará una potencia de 10.
+        Imprimirá la cantidad de primos y el porcentaje de números primos hasta el límite introducido.
+    f. Escribir una función segmentos_primos(limite, ancho) y devuelva una lista de tuplas que cuente el número
+        de primos dentro de un rango que irá de ancho en ancho hasta limite.
 """
 from math import ceil, sqrt
 import time
@@ -63,11 +67,48 @@ def criba(index, lista_criba):
     return lista_criba
 
 
-print(divisores(22))
+def cantidad_primos(incluido, excluido):
+    """ Devuelve la cantidad de primos comprendidos entre dos valores, el primero
+    incluído y el segundo excluído del intervalo
+    """
+    ret = 0
+    for num in range(incluido, excluido):
+        if es_primo(num):
+            ret += 1
+    return ret
+
+
+def estadistica_primos(potencia_diez):
+    """ Imprime la cantidad de primos desde 0 hasta 10^potencia y el porcentaje
+    de éstos dentro de ese intervalo
+    """
+    limite = 10 ** potencia_diez
+    cantidad = cantidad_primos(2, limite)
+    print('La cantidad de primos menores que', limite, 'es de', cantidad)
+    print('En total hay un ', cantidad * 100 / limite, "% de primos en el intervalo", sep="")
+
+
+def segmentos_primos(limite, ancho):
+    """ Devuelve una lista de tuplas que cuenta el número
+    de primos dentro de un rango que irá de ancho en ancho hasta limite
+    """
+    ret = []
+    for cont in range(0, limite, ancho):
+        izquierda = cont
+        if izquierda == 0:
+            izquierda = 1
+        ret.append((izquierda, cont + ancho, cantidad_primos(cont - 1, cont + ancho - 1)))
+    return ret
+
+
+"""print(divisores(22))
 print(es_primo(13))
 t1 = time.time()
 print(primos_hasta(3000))
 t2 = time.time()
 print(t2 - t1)
 print(criba_eratostenes(3000))
-print(time.time() - t2)
+print(time.time() - t2)"""
+
+estadistica_primos(3)
+print(segmentos_primos(1000, 100))
