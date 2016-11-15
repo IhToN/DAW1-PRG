@@ -85,7 +85,7 @@ def estadistica_primos(potencia_diez):
     limite = 10 ** potencia_diez
     cantidad = cantidad_primos(2, limite)
     print('La cantidad de primos menores que', limite, 'es de', cantidad)
-    print('En total hay un ', cantidad * 100 / limite, "% de primos en el intervalo", sep="")
+    print('En total hay un ', round(cantidad * 100 / limite, 2), "% de primos en el intervalo", sep="")
 
 
 def segmentos_primos(limite, ancho):
