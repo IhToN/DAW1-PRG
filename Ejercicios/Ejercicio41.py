@@ -6,17 +6,17 @@
 from math import hypot
 from random import randint
 
-diccionario = {}
 
 
-def addPunto(x, y):
+
+def addPunto(diccionario, x, y):
     diccionario[(x, y)] = hypot(x, y)
 
 
 def generadorPuntos(cantidad, limite_inferior, limite_superior):
     for elemento in range(cantidad):
-        addPunto(randint(limite_inferior, limite_superior), randint(limite_inferior, limite_superior))
+        addPunto(diccionario, randint(limite_inferior, limite_superior), randint(limite_inferior, limite_superior))
 
-
+diccionario = {}
 generadorPuntos(50, -100, 100)
 print(diccionario)
