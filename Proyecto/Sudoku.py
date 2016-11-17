@@ -9,22 +9,34 @@ class Sudoku:
     def __init__(self):
         self.cuadricula = tuple([[0] * 9 for _ in range(9)])
 
+    # Getters
+    def get_regiones(self):
+        """ Devuelve una lista con todas las regiones de 3x3 del Sudoku
+        """
+        return [self.create_region(column, row) for row in range(3) for column in range(3)]
+
+    def get_verticales(self):
+        """
+        Devuelve una lista con todas las columnas de la cuadrícula
+        """
+        return [list(tuple(zip(*self.cuadricula))[_]) for _ in range(9)]
+
+    def get_horizontales(self):
+        """
+        Devuelve una lista con todas las columnas de la cuadrícula
+        """
+        return self.cuadricula
+
+    # Setters
+    def set_numero(self, column, row, numero):
+        self.cuadricula[row][column] = numero
+
+    # Generators
     def gen_cuadricula(self):
         """
         Regenera el Sudoku con todos los elementos a 0
         """
         self.cuadricula = tuple([[0] * 9 for _ in range(9)])
-
-    def check_solucion(self):
-        """
-        Devuelve si el Sudoku está bien resuelto o no
-        """
-        return self.check_regiones() and self.check_horizontales() and self.check_verticales()
-
-    def get_regiones(self):
-        """ Devuelve una lista con todas las regiones de 3x3 del Sudoku
-        """
-        return [self.create_region(column, row) for row in range(3) for column in range(3)]
 
     def create_region(self, column, row):
         """ Devuelve la región según la columna y la fila especificada
@@ -46,6 +58,13 @@ class Sudoku:
         return [item for sublist in range(0 + 3 * row, 3 + 3 * row) for item in
                 self.cuadricula[sublist][0 + 3 * column: 3 + 3 * column]]
 
+    # Checkers
+    def check_solucion(self):
+        """
+        Devuelve si el Sudoku está bien resuelto o no
+        """
+        return self.check_regiones() and self.check_horizontales() and self.check_verticales()
+
     def check_regiones(self):
         """
         Comprueba que todas las regiones están bien resueltas
@@ -54,12 +73,6 @@ class Sudoku:
             if not self.check_numbers(region):
                 return False
         return True
-
-    def get_verticales(self):
-        """
-        Devuelve una lista con todas las columnas de la cuadrícula
-        """
-        return [list(tuple(zip(*self.cuadricula))[_]) for _ in range(9)]
 
     def check_verticales(self):
         """
@@ -74,7 +87,7 @@ class Sudoku:
         """
         Comprueba que las filas están bien resueltas
         """
-        for horizontal in self.cuadricula:
+        for horizontal in self.get_horizontales():
             if not self.check_numbers(horizontal):
                 return False
         return True
@@ -87,6 +100,8 @@ class Sudoku:
             return False
         return 1 in numberlist and 2 in numberlist and 3 in numberlist and 4 in numberlist and \
                5 in numberlist and 6 in numberlist and 7 in numberlist and 8 in numberlist and 9 in numberlist
+
+
 
 
 Sudo = Sudoku()
