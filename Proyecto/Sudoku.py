@@ -22,26 +22,17 @@ class Sudoku:
         return self.check_regiones() and self.check_horizontales() and self.check_verticales()
 
     def get_regiones(self):
+        """ Devuelve una lista con todas las regiones de 3x3 del Sudoku
         """
-        Devuelve una lista con todas las regiones de 3x3 del Sudoku
+        return [self.create_region(column, row) for row in range(3) for column in range(3)]
 
-            First region: 1, 2 ,3 from Horizontal 1, 2, 3
-            Second region: 4, 5, 6 from Horizontal 1, 2, 3
-            Third region: 7, 8, 9 from Horizontal 1, 2, 3
-
-            Fourth region: 1, 2, 3 from Horizontal 4, 5, 6
-            Fifth region: 4, 5, 6 from Horizontal 4, 5, 6
-            Sixth region: 7, 8, 9 from Horizontal 4, 5, 6
-
-            Seventh region: 1, 2, 3 from Horizontal 7, 8, 9
-            Eighth region: 4, 5, 6 from Horizontal 7, 8, 9
-            Nineth region: 7, 8, 9 from Horizontal 7, 8, 9
-
-        ¡Qué cosa más asquerosa! Esto hay que dejarlo bonito pero... ¿cómo?
+    def create_region(self, column, row):
+        """ Devuelve la región según la columna y la fila especificada
         """
-        first_region = [item for sublist in range(3) for item in self.cuadricula[sublist][0:3]]
-        second_region = [item for sublist in range(3) for item in self.cuadricula[sublist][3:6]]
-        third_region = [item for sublist in range(3) for item in self.cuadricula[sublist][6:9]]
+        """
+        first_region = [item for sublist in range(0, 3) for item in self.cuadricula[sublist][0:3]]
+        second_region = [item for sublist in range(0, 3) for item in self.cuadricula[sublist][3:6]]
+        third_region = [item for sublist in range(0, 3) for item in self.cuadricula[sublist][6:9]]
         fourth_region = [item for sublist in range(3, 6) for item in self.cuadricula[sublist][0:3]]
         fifth_region = [item for sublist in range(3, 6) for item in self.cuadricula[sublist][3:6]]
         sixth_region = [item for sublist in range(3, 6) for item in self.cuadricula[sublist][6:9]]
@@ -51,7 +42,9 @@ class Sudoku:
 
         total_regions = [first_region, second_region, third_region, fourth_region, fifth_region, sixth_region,
                          seventh_region, eighth_region, nineth_region]
-        return total_regions
+        """
+        return [item for sublist in range(0 + 3 * row, 3 + 3 * row) for item in
+                self.cuadricula[sublist][0 + 3 * column: 3 + 3 * column]]
 
     def check_regiones(self):
         """
