@@ -1,5 +1,7 @@
 """
     Crear una función que genere un diccionario que reúna como clave un número y como valor su cuadrado.
+        a. Solución Original
+        b. Hacer un diccionario por comprensión con la letra y su valor ASCII (65 a 90 y 97 a 122).
 """
 
 
@@ -12,4 +14,4 @@ def dic_ascii():
 
 
 print(dic_cuadrados(5))
-print(sorted(dic_ascii().items()))
+print(sorted(dic_ascii().items())) # Mérito de Alfon, por aprender a usar Stackoverflow
