@@ -40,15 +40,19 @@ class Sudoku:
         """
         return [list(tuple(zip(*elem))[0]) for elem in self.get_filas()]
 
+    def get_numero(self, row, column):
+         return self.cuadricula[row-1][column-1][0]
+
     # Setters
-    def set_numero(self, column, row, numero):
+    def set_numero(self, row, column, numero):
         """ Cambia el número de la columna y la fila especificada,
         numeradas desde 1 hasta 9.
         """
         if not self.cuadricula[row-1][column-1][1]:
-            self.cuadricula[row-1][column-1][0] = numero
+            self.cuadricula[row - 1][column - 1] = [numero, False]
         else:
             print("Ese número no es modificable")
+        return self
 
     # Generators
     def gen_cuadricula(self):
@@ -114,9 +118,12 @@ class Sudoku:
         return 1 in numberlist and 2 in numberlist and 3 in numberlist and 4 in numberlist and \
                5 in numberlist and 6 in numberlist and 7 in numberlist and 8 in numberlist and 9 in numberlist
 
+    def check_duplicated(self, numberlist, number):
+        return not number in numberlist
 
 
 
+"""
 Sudo = Sudoku()
 
 print(" ==== Cuadrícula Base ====")
@@ -140,3 +147,4 @@ for elem in Sudo.get_nums_regiones():
 print(" ==== Columnas ====")
 for elem in Sudo.get_nums_columnas():
     print(elem)
+"""
