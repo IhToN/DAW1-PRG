@@ -84,14 +84,18 @@ def deselect(X, Y, row, cols):
                     X[k].add(i)
 
 
-def golf_code_solver(p):
+def code_gold_solver(p):
     """ Ida de olla de uno, lo explica aquí:
         https://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/
-    Pensó un algoritmo del copón el cual fue reduciendo en tamaño todo lo que pudo hasta tener el churro de abajo.
+    Pensó un algoritmo del copón el cual fue reduciendo en tamaño todo lo que pudo, no he usado el más pequeño
+    para que quede claro el código, porque tiene telita lo que hizo el amiwo.
     """
     i = p.find('0')
-    g = (s for v in set('123456789')
-         - {(i % 9 != j % 9) and (i // 9 != j // 9) and (i // 27 != j // 27 or i % 9 // 3 != j % 9 // 3)
-            or p[j] for j in range(81)} for s in golf_code_solver(p[:i] + v + p[i + 1:]))
-    for s in g if i >= 0 else[p]:
-        yield s
+    if i < 0:
+        yield p
+    else:
+        for v in set('123456789') - set(p[j] for j in range(81)
+                                        if (i % 9 == j % 9) or (i // 9 == j // 9)
+                                        or (i // 27 == j // 27 and i % 9 // 3 == j % 9 // 3)):
+            for s in code_gold_solver(p[:i] + v + p[i + 1:]):
+                yield s
