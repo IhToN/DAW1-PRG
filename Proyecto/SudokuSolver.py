@@ -19,7 +19,7 @@ def solve_sudoku(tamanyo, grid):
     X = ([("fc", fc) for fc in product(range(numeros_posibles), range(numeros_posibles))] +
          [("fn", fn) for fn in product(range(numeros_posibles), range(1, numeros_posibles + 1))] +
          [("cn", cn) for cn in product(range(numeros_posibles), range(1, numeros_posibles + 1))] +
-         [("rn", rn) for bn in product(range(numeros_posibles), range(1, numeros_posibles + 1))])
+         [("rn", rn) for rn in product(range(numeros_posibles), range(1, numeros_posibles + 1))])
     Y = dict()
     for f, c, n in product(range(numeros_posibles), range(numeros_posibles), range(1, numeros_posibles + 1)):
         r = (f // fila) * fila + (c // columna)  # Región
@@ -82,3 +82,16 @@ def deselect(X, Y, row, cols):
             for k in Y[i]:
                 if k != j:
                     X[k].add(i)
+
+
+def golf_code_solver(p):
+    """ Ida de olla de uno, lo explica aquí:
+        https://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/
+    Pensó un algoritmo del copón el cual fue reduciendo en tamaño todo lo que pudo hasta tener el churro de abajo.
+    """
+    i = p.find('0')
+    g = (s for v in set('123456789')
+         - {(i % 9 != j % 9) and (i // 9 != j // 9) and (i // 27 != j // 27 or i % 9 // 3 != j % 9 // 3)
+            or p[j] for j in range(81)} for s in golf_code_solver(p[:i] + v + p[i + 1:]))
+    for s in g if i >= 0 else[p]:
+        yield s

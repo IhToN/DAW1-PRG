@@ -2,8 +2,9 @@
     Clase Sudoku. Contendrá la cuadrícula con sus subsecciones vacías.
     Será el propio generador quien se encargue de rellenarlo con la solución.
 """
-from math import ceil
+from math import ceil, sqrt
 from Proyecto.SudokuSolver import *
+import textwrap
 
 
 class Sudoku:
@@ -22,8 +23,11 @@ class Sudoku:
         """
         if not grid:
             self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
-        else:
+        elif type(grid) == list:
             self.cuadricula = [[[number, False if number == 0 else True] for number in elem] for elem in grid]
+        elif type(grid) == str:
+            self.cuadricula = [[[int(number), False if number == 0 else True] for number in elem] for elem in
+                               textwrap.wrap(grid, int(sqrt(len(grid))))]
 
     # Getters
     def get_cuadricula(self):
@@ -89,6 +93,13 @@ class Sudoku:
     def get_nums_region(self, row, column):
         return [item[0] for item in self.get_region(row, column)]
 
+    def get_nums_string(self):
+        acum = ""
+        for fila in self.get_nums_filas():
+            for numero in fila:
+                acum += str(numero)
+        return acum
+
     def get_solucion(self):
         for solucion in solve_sudoku((len(self.get_nums_filas()) // 3, len(self.get_nums_columnas()) // 3),
                                      self.get_nums_filas()):
@@ -151,3 +162,14 @@ class Sudoku:
 
     def check_duplicated(self, numberlist, number):
         return not number in numberlist
+
+
+def divisores(numero):
+    """ Devuelve una tupla con los divisores de numero
+    """
+    ret = ()
+    for i in range(1, ceil((numero + 1) / 2)):
+        if numero % i == 0:
+            ret += i,
+    ret += numero,
+    return ret
