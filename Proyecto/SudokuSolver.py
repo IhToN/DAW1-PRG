@@ -7,7 +7,7 @@ from itertools import product
 
 
 def solve_sudoku(tamanyo, grid):
-    """ Solucionar el Grid, devuelve un Generator con las soluciones
+    """ Solucionar el Grid, devuelve un Generator con una de las posibles soluciones del Sudoku
         Tamanyo = (#reg x, #reg y)
         Grid = Lista de listas de numeros
     """
@@ -85,7 +85,8 @@ def deselect(X, Y, row, cols):
 
 
 def code_gold_solver(p):
-    """ Ida de olla de uno, lo explica aquí:
+    """ Devuelve todas las posibles soluciones de un Sudoku
+     Ida de olla de uno, lo explica aquí:
         https://jakevdp.github.io/blog/2013/04/15/code-golf-in-python-sudoku/
     Pensó un algoritmo del copón el cual fue reduciendo en tamaño todo lo que pudo, no he usado el más pequeño
     para que quede claro el código, porque tiene telita lo que hizo el amiwo.
