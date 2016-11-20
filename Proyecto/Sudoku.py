@@ -3,6 +3,7 @@
     Será el propio generador quien se encargue de rellenarlo con la solución.
 """
 from math import ceil
+from Proyecto.SudokuSolver import *
 
 
 class Sudoku:
@@ -87,6 +88,11 @@ class Sudoku:
 
     def get_nums_region(self, row, column):
         return [item[0] for item in self.get_region(row, column)]
+
+    def get_solucion(self):
+        for solucion in solve_sudoku((len(self.get_nums_filas()) // 3, len(self.get_nums_columnas()) // 3),
+                                     self.get_nums_filas()):
+            return solucion
 
     # Setters
     def set_numero(self, row, column, numero):
