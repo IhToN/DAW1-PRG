@@ -13,21 +13,21 @@ def solve_sudoku(tamanyo, grid):
     """
 
     fila, columna = tamanyo
-    num_regiones = fila * columna
+    numeros_posibles = fila * columna
 
     # X e Y serán nuestros "double-linked lists", para recorrer de forma más rápida tanto filas como columnas.
-    X = ([("fc", fc) for fc in product(range(num_regiones), range(num_regiones))] +
-         [("fn", fn) for fn in product(range(num_regiones), range(1, num_regiones + 1))] +
-         [("cn", cn) for cn in product(range(num_regiones), range(1, num_regiones + 1))] +
-         [("bn", bn) for bn in product(range(num_regiones), range(1, num_regiones + 1))])
+    X = ([("fc", fc) for fc in product(range(numeros_posibles), range(numeros_posibles))] +
+         [("fn", fn) for fn in product(range(numeros_posibles), range(1, numeros_posibles + 1))] +
+         [("cn", cn) for cn in product(range(numeros_posibles), range(1, numeros_posibles + 1))] +
+         [("rn", rn) for bn in product(range(numeros_posibles), range(1, numeros_posibles + 1))])
     Y = dict()
-    for f, c, n in product(range(num_regiones), range(num_regiones), range(1, num_regiones + 1)):
-        b = (f // fila) * fila + (c // columna)  # Box number
+    for f, c, n in product(range(numeros_posibles), range(numeros_posibles), range(1, numeros_posibles + 1)):
+        r = (f // fila) * fila + (c // columna)  # Región
         Y[(f, c, n)] = [
             ("fc", (f, c)),
             ("fn", (f, n)),
             ("cn", (c, n)),
-            ("bn", (b, n))]
+            ("rn", (r, n))]
     X, Y = exact_cover(X, Y)
     for i, fila in enumerate(grid):
         for j, n in enumerate(fila):
