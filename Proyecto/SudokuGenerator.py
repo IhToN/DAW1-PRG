@@ -7,10 +7,8 @@
 """
 import random
 
-from Proyecto.Sudoku import *
 
-
-def make_board(num_ceros = 17):
+def make_board(num_ceros=17):
     """Return a random filled m**2 x m**2 Sudoku board."""
     n = 3 ** 2
     board = [[None for _ in range(n)] for _ in range(n)]
@@ -37,8 +35,3 @@ def make_board(num_ceros = 17):
         fil, col = random.randint(0, 8), random.randint(0, 8)
         board[fil][col] = 0
     return board
-
-
-sudoku = Sudoku(make_board(70))
-print("Cuadrícula Sudoku", *sudoku.get_nums_filas(), sep="\n    ")
-print("Soluciones Sudoku", *sudoku.get_soluciones(), sep="\n    ")

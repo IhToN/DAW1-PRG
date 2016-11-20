@@ -1,5 +1,6 @@
 """ Test del Sudoku"""
 from Proyecto.Sudoku import *
+from Proyecto.SudokuGenerator import make_board
 from Proyecto.SudokuSolver import *
 
 sudoku1 = Sudoku()
@@ -38,3 +39,7 @@ sudoku3 = Sudoku("02780006100003000891000542050001603000097020007000009670000008
 print("\nSudoku Original:", *sudoku3.get_nums_filas(), sep='\n    ')
 print("\nSudoku Resuelto:", *sudoku3.get_solucion_algX(), sep='\n    ')
 print("\nSoluciones del sudoku:", *sudoku3.get_soluciones(), sep='\n    ')
+
+sudoku = Sudoku(make_board(70))
+print("Cuadrícula Sudoku", *sudoku.get_nums_filas(), sep="\n    ")
+print("Soluciones Sudoku", *sudoku.get_soluciones(), sep="\n    ")
