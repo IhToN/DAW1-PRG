@@ -2,18 +2,38 @@
     Clase Sudoku. Contendrá la cuadrícula con sus subsecciones vacías.
     Será el propio generador quien se encargue de rellenarlo con la solución.
 """
-from random import randint
+from math import ceil
 
 
 class Sudoku:
-    def __init__(self):
-        self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
+    def __init__(self, grid=None):
+        """ Inicializa el sudoku con 9 filas a [0, False] o con el grid introducido,
+        el grid ha de ser del tipo:
+                [[0, 0, 0, 0, 7, 6, 4, 0, 0],
+                 [0, 1, 4, 0, 0, 3, 0, 0, 7],
+                 [0, 3, 0, 5, 0, 0, 0, 1, 6],
+                 [2, 0, 0, 0, 9, 7, 0, 0, 0],
+                 [8, 6, 9, 0, 0, 0, 3, 0, 4],
+                 [0, 0, 0, 0, 0, 4, 8, 0, 2],
+                 [5, 8, 0, 7, 0, 0, 0, 0, 3],
+                 [0, 2, 0, 0, 0, 0, 5, 8, 0],
+                 [4, 0, 0, 0, 0, 0, 0, 2, 0]]
+        """
+        if not grid:
+            self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
+        else:
+            self.cuadricula = [[[number, False if number == 0 else True] for number in elem] for elem in grid]
 
     # Getters
+    def get_cuadricula(self):
+        """ Devuelve la cuadrícula generada
+        """
+        return self.get_nums_filas()
+
     def get_regiones(self):
         """ Devuelve una lista con todas las regiones de 3x3 del Sudoku
         """
-        return [self.create_region(column, row) for row in range(3) for column in range(3)]
+        return [self.get_region(row, column) for row in range(1, 10, 3) for column in range(1, 10, 3)]
 
     def get_columnas(self):
         """ Devuelve una lista con todas las columnas de la cuadrícula
@@ -41,26 +61,9 @@ class Sudoku:
         return [list(tuple(zip(*elem))[0]) for elem in self.get_filas()]
 
     def get_numero(self, row, column):
-         return self.cuadricula[row-1][column-1][0]
+        return self.cuadricula[row - 1][column - 1][0]
 
-    # Setters
-    def set_numero(self, row, column, numero):
-        """ Cambia el número de la columna y la fila especificada,
-        numeradas desde 1 hasta 9.
-        """
-        if not self.cuadricula[row-1][column-1][1]:
-            self.cuadricula[row - 1][column - 1] = [numero, False]
-        else:
-            print("Ese número no es modificable")
-        return self
-
-    # Generators
-    def gen_cuadricula(self):
-        """ Regenera el Sudoku con todos los elementos a 0
-        """
-        self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
-
-    def create_region(self, column, row):
+    def get_region(self, row, column):
         """ Devuelve la región según la columna y la fila especificada
         """
         """
@@ -77,8 +80,30 @@ class Sudoku:
         total_regions = [first_region, second_region, third_region, fourth_region, fifth_region, sixth_region,
                          seventh_region, eighth_region, nineth_region]
         """
-        return [item for sublist in range(0 + 3 * row, 3 + 3 * row) for item in
-                self.cuadricula[sublist][0 + 3 * column: 3 + 3 * column]]
+        row_reg = ceil((row - 1) // 3)
+        column_reg = ceil((column - 1) // 3)
+        return [item for sublist in range(0 + 3 * row_reg, 3 + 3 * row_reg) for item in
+                self.cuadricula[sublist][0 + 3 * column_reg: 3 + 3 * column_reg]]
+
+    def get_nums_region(self, row, column):
+        return [item[0] for item in self.get_region(row, column)]
+
+    # Setters
+    def set_numero(self, row, column, numero):
+        """ Cambia el número de la columna y la fila especificada,
+        numeradas desde 1 hasta 9.
+        """
+        if not self.cuadricula[row - 1][column - 1][1]:
+            self.cuadricula[row - 1][column - 1] = [numero, False]
+        else:
+            print("Ese número no es modificable")
+        return self
+
+    # Generators
+    def gen_cuadricula(self):
+        """ Regenera el Sudoku con todos los elementos a 0
+        """
+        self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
 
     # Checkers
     def check_solucion(self):
@@ -120,31 +145,3 @@ class Sudoku:
 
     def check_duplicated(self, numberlist, number):
         return not number in numberlist
-
-
-
-"""
-Sudo = Sudoku()
-
-print(" ==== Cuadrícula Base ====")
-for elem in Sudo.cuadricula:
-    print(elem)
-
-print(" ==== Cuadrícula Aleatoria (No Solucionada) ====")
-for reg in range(9):
-    for elem in range(9):
-        Sudo.cuadricula[reg][elem] = [randint(1, 9), True]
-    print(Sudo.cuadricula[reg])
-
-print(" ==== Filas ====")
-for elem in Sudo.get_nums_filas():
-    print(elem)
-
-print(" ==== Regiones de Cuadrícula ====")
-for elem in Sudo.get_nums_regiones():
-    print(elem)
-
-print(" ==== Columnas ====")
-for elem in Sudo.get_nums_columnas():
-    print(elem)
-"""
