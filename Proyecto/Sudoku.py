@@ -3,11 +3,21 @@
     Será el propio generador quien se encargue de rellenarlo con la solución.
 """
 from math import ceil, sqrt
+from random import randint
+from tkinter import Tk
+
+from Proyecto import SudokuGenerator
 from Proyecto.SudokuSolver import *
 import textwrap
 
+from Proyecto.SudokuUI import SudokuUI
+
 
 class Sudoku:
+    MARGIN = 20  # Pixels around the board
+    SIDE = 50  # Width of every board cell.
+    WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9  # Width and height of the whole board
+
     def __init__(self, grid=None):
         """ Inicializa el sudoku con 9 filas a [0, False] o con el grid introducido,
         el grid ha de ser del tipo:
@@ -21,6 +31,7 @@ class Sudoku:
                  [0, 2, 0, 0, 0, 0, 5, 8, 0],
                  [4, 0, 0, 0, 0, 0, 0, 2, 0]]
         """
+        self.game_over = False
         if not grid:
             self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
         elif type(grid) == list:
@@ -28,6 +39,16 @@ class Sudoku:
         elif type(grid) == str:
             self.cuadricula = [[[int(number), False if number == 0 else True] for number in elem] for elem in
                                textwrap.wrap(grid, int(sqrt(len(grid))))]
+
+    # Puzzle Starter
+    def start(self, num_ceros=17, is_clear=False):
+        if is_clear:
+            for elem in self.cuadricula:
+                for num in elem:
+                    if not num[1]:
+                        num[0] = 0
+        else:
+            self.__init__(SudokuGenerator.make_board(num_ceros))
 
     # Getters
     def get_cuadricula(self):
@@ -133,7 +154,8 @@ class Sudoku:
     def check_solucion(self):
         """ Devuelve si el Sudoku está bien resuelto o no
         """
-        return self.check_regiones() and self.check_horizontales() and self.check_verticales()
+        game_over = self.check_regiones() and self.check_horizontales() and self.check_verticales()
+        return game_over
 
     def check_regiones(self):
         """ Comprueba que todas las regiones están bien resueltas
@@ -180,3 +202,11 @@ def divisores(numero):
             ret += i,
     ret += numero,
     return ret
+
+
+if __name__ == '__main__':
+    sudoku = Sudoku(SudokuGenerator.make_board(randint(5, 70)))
+    root = Tk()
+    SudokuUI(root, sudoku)
+    root.geometry("%dx%d" % (sudoku.WIDTH, sudoku.HEIGHT + 40))
+    root.mainloop()
