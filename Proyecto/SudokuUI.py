@@ -10,7 +10,7 @@ class SudokuUI(Frame):
         self.parent = parent
         Frame.__init__(self, parent)
 
-        self.row, self.col = 0, 0
+        self.fila, self.columna = 0, 0
 
         self.__initUI()
 
@@ -87,27 +87,27 @@ class SudokuUI(Frame):
         if self.game.MARGIN < x < self.game.WIDTH - self.game.MARGIN and self.game.MARGIN < y < self.game.HEIGHT - self.game.MARGIN:
             self.canvas.focus_set()
 
-            # get row and col numbers from x,y coordinates
-            row, col = int((y - self.game.MARGIN) / self.game.SIDE), int((x - self.game.MARGIN) / self.game.SIDE)
+            # get columna and fila numbers from x,y coordinates
+            columna, fila = int((y - self.game.MARGIN) / self.game.SIDE), int((x - self.game.MARGIN) / self.game.SIDE)
 
 
             # if cell was selected already - deselect it
-            if (row, col) == (self.row, self.col):
-                self.row, self.col = -1, -1
-            elif self.game.get_numero(row+1, col+1) == 0:
-                self.row, self.col = row, col
+            if (columna, fila) == (self.fila, self.columna):
+                self.fila, self.columna = -1, -1
+            elif self.game.get_numero(columna+1, fila+1) == 0:
+                self.fila, self.columna = columna, fila
 
-            print(row+1, col+1, self.game.get_numero(row+1, col+1))
+            print(columna+1, fila+1, self.game.get_numero(fila+1, columna+1))
 
         self.__draw_cursor()
 
     def __draw_cursor(self):
         self.canvas.delete("cursor")
-        if self.row >= 0 and self.col >= 0:
-            x0 = self.game.MARGIN + self.col * self.game.SIDE + 1
-            y0 = self.game.MARGIN + self.row * self.game.SIDE + 1
-            x1 = self.game.MARGIN + (self.col + 1) * self.game.SIDE - 1
-            y1 = self.game.MARGIN + (self.row + 1) * self.game.SIDE - 1
+        if self.fila >= 0 and self.columna >= 0:
+            x0 = self.game.MARGIN + self.columna * self.game.SIDE + 1
+            y0 = self.game.MARGIN + self.fila * self.game.SIDE + 1
+            x1 = self.game.MARGIN + (self.columna + 1) * self.game.SIDE - 1
+            y1 = self.game.MARGIN + (self.fila + 1) * self.game.SIDE - 1
             self.canvas.create_rectangle(
                 x0, y0, x1, y1,
                 outline="red", tags="cursor"
@@ -116,9 +116,9 @@ class SudokuUI(Frame):
     def __key_pressed(self, event):
         if self.game.game_over:
             return
-        if self.row >= 0 and self.col >= 0 and event.char in "1234567890":
-            self.game.set_numero(self.row, self.col, event.char)
-            self.col, self.row = -1, -1
+        if self.fila >= 0 and self.columna >= 0 and event.char in "1234567890":
+            self.game.set_numero(self.fila, self.columna, event.char)
+            self.columna, self.fila = -1, -1
             self.__draw_puzzle()
             self.__draw_cursor()
             if self.game.check_solucion():
