@@ -15,10 +15,10 @@ sudoku1.set_numero(1, 2, 8).set_numero(1, 4, 5).set_numero(1, 5, 7).set_numero(1
     .set_numero(8, 1, 3).set_numero(8, 3, 8).set_numero(8, 4, 7).set_numero(8, 8, 2).set_numero(8, 9, 5) \
     .set_numero(9, 2, 4).set_numero(9, 9, 6)
 print("\nSudoku Original:", *sudoku1.get_nums_filas(), sep='\n    ')
-print("\nSudoku Solucionado:", *sudoku1.get_solucion(), sep='\n    ')
+print("\nSudoku Resuelto:", *sudoku1.get_solucion_algX(), sep='\n    ')
 print("\nSoluciones del sudoku:", *code_gold_solver(sudoku1.get_nums_string()))
 
-grid = [[0, 0, 0, 0, 7, 6, 4, 4, 0],
+grid = [[0, 0, 0, 0, 7, 6, 4, 0, 0],
         [0, 1, 4, 0, 0, 3, 0, 0, 7],
         [0, 3, 0, 5, 0, 0, 0, 1, 6],
         [2, 0, 0, 0, 9, 7, 0, 0, 0],
@@ -29,12 +29,12 @@ grid = [[0, 0, 0, 0, 7, 6, 4, 4, 0],
         [4, 0, 0, 0, 0, 0, 0, 2, 0]]
 sudoku2 = Sudoku(grid)
 print("\nSudoku Original:", *sudoku2.get_nums_filas(), sep='\n    ')
-print("\nSudoku Solucionado:")
+print("\nSudoku Resuelto:")
 for solucion in solve_sudoku((3, 3), sudoku2.get_nums_filas()):
     print("", *solucion, sep='\n    ')
 print("\nSoluciones del sudoku:", *code_gold_solver(sudoku2.get_nums_string()))
 
 sudoku3 = Sudoku("027800061000030008910005420500016030000970200070000096700000080006027000030480007")
 print("\nSudoku Original:", *sudoku3.get_nums_filas(), sep='\n    ')
-print("\nSudoku Solucionado:", *sudoku3.get_solucion(), sep='\n    ')
-print("\nSoluciones del sudoku:", *code_gold_solver(sudoku3.get_nums_string()))
+print("\nSudoku Resuelto:", *sudoku3.get_solucion_algX(), sep='\n    ')
+print("\nSoluciones del sudoku:", *sudoku3.get_soluciones(), sep='\n    ')

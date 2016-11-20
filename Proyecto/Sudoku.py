@@ -100,10 +100,16 @@ class Sudoku:
                 acum += str(numero)
         return acum
 
-    def get_solucion(self):
+    def get_solucion_algX(self):
         for solucion in solve_sudoku((len(self.get_nums_filas()) // 3, len(self.get_nums_columnas()) // 3),
                                      self.get_nums_filas()):
             return solucion
+
+    def get_soluciones(self):
+        soluciones = []
+        for sol in code_gold_solver(self.get_nums_string()):
+            soluciones.append(sol)
+        return soluciones
 
     # Setters
     def set_numero(self, row, column, numero):
@@ -121,6 +127,7 @@ class Sudoku:
         """ Regenera el Sudoku con todos los elementos a 0
         """
         self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
+        return self
 
     # Checkers
     def check_solucion(self):

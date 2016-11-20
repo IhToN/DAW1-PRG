@@ -72,7 +72,7 @@ def select(X, Y, row):
             cols.append(X.pop(j))
         return cols
     except KeyError:
-        print('¡El sudoku no tiene solución!')
+        raise Exception('¡El sudoku no tiene solución!')
 
 
 def deselect(X, Y, row, cols):
