@@ -14,10 +14,6 @@ from Proyecto.SudokuUI import SudokuUI
 
 
 class Sudoku:
-    MARGIN = 20  # Pixels around the board
-    SIDE = 50  # Width of every board cell.
-    WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9  # Width and height of the whole board
-
     def __init__(self, grid=None):
         """ Inicializa el sudoku con 9 filas a [0, False] o con el grid introducido,
         el grid ha de ser del tipo:
@@ -165,30 +161,30 @@ class Sudoku:
     def check_solucion(self):
         """ Devuelve si el Sudoku está bien resuelto o no
         """
-        self.game_over = self.check_regiones() and self.check_horizontales() and self.check_verticales()
+        self.game_over = self.check_regiones() and self.check_filas() and self.check_columnas()
         return self.game_over
 
     def check_regiones(self):
         """ Comprueba que todas las regiones están bien resueltas
         """
-        for region in self.get_regiones():
-            if not self.check_numbers(region[0]):
+        for region in self.get_nums_regiones():
+            if not self.check_numbers(region):
                 return False
         return True
 
-    def check_verticales(self):
+    def check_columnas(self):
         """ Comprueba que las columnas están bien resueltas
         """
-        for vertical in self.get_columnas():
-            if not self.check_numbers(vertical[0]):
+        for columna in self.get_nums_columnas():
+            if not self.check_numbers(columna):
                 return False
         return True
 
-    def check_horizontales(self):
+    def check_filas(self):
         """ Comprueba que las filas están bien resueltas
         """
-        for horizontal in self.get_filas():
-            if not self.check_numbers(horizontal[0]):
+        for fila in self.get_nums_filas():
+            if not self.check_numbers(fila):
                 return False
         return True
 
@@ -219,5 +215,5 @@ if __name__ == '__main__':
     sudoku = Sudoku(SudokuGenerator.make_board(randint(5, 70)))
     root = Tk()
     SudokuUI(root, sudoku)
-    root.geometry("%dx%d" % (sudoku.WIDTH, sudoku.HEIGHT + 40))
+    root.geometry("%dx%d" % (SudokuUI.WIDTH, SudokuUI.HEIGHT + 60))
     root.mainloop()

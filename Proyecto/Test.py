@@ -42,6 +42,7 @@ print("\nSoluciones del sudoku:", *sudoku3.get_soluciones(), sep='\n    ')"""
 
 sudoku = Sudoku(make_board(70))
 print("Cuadrícula Sudoku", *sudoku.get_nums_filas(), sep="\n    ")
-print("Soluciones Sudoku", *sudoku.get_solucion_algX(), sep="\n    ")
+print("Solucion Sudoku", *sudoku.get_solucion_algX(), sep="\n    ")
+print("Check Solucion", sudoku.check_solucion(), "   Game Over?", sudoku.game_over)
 sudoku.set_solucion_algX()
-print(sudoku.cuadricula)
+print("Check Solucion", sudoku.check_solucion(), "   Game Over?", sudoku.game_over)
