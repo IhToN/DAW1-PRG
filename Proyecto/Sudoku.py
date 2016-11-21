@@ -200,17 +200,6 @@ class Sudoku:
         return not number in numberlist
 
 
-def divisores(numero):
-    """ Devuelve una tupla con los divisores de numero
-    """
-    ret = ()
-    for i in range(1, ceil((numero + 1) / 2)):
-        if numero % i == 0:
-            ret += i,
-    ret += numero,
-    return ret
-
-
 if __name__ == '__main__':
     sudoku = Sudoku(SudokuGenerator.make_board(randint(5, 70)))
     root = Tk()
