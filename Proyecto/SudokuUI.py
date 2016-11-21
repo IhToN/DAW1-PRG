@@ -1,4 +1,4 @@
-from tkinter import Tk, Canvas, Frame, Button, BOTH, TOP, BOTTOM
+from tkinter import Tk, Canvas, Frame, Button, BOTH, TOP, LEFT, RIGHT, BOTTOM
 
 
 class SudokuUI(Frame):
@@ -7,6 +7,7 @@ class SudokuUI(Frame):
 
     def __init__(self, parent, game):
         self.game = game
+        self.algX_solution = self.game.get_solucion_algX()
         self.parent = parent
         Frame.__init__(self, parent)
 
@@ -21,14 +22,14 @@ class SudokuUI(Frame):
                              width=self.game.WIDTH,
                              height=self.game.HEIGHT)
         self.canvas.pack(fill=BOTH, side=TOP)
-        solve_button = Button(self,
-                              text="Solve Sudoku",
-                              command=self.__solve_sudoku)
-        solve_button.pack(fill=BOTH, side=BOTTOM)
         clear_button = Button(self,
-                              text="Clear Answers",
+                              text="Limpiar Respuestas",
                               command=self.__clear_answers)
-        clear_button.pack(fill=BOTH, side=BOTTOM)
+        clear_button.pack(expand=1, fill=BOTH, side=LEFT)
+        solve_button = Button(self,
+                              text="Solucionar Sudoku",
+                              command=self.__solve_sudoku)
+        solve_button.pack(expand=1, fill=BOTH, side=RIGHT)
 
         self.__draw_grid()
         self.__draw_puzzle()
@@ -56,22 +57,23 @@ class SudokuUI(Frame):
             self.canvas.create_line(x0, y0, x1, y1, fill=color)
 
     def __draw_puzzle(self):
-        self.canvas.delete("numbers")
+        self.canvas.delete("numeros")
         for i in range(9):
             for j in range(9):
-                print(i, j)
-                answer = self.game.get_numero(j + 1, i + 1)
+                answer = self.game.get_numero(i + 1, j + 1)
                 if answer != 0:
                     x = self.game.MARGIN + j * self.game.SIDE + self.game.SIDE / 2
                     y = self.game.MARGIN + i * self.game.SIDE + self.game.SIDE / 2
-                    original = self.game.get_numero(j + 1, i + 1)
-                    color = "black" if answer == original else "sea green"
+                    color = "black" if self.game.cuadricula[i][j][1] else "red"
+                    if not self.game.cuadricula[i][j][1] and answer == self.algX_solution[i][j]:
+                        color = "sea green"
                     self.canvas.create_text(
-                        x, y, text=answer, tags="numbers", fill=color
+                        x, y, text=answer, tags="numeros", fill=color
                     )
 
     def __solve_sudoku(self):
-        self.game.cuadricula = self.game.get_solucion_algX()
+        self.__clear_answers()
+        self.game.set_solucion_algX()
         self.canvas.delete("victory")
         self.__draw_puzzle()
 
@@ -84,20 +86,18 @@ class SudokuUI(Frame):
         if self.game.game_over:
             return
         x, y = event.x, event.y
-        if self.game.MARGIN < x < self.game.WIDTH - self.game.MARGIN and self.game.MARGIN < y < self.game.HEIGHT - self.game.MARGIN:
+        if self.game.MARGIN < x < self.game.WIDTH - self.game.MARGIN \
+                and self.game.MARGIN < y < self.game.HEIGHT - self.game.MARGIN:
             self.canvas.focus_set()
 
             # get columna and fila numbers from x,y coordinates
-            columna, fila = int((y - self.game.MARGIN) / self.game.SIDE), int((x - self.game.MARGIN) / self.game.SIDE)
-
+            fila, columna = int((y - self.game.MARGIN) / self.game.SIDE), int((x - self.game.MARGIN) / self.game.SIDE)
 
             # if cell was selected already - deselect it
             if (columna, fila) == (self.fila, self.columna):
                 self.fila, self.columna = -1, -1
-            elif self.game.get_numero(columna+1, fila+1) == 0:
-                self.fila, self.columna = columna, fila
-
-            print(columna+1, fila+1, self.game.get_numero(fila+1, columna+1))
+            elif not self.game.cuadricula[fila][columna][1]:
+                self.fila, self.columna = fila, columna
 
         self.__draw_cursor()
 
@@ -117,11 +117,12 @@ class SudokuUI(Frame):
         if self.game.game_over:
             return
         if self.fila >= 0 and self.columna >= 0 and event.char in "1234567890":
-            self.game.set_numero(self.fila, self.columna, event.char)
-            self.columna, self.fila = -1, -1
+            self.game.set_numero(self.fila + 1, self.columna + 1, event.char)
+            self.fila, self.columna = -1, -1
             self.__draw_puzzle()
             self.__draw_cursor()
-            if self.game.check_solucion():
+            self.game.check_solucion()
+            if self.game.game_over:
                 self.__draw_victory()
 
     def __draw_victory(self):
@@ -136,6 +137,6 @@ class SudokuUI(Frame):
         x = y = self.game.MARGIN + 4 * self.game.SIDE + self.game.SIDE / 2
         self.canvas.create_text(
             x, y,
-            text="You win!", tags="winner",
+            text="Has Ganado!", tags="winner",
             fill="white", font=("Arial", 32)
         )

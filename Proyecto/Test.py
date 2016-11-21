@@ -3,7 +3,7 @@ from Proyecto.Sudoku import *
 from Proyecto.SudokuGenerator import make_board
 from Proyecto.SudokuSolver import *
 
-sudoku1 = Sudoku()
+"""sudoku1 = Sudoku()
 sudoku1.set_numero(1, 2, 8).set_numero(1, 4, 5).set_numero(1, 5, 7).set_numero(1, 6, 6).set_numero(1, 7, 2) \
     .set_numero(2, 4, 4).set_numero(2, 6, 2) \
     .set_numero(3, 5, 3).set_numero(3, 6, 9).set_numero(3, 7, 5).set_numero(3, 8, 4).set_numero(3, 9, 8) \
@@ -38,8 +38,10 @@ print("\nSoluciones del sudoku:", *code_gold_solver(sudoku2.get_nums_string()))
 sudoku3 = Sudoku("027800061000030008910005420500016030000970200070000096700000080006027000030480007")
 print("\nSudoku Original:", *sudoku3.get_nums_filas(), sep='\n    ')
 print("\nSudoku Resuelto:", *sudoku3.get_solucion_algX(), sep='\n    ')
-print("\nSoluciones del sudoku:", *sudoku3.get_soluciones(), sep='\n    ')
+print("\nSoluciones del sudoku:", *sudoku3.get_soluciones(), sep='\n    ')"""
 
 sudoku = Sudoku(make_board(70))
 print("Cuadrícula Sudoku", *sudoku.get_nums_filas(), sep="\n    ")
-print("Soluciones Sudoku", *sudoku.get_soluciones(), sep="\n    ")
+print("Soluciones Sudoku", *sudoku.get_solucion_algX(), sep="\n    ")
+sudoku.set_solucion_algX()
+print(sudoku.cuadricula)

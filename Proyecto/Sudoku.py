@@ -140,8 +140,19 @@ class Sudoku:
         if not self.cuadricula[row - 1][column - 1][1]:
             self.cuadricula[row - 1][column - 1] = [numero, False]
         else:
-            print("Ese número no es modificable")
+            print("¡Ese número no es modificable!", row, column, self.cuadricula[row - 1][column - 1])
         return self
+
+    def set_solucion_algX(self):
+        i = 0
+        solucion = self.get_solucion_algX()
+        for fila in solucion:
+            i += 1
+            j = 0
+            for num in fila:
+                j += 1
+                if not self.cuadricula[i - 1][j - 1][1]:
+                    self.set_numero(i, j, num)
 
     # Generators
     def gen_cuadricula(self):
@@ -154,8 +165,8 @@ class Sudoku:
     def check_solucion(self):
         """ Devuelve si el Sudoku está bien resuelto o no
         """
-        game_over = self.check_regiones() and self.check_horizontales() and self.check_verticales()
-        return game_over
+        self.game_over = self.check_regiones() and self.check_horizontales() and self.check_verticales()
+        return self.game_over
 
     def check_regiones(self):
         """ Comprueba que todas las regiones están bien resueltas
