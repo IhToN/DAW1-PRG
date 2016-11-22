@@ -37,14 +37,14 @@ class Sudoku:
                                textwrap.wrap(grid, int(sqrt(len(grid))))]
 
     # Puzzle Starter
-    def start(self, num_ceros=17, is_clear=False):
+    def start(self, is_clear=False):
         if is_clear:
             for elem in self.cuadricula:
                 for num in elem:
                     if not num[1]:
                         num[0] = 0
         else:
-            self.__init__(SudokuGenerator.make_board(num_ceros))
+            self.__init__(SudokuGenerator.make_board(randint(15, 81)))
 
     # Getters
     def get_cuadricula(self):

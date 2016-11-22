@@ -4,7 +4,7 @@ from tkinter import *
 class SudokuUI(Frame):
     """ The Tkinter UI, responsible for drawing the board and accepting user input.
     """
-    
+
     MARGIN = 20  # Margen de pixeles alrededor de la Tabla
     SIDE = 50  # Largo de cada cuadrado del grid
     WIDTH = HEIGHT = MARGIN * 2 + SIDE * 9  # Ancho y Alto de la cuadrícula
@@ -21,7 +21,8 @@ class SudokuUI(Frame):
         self.__initUI()
 
     def __initUI(self):
-        self.parent.title("Sudoku")
+        self.parent.title("SudokIhToN - Huecos: " + str(
+            self.game.get_nums_string().count('0')) + " - Posibles Soluciones: " + str(len(self.game.get_soluciones())))
         self.pack(fill=BOTH, expand=1)
         self.canvas = Canvas(self,
                              width=self.WIDTH,
@@ -33,8 +34,8 @@ class SudokuUI(Frame):
         clear_button.pack(expand=1, fill=BOTH, side=LEFT)
 
         generate_button = Button(self,
-                              text="Generar Nuevo Sudoku",
-                              command=self.__generar_sudoku)
+                                 text="Generar Nuevo Sudoku",
+                                 command=self.__generar_sudoku)
         generate_button.pack(expand=1, fill=BOTH, side=RIGHT)
 
         check_button = Button(self,
@@ -105,6 +106,8 @@ class SudokuUI(Frame):
         self.__pintar_sudoku()
         self.fila, self.columna = -1, -1
         self.__pintar_cursor()
+        self.parent.title("SudokIhToN - Huecos: " + str(
+            self.game.get_nums_string().count('0')) + " - Posibles Soluciones: " + str(len(self.game.get_soluciones())))
 
     def __comprobar_solucion(self):
         print("Comprobar Solución")
