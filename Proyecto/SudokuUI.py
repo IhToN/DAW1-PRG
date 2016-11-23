@@ -27,25 +27,30 @@ class SudokuUI(Frame):
         self.canvas = Canvas(self,
                              width=self.WIDTH,
                              height=self.HEIGHT)
+        self.canvas.config(highlightthickness=0)
         self.canvas.pack(fill=BOTH, side=TOP)
         clear_button = Button(self,
                               text="Limpiar Respuestas",
-                              command=self.__limpiar_sudoku)
+                              command=self.__limpiar_sudoku, relief=GROOVE, activebackground="dark violet",
+                              activeforeground="white")
         clear_button.pack(expand=1, fill=BOTH, side=LEFT)
 
         generate_button = Button(self,
                                  text="Generar Nuevo Sudoku",
-                                 command=self.__generar_sudoku)
+                                 command=self.__generar_sudoku, relief=GROOVE, activebackground="dark violet",
+                                 activeforeground="white")
         generate_button.pack(expand=1, fill=BOTH, side=RIGHT)
 
         check_button = Button(self,
                               text="Comprobar Solución",
-                              command=self.__comprobar_solucion)
+                              command=self.__comprobar_solucion, relief=GROOVE, activebackground="dark violet",
+                              activeforeground="white")
         check_button.pack(expand=1, fill=BOTH, side=TOP)
 
         solve_button = Button(self,
                               text="Solucionar Sudoku",
-                              command=self.__solucionar_sudoku)
+                              command=self.__solucionar_sudoku, relief=GROOVE, activebackground="dark violet",
+                              activeforeground="white")
         solve_button.pack(expand=1, fill=BOTH, side=BOTTOM)
 
         self.__pintar_grid()
