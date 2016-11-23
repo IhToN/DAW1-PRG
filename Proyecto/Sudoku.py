@@ -28,6 +28,7 @@ class Sudoku:
                  [4, 0, 0, 0, 0, 0, 0, 2, 0]]
         """
         self.game_over = False
+        self.soluciones = []
         if not grid:
             self.cuadricula = [[[0, False]] * 9 for _ in range(9)]
         elif type(grid) == list:
@@ -38,6 +39,8 @@ class Sudoku:
 
     # Puzzle Starter
     def start(self, is_clear=False):
+        self.game_over = False
+        self.soluciones = []
         if is_clear:
             for elem in self.cuadricula:
                 for num in elem:
@@ -123,10 +126,10 @@ class Sudoku:
             return solucion
 
     def get_soluciones(self):
-        soluciones = []
-        for sol in code_gold_solver(self.get_nums_string()):
-            soluciones.append(sol)
-        return soluciones
+        if not self.soluciones:
+            for sol in code_gold_solver(self.get_nums_string()):
+                self.soluciones.append(sol)
+        return self.soluciones
 
     # Setters
     def set_numero(self, row, column, numero):

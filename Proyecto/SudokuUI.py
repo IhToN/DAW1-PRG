@@ -59,19 +59,19 @@ class SudokuUI(Frame):
         Draws grid divided with blue lines into 3x3 squares
         """
         for i in range(10):
-            color = "blue" if i % 3 == 0 else "gray"
+            color, grosor = ("dark violet", 2) if i % 3 == 0 else ("gray", 1)
 
             x0 = self.MARGIN + i * self.SIDE
             y0 = self.MARGIN
             x1 = self.MARGIN + i * self.SIDE
             y1 = self.HEIGHT - self.MARGIN
-            self.canvas.create_line(x0, y0, x1, y1, fill=color)
+            self.canvas.create_line(x0, y0, x1, y1, fill=color, width=grosor)
 
             x0 = self.MARGIN
             y0 = self.MARGIN + i * self.SIDE
             x1 = self.WIDTH - self.MARGIN
             y1 = self.MARGIN + i * self.SIDE
-            self.canvas.create_line(x0, y0, x1, y1, fill=color)
+            self.canvas.create_line(x0, y0, x1, y1, fill=color, width=grosor)
 
     def __pintar_sudoku(self):
         self.canvas.delete("numeros")
@@ -89,12 +89,14 @@ class SudokuUI(Frame):
                         x, y, text=answer, tags="numeros", fill=color
                     )
 
+    def __numero_es_correcto(self, fila, columna, numero):
+        # TODO: Comprobar "cadena" de soluciones para checkear los numeros para todas las soluciones y no solo AlgX
+        pass
+
     def __limpiar_sudoku(self):
         print("Limpiamos las respuestas del sudoku")
         self.game.start(is_clear=True)
-        self.canvas.delete("victory")
-        self.__pintar_sudoku()
-        self.fila, self.columna = -1, -1
+        self.__limpiar_victoria()
         self.__pintar_cursor()
 
     def __generar_sudoku(self):
@@ -102,9 +104,7 @@ class SudokuUI(Frame):
         self.__limpiar_sudoku()
         self.game.start()
         self.algX_solution = self.game.get_solucion_algX()
-        self.canvas.delete("victory")
-        self.__pintar_sudoku()
-        self.fila, self.columna = -1, -1
+        self.__limpiar_victoria()
         self.__pintar_cursor()
         self.parent.title("SudokIhToN - Huecos: " + str(
             self.game.get_nums_string().count('0')) + " - Posibles Soluciones: " + str(len(self.game.get_soluciones())))
@@ -112,9 +112,7 @@ class SudokuUI(Frame):
     def __comprobar_solucion(self):
         print("Comprobar Solución")
         self.comprobando_solucion = True
-        self.canvas.delete("victory")
-        self.__pintar_sudoku()
-        self.fila, self.columna = -1, -1
+        self.__limpiar_victoria()
         self.__pintar_cursor()
         self.comprobando_solucion = False
 
@@ -123,11 +121,15 @@ class SudokuUI(Frame):
         self.__limpiar_sudoku()
         self.game.set_solucion_algX()
         self.comprobando_solucion = True
-        self.canvas.delete("victory")
-        self.__pintar_sudoku()
+        self.__limpiar_victoria()
         self.fila, self.columna = -1, -1
         self.__pintar_cursor()
         self.comprobando_solucion = False
+
+    def __limpiar_victoria(self):
+        self.canvas.delete("ganado")
+        self.__pintar_sudoku()
+        self.fila, self.columna = -1, -1
 
     def __celda_clickada(self, event):
         if self.game.game_over:
@@ -137,10 +139,10 @@ class SudokuUI(Frame):
                 and self.MARGIN < y < self.HEIGHT - self.MARGIN:
             self.canvas.focus_set()
 
-            # get columna and fila numbers from x,y coordinates
+            # sacar la fila y columna de donde se ha clickao
             fila, columna = int((y - self.MARGIN) / self.SIDE), int((x - self.MARGIN) / self.SIDE)
 
-            # if cell was selected already - deselect it
+            # deseleccionar o seleccionar al hacer click
             if (columna, fila) == (self.fila, self.columna):
                 self.fila, self.columna = -1, -1
             elif not self.game.cuadricula[fila][columna][1]:
@@ -168,6 +170,7 @@ class SudokuUI(Frame):
             self.fila, self.columna = -1, -1
             self.__pintar_sudoku()
             self.__pintar_cursor()
+            self.game.check_solucion()
             if self.game.game_over:
                 self.__pintar_victoria()
 
@@ -177,12 +180,12 @@ class SudokuUI(Frame):
         x1 = y1 = self.MARGIN + self.SIDE * 7
         self.canvas.create_oval(
             x0, y0, x1, y1,
-            tags="victory", fill="dark orange", outline="orange"
+            tags="ganado", fill="dark orange", outline="orange"
         )
         # create text
         x = y = self.MARGIN + 4 * self.SIDE + self.SIDE / 2
         self.canvas.create_text(
             x, y,
-            text="Has Ganado!", tags="winner",
+            text="Has Ganado!", tags="ganado",
             fill="white", font=("Arial", 32)
         )
