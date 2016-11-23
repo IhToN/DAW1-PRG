@@ -25,8 +25,8 @@ def cuenta_palabras(texto):
     que aparecen en el texto
     """
     ret = dict()
-    texto = texto.lower()
-    for palabra in texto.split():
+    texto = texto.lower().split()
+    for palabra in texto:
         ret[palabra] = texto.count(palabra)
     return ret
 
