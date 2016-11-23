@@ -4,6 +4,8 @@
     cuya clave será el carácter y el valor el contador de dicho carácter.
      a. Solución Original
      b. Hacer el contador de palabras en lugar de letras.
+     c. Hacer una segunda versión del contador de palabras que sea capaz de usar más de un separador.
+     d. Leer de un archivo y procesar según la función C
 """
 from string import ascii_uppercase
 
