@@ -9,6 +9,9 @@ from string import ascii_uppercase
 
 
 def cuenta_caracteres(texto):
+    """ Devuelve un diccionario cuyas claves son letras y su valor la cantidad de veces que
+    aparece en el texto
+    """
     ret = dict()
     texto = texto.upper()
     for letra in ascii_uppercase:
@@ -18,6 +21,9 @@ def cuenta_caracteres(texto):
 
 
 def cuenta_palabras(texto):
+    """ Devuelve un diccionario cuyas claves son palabras y su valor la cantidad de veces
+    que aparecen en el texto
+    """
     ret = dict()
     texto = texto.lower()
     for palabra in texto.split():
@@ -26,6 +32,9 @@ def cuenta_palabras(texto):
 
 
 def cuenta_palabras_sep(texto, separadores):
+    """ Devuelve un diccionario cuyas claves son palabras y su valor la cantidad de veces
+    que aparecen en el texto dividido no sólo por espacios, sino por cualquier set de separadores
+    """
     for separador in separadores:
         texto = texto.replace(separador, ' ')
     return cuenta_palabras(texto)
