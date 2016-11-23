@@ -2,11 +2,12 @@
     Proyecto Personal - Vamos a hacer un generador de Sudokus intentando usar el algoritmo de Donald Knuth - Algorithm X
             https://en.wikipedia.org/wiki/Dancing_Links
             http://es.slideshare.net/ljsking/dancing-links-11376810
+            https://kunigami.blog/2013/04/28/the-algorithm-x-and-the-dancing-links/
 """
 from itertools import product
 
 
-def solve_sudoku(tamanyo, grid):
+def solucionar_sudoku(tamanyo, grid):
     """ Solucionar el Grid, devuelve un Generator con una de las posibles soluciones del Sudoku
         Tamanyo = (#reg x, #reg y)
         Grid = Lista de listas de numeros
@@ -32,14 +33,19 @@ def solve_sudoku(tamanyo, grid):
     for i, fila in enumerate(grid):
         for j, n in enumerate(fila):
             if n:
-                select(X, Y, (i, j, n))
-    for solucion in solve(X, Y, []):
+                seleccionar(X, Y, (i, j, n))
+    for solucion in solucionar(X, Y, []):
         for (f, c, n) in solucion:
             grid[f][c] = n
         yield grid
 
 
 def exact_cover(X, Y):
+    """ En matemáticas, dado un set S de subsets de X elementos. Un "exact cover" es una colección U de S
+    tal que cada elemento de X es contenido en exactamente un subset de U.
+    Se dirá que cada elemento en X está "exactamente contenido" en subset de U
+    https://en.wikipedia.org/wiki/Exact_cover
+    """
     X = {j: set() for j in X}
     for i, row in Y.items():
         for j in row:
@@ -47,21 +53,21 @@ def exact_cover(X, Y):
     return X, Y
 
 
-def solve(X, Y, solucion):
+def solucionar(X, Y, solucion):
     if not X:
         yield list(solucion)
     else:
         c = min(X, key=lambda c: len(X[c]))
         for row in list(X[c]):
             solucion.append(row)
-            cols = select(X, Y, row)
-            for sol in solve(X, Y, solucion):
+            cols = seleccionar(X, Y, row)
+            for sol in solucionar(X, Y, solucion):
                 yield sol
-            deselect(X, Y, row, cols)
+            deseleccionar(X, Y, row, cols)
             solucion.pop()
 
 
-def select(X, Y, row):
+def seleccionar(X, Y, row):
     try:
         cols = []
         for j in Y[row]:
@@ -75,7 +81,7 @@ def select(X, Y, row):
         raise Exception('¡El sudoku no tiene solución!')
 
 
-def deselect(X, Y, row, cols):
+def deseleccionar(X, Y, row, cols):
     for j in reversed(Y[row]):
         X[j] = cols.pop()
         for i in X[j]:

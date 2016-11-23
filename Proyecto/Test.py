@@ -31,7 +31,7 @@ grid = [[0, 0, 0, 0, 7, 6, 4, 0, 0],
 sudoku2 = Sudoku(grid)
 print("\nSudoku Original:", *sudoku2.get_nums_filas(), sep='\n    ')
 print("\nSudoku Resuelto:")
-for solucion in solve_sudoku((3, 3), sudoku2.get_nums_filas()):
+for solucion in solucionar_sudoku((3, 3), sudoku2.get_nums_filas()):
     print("", *solucion, sep='\n    ')
 print("\nSoluciones del sudoku:", *code_gold_solver(sudoku2.get_nums_string()))
 

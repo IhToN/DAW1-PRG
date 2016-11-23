@@ -100,7 +100,7 @@ class SudokuUI(Frame):
 
     def __limpiar_sudoku(self):
         print("Limpiamos las respuestas del sudoku")
-        self.game.start(is_clear=True)
+        self.game.start(es_limpiado=True)
         self.__limpiar_victoria()
         self.__pintar_cursor()
 

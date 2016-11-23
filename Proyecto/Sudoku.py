@@ -40,10 +40,13 @@ class Sudoku:
                                textwrap.wrap(grid, int(sqrt(len(grid))))]
 
     # Puzzle Starter
-    def start(self, is_clear=False):
+    def start(self, es_limpiado=False):
+        """ Genera un sudoku aleatorio o borra el avance hasta el momento en caso de que
+        es_limpiado sea True
+        """
         self.game_over = False
         self.soluciones = []
-        if is_clear:
+        if es_limpiado:
             for elem in self.cuadricula:
                 for num in elem:
                     if not num[1]:
@@ -60,7 +63,7 @@ class Sudoku:
     def get_regiones(self):
         """ Devuelve una lista con todas las regiones de 3x3 del Sudoku
         """
-        return [self.get_region(row, column) for row in range(1, 10, 3) for column in range(1, 10, 3)]
+        return [self.get_region(fila, columna) for fila in range(1, 10, 3) for columna in range(1, 10, 3)]
 
     def get_columnas(self):
         """ Devuelve una lista con todas las columnas de la cuadrícula
@@ -87,10 +90,12 @@ class Sudoku:
         """
         return [list(tuple(zip(*elem))[0]) for elem in self.get_filas()]
 
-    def get_numero(self, row, column):
-        return self.cuadricula[row - 1][column - 1][0]
+    def get_numero(self, fila, columna):
+        """ Devuelve el número de la fila y columna especificada
+        """
+        return self.cuadricula[fila - 1][columna - 1][0]
 
-    def get_region(self, row, column):
+    def get_region(self, fila, columna):
         """ Devuelve la región según la columna y la fila especificada
         """
         """
@@ -107,15 +112,19 @@ class Sudoku:
         total_regions = [first_region, second_region, third_region, fourth_region, fifth_region, sixth_region,
                          seventh_region, eighth_region, nineth_region]
         """
-        row_reg = ceil((row - 1) // 3)
-        column_reg = ceil((column - 1) // 3)
-        return [item for sublist in range(0 + 3 * row_reg, 3 + 3 * row_reg) for item in
+        fila_reg = ceil((fila - 1) // 3)
+        column_reg = ceil((columna - 1) // 3)
+        return [item for sublist in range(0 + 3 * fila_reg, 3 + 3 * fila_reg) for item in
                 self.cuadricula[sublist][0 + 3 * column_reg: 3 + 3 * column_reg]]
 
-    def get_nums_region(self, row, column):
-        return [item[0] for item in self.get_region(row, column)]
+    def get_nums_region(self, fila, columna):
+        """ Devuelve una lista con todos los números de una región
+        """
+        return [item[0] for item in self.get_region(fila, columna)]
 
     def get_nums_string(self):
+        """ Devuelve un String que contiene el grid del Sudoku hasta el momento
+        """
         acum = ""
         for fila in self.get_nums_filas():
             for numero in fila:
@@ -123,28 +132,34 @@ class Sudoku:
         return acum
 
     def get_solucion_algX(self):
-        for solucion in solve_sudoku((len(self.get_nums_filas()) // 3, len(self.get_nums_columnas()) // 3),
-                                     self.get_nums_filas()):
+        """ Devuelve la solución generada mediante Dancing Links
+        """
+        for solucion in solucionar_sudoku((len(self.get_nums_filas()) // 3, len(self.get_nums_columnas()) // 3),
+                                          self.get_nums_filas()):
             return solucion
 
     def get_soluciones(self):
+        """ Devuelve una lista con todas las soluciones posibles del Sudoku
+        """
         if not self.soluciones:
             for sol in code_gold_solver(self.get_nums_string()):
                 self.soluciones.append(sol)
         return self.soluciones
 
     # Setters
-    def set_numero(self, row, column, numero):
+    def set_numero(self, fila, columna, numero):
         """ Cambia el número de la columna y la fila especificada,
         numeradas desde 1 hasta 9.
         """
-        if not self.cuadricula[row - 1][column - 1][1]:
-            self.cuadricula[row - 1][column - 1] = [numero, False]
+        if not self.cuadricula[fila - 1][columna - 1][1]:
+            self.cuadricula[fila - 1][columna - 1] = [numero, False]
         else:
-            print("¡Ese número no es modificable!", row, column, self.cuadricula[row - 1][column - 1])
+            print("¡Ese número no es modificable!", fila, columna, self.cuadricula[fila - 1][columna - 1])
         return self
 
     def set_solucion_algX(self):
+        """ Soluciona el Sudoku obtieniendo la solución del Sudoku mediante Dancing Links
+        """
         i = 0
         solucion = self.get_solucion_algX()
         for fila in solucion:
@@ -202,6 +217,8 @@ class Sudoku:
                5 in numberlist and 6 in numberlist and 7 in numberlist and 8 in numberlist and 9 in numberlist
 
     def check_duplicated(self, numberlist, number):
+        """ Comprueba si el número ya está en la lista de números
+        """
         return not number in numberlist
 
 
