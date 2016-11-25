@@ -31,5 +31,5 @@ def add_anagrama(diccionario, palabra):
 
 
 dicc = dict()
-add_anagrama(dicc, "sal")
+add_anagrama(dicc, "hola")
 print(dicc)
