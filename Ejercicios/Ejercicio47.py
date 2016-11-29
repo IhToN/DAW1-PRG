@@ -11,7 +11,8 @@ def lista_anagramas(palabra):
     ret = set()
     for i in range(len(palabra)):
         for elem in lista_shifts(list(palabra), i):
-                ret.add(elem)
+            for elem2 in lista_shifts(list(elem), i):
+                    ret.add(elem2)
     return ret
 
 
