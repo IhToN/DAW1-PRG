@@ -6,6 +6,8 @@
 
 
 def lista_anagramas(palabra):
+    """ Devuelve una lista con todos los anagramas de una palabra
+    """
     ret = []
     for i in range(len(palabra)):
         for elem in lista_shifts(list(palabra), i):
@@ -15,6 +17,9 @@ def lista_anagramas(palabra):
 
 
 def lista_shifts(palabra, posicion):
+    """ Devuelve con todas las posibles "palabras" generadas por el movimiento de una letra
+    de la palabra, especificada por la posicion (de 0 hasta len(palabra)-1)
+    """
     ret = []
     letra = palabra.pop(posicion)
     for i in range(len(palabra) + 1):
@@ -26,8 +31,9 @@ def lista_shifts(palabra, posicion):
 
 
 def add_anagrama(diccionario, palabra):
+    """ Agrega la palabra y sus anagramas a un diccionario.
+    """
     diccionario[palabra] = lista_anagramas(palabra)
-    return diccionario
 
 
 dicc = dict()
