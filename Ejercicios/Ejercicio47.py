@@ -43,4 +43,4 @@ while palabra:
     palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
 
 for par in dicc.items():
-    print(par)
+    print(len(par[1]), par)
