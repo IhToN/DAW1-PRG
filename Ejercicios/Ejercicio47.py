@@ -6,13 +6,12 @@
 
 
 def lista_anagramas(palabra):
-    """ Devuelve una lista con todos los anagramas de una palabra
+    """ Devuelve un set con todos los anagramas de una palabra
     """
-    ret = []
+    ret = set()
     for i in range(len(palabra)):
         for elem in lista_shifts(list(palabra), i):
-            if elem not in ret:
-                ret.append(elem)
+                ret.add(elem)
     return ret
 
 
