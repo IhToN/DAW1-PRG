@@ -46,14 +46,26 @@ def generar_lista_contacto(cantidad):
     """
     ret = []
     for i in range(cantidad):
-        nombre = ""
-        for pos_letra in range(4):
-            nombre += random.choice(string.ascii_lowercase)
-        numero = 600000000
-        for pot_diez in range(8):
-            numero += random.randint(0, 9) * (10 ** pot_diez)
-        ret.append((nombre.capitalize(), numero))
+        ret.append((genera_nombre_aleatorio(random.randint(3, 7)), genera_movil_aleatorio()))
     return ret
+
+
+def genera_nombre_aleatorio(longitud):
+    """ Genera un nombre aleatorio de longitud x
+    """
+    nombre = ""
+    for pos_letra in range(longitud):
+        nombre += random.choice(string.ascii_lowercase)
+    return nombre.capitalize()
+
+
+def genera_movil_aleatorio():
+    """ Genera un número de móvil aleatorio
+    """
+    numero = 600000000
+    for pot_diez in range(8):
+        numero += random.randint(0, 9) * (10 ** pot_diez)
+    return numero
 
 
 def agregar_contactos_random(agenda, cantidad):
