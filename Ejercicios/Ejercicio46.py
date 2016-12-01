@@ -11,14 +11,16 @@ from string import ascii_uppercase
 
 
 def cuenta_caracteres(texto):
-    """ Devuelve un diccionario cuyas claves son letras y su valor la cantidad de veces que
-    aparece en el texto
+    """ Devuelve un diccionario cuyas claves son caracteres y su valor la cantidad de veces que
+    aparecen en el texto
     """
     ret = dict()
     texto = texto.upper()
-    for letra in ascii_uppercase:
-        if texto.count(letra):
-            ret[letra] = texto.count(letra)
+    for char in texto:
+        if char not in ret:
+            ret[char] = 1
+        else:
+            ret[char] += 1
     return ret
 
 

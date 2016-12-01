@@ -9,7 +9,8 @@
     d. Generar contactos aleatorios usando un diccionario por comprensión,
     siendo el nombre 4 letras aleatorias y un teléfono móvil.
 """
-import random, string
+import random
+import string
 
 
 def add_contacto(agenda, contacto):
