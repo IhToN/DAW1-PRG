@@ -31,7 +31,6 @@ def alumnos_de_curso(id_curso):
     """ Devuelve una lista con todos los alumnos matriculados
     en un curso
     """
-    ret = []
     return [alumno for curso, alumno in matriculados if curso == id_curso]
 
 
