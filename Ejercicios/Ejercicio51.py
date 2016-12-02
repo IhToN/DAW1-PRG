@@ -9,10 +9,10 @@
 alumnos, cursos, matriculados = {}, {}, []
 
 
-def add_alumno(dni, nombre, direccion, telefono, email):
+def add_alumno(n_matricula, nombre, direccion, telefono, email):
     """ Agrega un alumno al listado de alumnos
     """
-    alumnos[dni] = (nombre, direccion, telefono, email)
+    alumnos[n_matricula] = (nombre, direccion, telefono, email)
 
 
 def add_curso(identificador, descripcion):
