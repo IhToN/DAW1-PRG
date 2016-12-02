@@ -9,17 +9,18 @@ def letras_texto(texto):
     """
     ret = dict()
     texto = texto.replace(".", "").replace(",", "").replace("-", "").lower()
+    palabras = texto.split()
     for letra in texto:
         if letra not in ret.keys():
-            ret[letra] = palabras(letra, texto)
+            ret[letra] = contiene_letra(letra, palabras)
     return ret
 
 
-def palabras(letra, texto):
+def contiene_letra(letra, palabras):
     """ Devuelve un set con las palabras que contienen la letra
     """
     ret = set()
-    for palabra in texto.split():
+    for palabra in palabras:
         if letra in palabra and palabra not in ret:
             ret.add(palabra)
     return ret
