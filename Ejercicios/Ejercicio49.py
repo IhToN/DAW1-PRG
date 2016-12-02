@@ -11,7 +11,7 @@ def letras_texto(texto):
     texto = texto.replace(".", "").replace(",", "").replace("-", "").lower()
     palabras = texto.split()
     for letra in texto:
-        if letra not in ret.keys():
+        if letra not in ret:
             ret[letra] = contiene_letra(letra, palabras)
     return ret
 
