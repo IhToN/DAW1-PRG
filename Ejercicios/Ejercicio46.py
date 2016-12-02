@@ -7,7 +7,6 @@
      c. Hacer una segunda versión del contador de palabras que sea capaz de usar más de un separador.
      d. Leer de un archivo y procesar según la función C
 """
-from string import ascii_uppercase
 
 
 def cuenta_caracteres(texto):
