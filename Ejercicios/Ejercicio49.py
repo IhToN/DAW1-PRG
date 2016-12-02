@@ -21,7 +21,7 @@ def contiene_letra(letra, palabras):
     """
     ret = set()
     for palabra in palabras:
-        if letra in palabra and palabra not in ret:
+        if letra in palabra:
             ret.add(palabra)
     return ret
 
