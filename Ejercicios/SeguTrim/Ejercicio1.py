@@ -1,8 +1,9 @@
-''' Hacer un triángulo equilátero con un lado dado.
+"""
+    Hacer un triángulo equilátero con un lado dado.
         a. Queremos una función a la que pasamos el tamaño del lado y cuántos triángulos queremos y nos dibuje
         una figura simétrica formada por triángulos que no se superpongan
         b. Hacer estrella con un número de puntas dado
-'''
+"""
 
 # Importamos métodos necesarios de turtle y creamos la pantalla.
 import turtle
