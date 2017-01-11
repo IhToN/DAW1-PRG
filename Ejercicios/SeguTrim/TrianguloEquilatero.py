@@ -1,4 +1,8 @@
-''' Hacer un triángulo equilátero con un lado dado'''
+''' Hacer un triángulo equilátero con un lado dado.
+        a. Queremos una función a la que pasamos el tamaño del lado y cuántos triángulos queremos y nos dibuje
+        una figura simétrica formada por triángulos que no se superpongan
+        b. Hacer estrella con un número de puntas dado
+'''
 
 # Importamos métodos necesarios de turtle y creamos la pantalla.
 import turtle
@@ -16,11 +20,6 @@ def equilatero(lado):
         t.right(120)
 
 
-'''Queremos una función a la que pasamos el tamaño del lado y cuántos
-triángulos queremos y nos dibuje una figura simétrica formada por triángulos
-que no se superpongan'''
-
-
 def giratriangulo(triangulos, lado):
     '''Genera figura simétrica con número de triángulos y longitud de lado
     definidos por usuario '''
@@ -30,9 +29,6 @@ def giratriangulo(triangulos, lado):
         angulo = 360 / triangulos
         t.right(angulo)
         equilatero(lado)
-
-
-'''Hacer estrella con un numero de puntas dado'''
 
 
 def estrella(puntas, longitud):
