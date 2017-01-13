@@ -7,6 +7,7 @@
 """
 import threading
 import turtle
+import random
 
 screen = turtle.Screen()
 car1 = turtle.Turtle()
@@ -50,7 +51,7 @@ def move_object(object, variance=0, stop=threading.Event()):
     while not stop.is_set():
         object.forward(5)
         if not check_canvas(object):
-            object.right(90 + variance)
+            object.right(90 + random.randint(variance))
         if object == car1 or object == car2:
             check_collision(car1, car2)
 
