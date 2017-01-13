@@ -36,8 +36,8 @@ def initialize_game():
     car1.setpos(-400, 0)
     car2.setpos(400, 0)
 
-    move_car1 = threading.Thread(target=move_object, args=[car1, 0, stop_car])
-    move_car2 = threading.Thread(target=move_object, args=[car2, 0, stop_car])
+    move_car1 = threading.Thread(target=move_object, args=[car1, 90, stop_car])
+    move_car2 = threading.Thread(target=move_object, args=[car2, 90, stop_car])
     move_ball = threading.Thread(target=move_object, args=[ball, -10])
 
     move_car1.start()
@@ -45,14 +45,12 @@ def initialize_game():
     move_ball.start()
 
 
-def move_object(object, initial_angle=0, stop=threading.Event()):
+def move_object(object, variance=0, stop=threading.Event()):
     """Movemos el objeto en pasos de 5"""
-    if initial_angle:
-        object.right(initial_angle)
     while not stop.is_set():
         object.forward(5)
         if not check_canvas(object):
-            object.right(180 + initial_angle)
+            object.right(90 + variance)
         if object == car1 or object == car2:
             check_collision(car1, car2)
 
