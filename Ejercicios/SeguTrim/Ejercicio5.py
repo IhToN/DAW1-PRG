@@ -10,14 +10,19 @@ import turtle
 from random import randint
 
 screen = turtle.Screen()
+screen.tracer(1, 0)
+
 car1 = turtle.Turtle()
 car1.shape('square')
+car1.shapesize(1, 3, 3)
 car2 = turtle.Turtle()
 car2.shape('square')
+car2.shapesize(1, 3, 3)
 ball = turtle.Turtle()
 ball.shape('circle')
 
 car1_size, car2_size, ball_size = [0, 0], [0, 0], [0, 0]
+score = [0, 0]
 
 stop_car = multiprocessing.Event()
 
@@ -28,9 +33,9 @@ def initialize_game():
     car2.fillcolor('blue')
     ball.fillcolor('green')
 
-    # car1.setheading(0)
-    car2.left(180)
-    ball.left(170)
+    car1.right(90)
+    car2.left(90)
+    ball.right(randint(0, 360))
 
     car1.up()
     car2.up()
@@ -44,29 +49,35 @@ def initialize_game():
     ball_size[0], ball_size[1] = 20, 20
 
     multiprocessing.Queue()
-    move_car1 = multiprocessing.Process(target=move_object, args=(car1, 90, stop_car,))
-    move_car2 = multiprocessing.Process(target=move_object, args=(car2, 90, stop_car,))
-    move_ball = multiprocessing.Process(target=move_object, args=(ball, -10,))
+    move_car1 = multiprocessing.Process(target=move_turt_car, args=(car1, 2, stop_car,))
+    move_car2 = multiprocessing.Process(target=move_turt_car, args=(car2, 2, stop_car,))
+    move_ball = multiprocessing.Process(target=move_turt_ball, args=(ball, 2,))
 
     move_car1.start()
     move_car2.start()
     move_ball.start()
 
 
-def check_canvas(turtobj):
+def check_canvas_ball(turtobj):
     """Comprobamos si el objeto está dentro del canvas"""
-    if turtobj == car1:
-        turtobj_size = car1_size
-    elif turtobj == car2:
-        turtobj_size = car2_size
-    elif turtobj == ball:
-        turtobj_size = ball_size
+    if abs(turtobj.xcor()) >= screen.window_width() / 2 - 20:
+        if turtobj.xcor() < 0:
+            score[1] += 1
+        if turtobj.xcor() > 0:
+            score[0] += 1
+        turtobj.home()
+        ball.right(randint(0, 360))
+        print(score)
+    if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
+        turtobj.right(turtobj.heading() * 2)
+        turtobj.fd(5)
 
-    width = screen.window_width() // 2 - turtobj_size[0]
-    height = screen.window_height() // 2 - turtobj_size[1]
-    xcor = turtobj.xcor()
-    ycor = turtobj.ycor()
-    return not (width < xcor or -width > xcor or height < ycor or -height > ycor)
+
+def check_canvas_car(turtobj):
+    """Comprobamos si el objeto está dentro del canvas"""
+    if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
+        turtobj.setheading(-turtobj.heading())
+        turtobj.fd(5)
 
 
 def check_collision(obj1, obj2):
@@ -76,39 +87,20 @@ def check_collision(obj1, obj2):
         stop_car.set()
 
 
-def bounce(turtobj, horizontal=True):
-    if turtobj.xcor() > 0 and turtobj.ycor() > 0:
-        if horizontal:
-            ret = turtobj.towards(0, screen.window_height() // 2)
-    elif turtobj.xcor() > 0 and turtobj.ycor() < 0:
-        if horizontal:
-            ret = turtobj.towards(0, -screen.window_height() // 2)
-    elif turtobj.xcor() < 0 and turtobj.ycor() > 0:
-        if horizontal:
-            ret = turtobj.towards(0, -screen.window_height() // 2)
-    elif turtobj.xcor() > 0 and turtobj.ycor() > 0:
-        if horizontal:
-            ret = turtobj.towards(0, screen.window_height() // 2)
-    else:
-        ret = 90
-    return ret
-
-
-def move_object(turtobj, variance=0, stop=multiprocessing.Event()):
-    """Movemos el objeto en pasos de 5"""
+def move_turt_car(turtobj, step=2, stop=multiprocessing.Event()):
+    """Movemos el objeto en pasos de 2"""
     while not stop.is_set():
-        turtobj.forward(5)
-        if not check_canvas(turtobj):
-            randvariance = randint(0, abs(variance))
-            if variance < 0:
-                randvariance = -randvariance
-            angle = turtobj.towards(0, turtobj.ycor())
-            if angle == 0:
-                angle = 180
-            turtobj.setheading(bounce(turtobj))
-            print(bounce(turtobj))
-        if turtobj == car1 or turtobj == car2:
-            check_collision(car1, car2)
+        turtobj.forward(step)
+        if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
+            step = -step
+        #check_canvas_car(turtobj)
+
+
+def move_turt_ball(turtobj, step=2, stop=multiprocessing.Event()):
+    """Movemos el objeto en pasos de 2"""
+    while not stop.is_set():
+        turtobj.forward(step)
+        check_canvas_ball(turtobj)
 
 
 initialize_game()
