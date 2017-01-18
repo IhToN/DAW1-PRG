@@ -93,6 +93,7 @@ def move_turt_car(turtobj, step=2, stop=multiprocessing.Event()):
         turtobj.forward(step)
         if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
             step = -step
+        print(turtobj.get_shapepoly())
         #check_canvas_car(turtobj)
 
 
