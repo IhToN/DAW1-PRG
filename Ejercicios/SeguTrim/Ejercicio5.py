@@ -23,6 +23,8 @@ ball.shape('circle')
 score = [0, 0]
 
 stop_ball = multiprocessing.Event()
+stop_car1 = multiprocessing.Event()
+stop_car2 = multiprocessing.Event()
 
 
 def initialize_game():
@@ -31,7 +33,7 @@ def initialize_game():
     car2.fillcolor('blue')
     ball.fillcolor('green')
 
-    car1.right(90)
+    car1.left(90)
     car2.left(90)
     ball.right(random.choice([-1, 1]) * random.randint(25, 155))
 
@@ -56,7 +58,7 @@ def check_canvas_ball(turtobj):
         if turtobj.xcor() > 0:
             score[0] += 1
         turtobj.home()
-        ball.right(random.choice([-1, 1]) * random.randint(25, 155))
+        ball.right(random.choice([-1, 1]) * random.randint(35, 145))
         print(score)
     if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
         turtobj.right(turtobj.heading() * 2)
@@ -94,41 +96,56 @@ def erasableWrite(turtobj, name, font, align, reuse=None):
     return eraser
 
 
-def move_car1_up():
-    turtle.tracer(0)
-    if not check_canvas_car(car1, False):
-        car1.fd(-15)
+def move_car(car, fd, event):
+    turtle.tracer(1, 15)
+    while not event.is_set() and not check_canvas_car(car, fd < 0):
+        car.fd(fd)
     turtle.tracer(1)
+
+
+def move_car1_up():
+    stop_car1.clear()
+    proc = multiprocessing.Process(target=move_car, args=(car1, 5, stop_car1))
+    proc.start()
 
 
 def move_car1_down():
-    turtle.tracer(0)
-    if not check_canvas_car(car1):
-        car1.fd(15)
-    turtle.tracer(1)
+    stop_car1.clear()
+    proc = multiprocessing.Process(target=move_car, args=(car1, -5, stop_car1))
+    proc.start()
 
 
 def move_car2_up():
-    turtle.tracer(0)
-    if not check_canvas_car(car2, False):
-        car2.fd(15)
-    turtle.tracer(1)
+    stop_car2.clear()
+    proc = multiprocessing.Process(target=move_car, args=(car2, 5, stop_car2))
+    proc.start()
 
 
 def move_car2_down():
-    turtle.tracer(0)
-    if not check_canvas_car(car2):
-        car2.fd(-15)
-    turtle.tracer(1)
+    stop_car2.clear()
+    proc = multiprocessing.Process(target=move_car, args=(car2, -5, stop_car2))
+    proc.start()
+
+
+def stopev_car1():
+    stop_car1.set()
+
+
+def stopev_car2():
+    stop_car2.set()
 
 
 def main():
     initialize_game()
 
-    screen.onkey(move_car1_up, "w")
-    screen.onkey(move_car1_down, "s")
-    screen.onkey(move_car2_up, "Up")
-    screen.onkey(move_car2_down, "Down")
+    screen.onkeypress(move_car1_up, "w")
+    screen.onkeyrelease(stopev_car1, "w")
+    screen.onkeypress(move_car1_down, "s")
+    screen.onkeyrelease(stopev_car1, "s")
+    screen.onkeypress(move_car2_up, "Up")
+    screen.onkeyrelease(stopev_car2, "Up")
+    screen.onkeypress(move_car2_down, "Down")
+    screen.onkeyrelease(stopev_car2, "Down")
     screen.listen()
 
 
