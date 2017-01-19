@@ -9,7 +9,7 @@ import multiprocessing.dummy as multiprocessing
 import turtle
 import random
 
-enable_ia1, enable_ia2 = False, False
+enable_ia1, enable_ia2 = True, True
 initial_delay = 5
 
 screen = turtle.Screen()
