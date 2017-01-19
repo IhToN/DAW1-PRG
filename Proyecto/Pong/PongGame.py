@@ -9,11 +9,11 @@ import multiprocessing.dummy as multiprocessing
 import turtle
 import random
 
-enable_ia1, enable_ia2 = True, True
+enable_ia1, enable_ia2 = False, False
 initial_delay = 5
 
 screen = turtle.Screen()
-turtle.bgcolor('#0f0f0f')
+screen.bgcolor('#0f0f0f')
 
 screen.delay(initial_delay)
 car1 = turtle.Turtle()
@@ -88,18 +88,16 @@ def check_canvas_ball(turtobj):
 
 def check_canvas_car(turtobj, down=True):
     """Comprobamos si el objeto está dentro del canvas"""
-    screen.tracer(0)
     if down:
         return turtobj.ycor() <= -screen.window_height() / 2 + 100
     else:
         return turtobj.ycor() >= screen.window_height() / 2 - 100
-    screen.tracer(1)
 
 
 def bounce_car1():
     """Comprobamos si la pelota toca el coche 1"""
-    if car1.xcor() <= ball.xcor() <= car1.xcor() + 20 and (
-                        car1.ycor() - 50 <= ball.ycor() - 10 or ball.ycor() + 10 <= car1.ycor() + 50):
+    if int(car1.xcor()) - 20 <= int(ball.xcor()) <= int(car1.xcor()) \
+            and (int(car1.ycor()) - 50 <= int(ball.ycor()) + 10 and int(ball.ycor()) - 10 <= int(car1.ycor()) + 50):
         car1.setx(car1.xcor() - 5)
         screen.tracer(0)
         if screen.delay() > 0:
@@ -118,8 +116,8 @@ def bounce_car1():
 
 def bounce_car2():
     """Comprobamos si la pelota toca el coche 2"""
-    if car2.xcor() - 20 <= ball.xcor() <= car2.xcor() and (
-                        car2.ycor() - 50 <= ball.ycor() - 10 or ball.ycor() + 10 <= car2.ycor() + 50):
+    if int(car2.xcor()) - 20 <= int(ball.xcor()) <= int(car2.xcor()) \
+            and (int(car2.ycor()) - 50 <= int(ball.ycor()) - 10 and int(ball.ycor()) + 10 <= int(car2.ycor()) + 50):
         car2.setx(car2.xcor() + 5)
         screen.tracer(0)
         if screen.delay() > 0:
