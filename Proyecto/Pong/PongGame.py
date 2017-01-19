@@ -9,7 +9,7 @@ import multiprocessing.dummy as multiprocessing
 import turtle
 import random
 
-enable_ia1, enable_ia2 = False, False
+enable_ia1, enable_ia2 = True, True
 initial_delay = 5
 
 screen = turtle.Screen()
@@ -70,17 +70,17 @@ def initialize_game():
 def check_canvas_ball(turtobj):
     """Comprobamos si el objeto está dentro del canvas"""
     screen.tracer(0)
-    if abs(turtobj.xcor()) >= screen.window_width() / 2 - 10:
+    if abs(turtobj.xcor()) >= screen.window_width() / 2 - 20:
         if turtobj.xcor() < 0:
             score[1] += 1
+            ball.right(random.randint(155, 205))
         if turtobj.xcor() > 0:
             score[0] += 1
+            ball.right(-random.randint(155, 205))
         turtobj.home()
         screen.delay(initial_delay)
-        ball.right(random.choice([-1, 1]) * random.randint(155, 205))
         draw_marker()
-        print(score)
-    if abs(turtobj.ycor()) >= screen.window_height() / 2 - 30:
+    if abs(turtobj.ycor()) >= screen.window_height() / 2 - 40:
         turtobj.right(turtobj.heading() * 2)
         turtobj.fd(15)
     screen.tracer(1)
@@ -90,15 +90,16 @@ def check_canvas_car(turtobj, down=True):
     """Comprobamos si el objeto está dentro del canvas"""
     screen.tracer(0)
     if down:
-        return turtobj.ycor() <= -screen.window_height() / 2 + 90
+        return turtobj.ycor() <= -screen.window_height() / 2 + 100
     else:
-        return turtobj.ycor() >= screen.window_height() / 2 - 90
+        return turtobj.ycor() >= screen.window_height() / 2 - 100
     screen.tracer(1)
 
 
 def bounce_car1():
     """Comprobamos si la pelota toca el coche 1"""
-    if car1.xcor() <= ball.xcor() <= car1.xcor() + 20 and car1.ycor() - 90 <= ball.ycor() <= car1.ycor() + 10:
+    if car1.xcor() <= ball.xcor() <= car1.xcor() + 20 and (
+                        car1.ycor() - 50 <= ball.ycor() - 10 or ball.ycor() + 10 <= car1.ycor() + 50):
         car1.setx(car1.xcor() - 5)
         screen.tracer(0)
         if screen.delay() > 0:
@@ -106,18 +107,19 @@ def bounce_car1():
                 screen.delay(screen.delay() - 1)
             else:
                 screen.delay(screen.delay() - .5)
-        screen.tracer(1)
-        angle = 45
-        if ball.ycor() <= car1.ycor() - 30:
+        angle = ball.distance(car1.xcor(), car1.ycor()) + random.randint(1, 25)
+        if ball.ycor() <= car1.ycor():
             angle = -angle
-        ball.right(180 + angle)
+        ball.left(180 + angle)
+        screen.tracer(1)
         ball.fd(15)
         car1.setx(car1.xcor() + 5)
 
 
 def bounce_car2():
     """Comprobamos si la pelota toca el coche 2"""
-    if car2.xcor() - 20 <= ball.xcor() <= car2.xcor() and car2.ycor() - 90 <= ball.ycor() <= car2.ycor() + 10:
+    if car2.xcor() - 20 <= ball.xcor() <= car2.xcor() and (
+                        car2.ycor() - 50 <= ball.ycor() - 10 or ball.ycor() + 10 <= car2.ycor() + 50):
         car2.setx(car2.xcor() + 5)
         screen.tracer(0)
         if screen.delay() > 0:
@@ -125,11 +127,11 @@ def bounce_car2():
                 screen.delay(screen.delay() - 1)
             else:
                 screen.delay(screen.delay() - .5)
-        screen.tracer(1)
-        angle = 45
-        if ball.ycor() <= car1.ycor() - 30:
+        angle = ball.distance(car2.xcor(), car2.ycor()) + random.randint(1, 25)
+        if ball.ycor() <= car2.ycor():
             angle = -angle
         ball.right(180 + angle)
+        screen.tracer(1)
         ball.fd(15)
         car2.setx(car2.xcor() - 5)
 
@@ -175,15 +177,6 @@ def draw_field():
 def draw_marker():
     marker.clear()
     marker.write(str(score[0]) + "          " + str(score[1]), align="center", font=("Helvetica", 80, "normal"))
-
-
-def erasableWrite(turtobj, name, font, align, reuse=None):
-    eraser = turtle.Turtle() if reuse is None else reuse
-    eraser.hideturtle()
-    eraser.up()
-    eraser.setposition(turtobj.position())
-    eraser.write(name, font=font, align=align)
-    return eraser
 
 
 def move_car(car, fd, event):
