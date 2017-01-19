@@ -9,6 +9,8 @@ import multiprocessing.dummy as multiprocessing
 import turtle
 import random
 
+enable_ia = False
+
 screen = turtle.Screen()
 screen.tracer(1, 5)
 car1 = turtle.Turtle()
@@ -101,7 +103,8 @@ def move_turt_ball(turtobj, step=2, stop=multiprocessing.Event()):
         bounce_car2()
         turtobj.forward(step)
         check_canvas_ball(turtobj)
-        move_car_ia(car2)
+        if enable_ia:
+            move_car_ia(car2)
 
 
 def erasableWrite(turtobj, name, font, align, reuse=None):
@@ -161,12 +164,11 @@ def main():
     screen.onkeyrelease(stopev_car1, "w")
     screen.onkeypress(move_car1_down, "s")
     screen.onkeyrelease(stopev_car1, "s")
-    """car2_ia = multiprocessing.Process(target=move_car_ia, args=(car2, stop_car2))
-    car2_ia.start()
-    screen.onkeypress(move_car2_up, "Up")
-    screen.onkeyrelease(stopev_car2, "Up")
-    screen.onkeypress(move_car2_down, "Down")
-    screen.onkeyrelease(stopev_car2, "Down")"""
+    if not enable_ia:
+        screen.onkeypress(move_car2_up, "Up")
+        screen.onkeyrelease(stopev_car2, "Up")
+        screen.onkeypress(move_car2_down, "Down")
+        screen.onkeyrelease(stopev_car2, "Down")
     screen.listen()
 
 
