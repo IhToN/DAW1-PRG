@@ -35,7 +35,7 @@ def initialize_game():
 
     car1.left(90)
     car2.left(90)
-    ball.right(random.choice([-1, 1]) * random.randint(25, 155))
+    ball.right(random.choice([-1, 1]) * random.randint(155, 205))
 
     car1.up()
     car2.up()
@@ -62,7 +62,7 @@ def check_canvas_ball(turtobj):
         print(score)
     if abs(turtobj.ycor()) >= screen.window_height() / 2 - 20:
         turtobj.right(turtobj.heading() * 2)
-        turtobj.fd(5)
+        turtobj.fd(15)
 
 
 def check_canvas_car(turtobj, down=True):
@@ -73,18 +73,35 @@ def check_canvas_car(turtobj, down=True):
         return turtobj.ycor() >= screen.window_height() / 2 - 20
 
 
-def check_collision(obj1, obj2):
-    """Comprobamos si los objetos han colisionado entre sí"""
-    if obj1.distance(obj2) < 20:
-        print("Puuuum, y explotó")
-        stop_ball.set()
+def bounce_car1():
+    """Comprobamos si la pelota toca el coche 1"""
+    if car1.xcor() <= ball.xcor() <= car1.xcor() + 20 and car1.ycor() - 60 <= ball.ycor() <= car1.ycor():
+        car1.setx(car1.xcor() - 5)
+        ball.right(180)
+        ball.fd(15)
+        car1.setx(car1.xcor() + 5)
+
+
+def bounce_car2():
+    """Comprobamos si la pelota toca el coche 2"""
+    if car2.xcor() - 20 <= ball.xcor() <= car2.xcor() and car2.ycor() - 60 <= ball.ycor() <= car2.ycor():
+        car2.setx(car2.xcor() + 5)
+        if ball.speed() > 0:
+            ball.speed(ball.speed() + 1)
+        print(ball.speed())
+        ball.right(180)
+        ball.fd(15)
+        car2.setx(car2.xcor() - 5)
 
 
 def move_turt_ball(turtobj, step=2, stop=multiprocessing.Event()):
     """Movemos el objeto en pasos de 2"""
     while not stop.is_set():
+        bounce_car1()
+        bounce_car2()
         turtobj.forward(step)
         check_canvas_ball(turtobj)
+        move_car_ia(car2)
 
 
 def erasableWrite(turtobj, name, font, align, reuse=None):
@@ -101,9 +118,8 @@ def move_car(car, fd, event):
         car.fd(fd)
 
 
-def move_car_ia(car, event):
-    while not event.is_set():
-        car.setpos(car.xcor(), ball.ycor())
+def move_car_ia(car):
+    car.setpos(car.xcor(), ball.ycor())
 
 
 def move_car1_up():
@@ -145,9 +161,9 @@ def main():
     screen.onkeyrelease(stopev_car1, "w")
     screen.onkeypress(move_car1_down, "s")
     screen.onkeyrelease(stopev_car1, "s")
-    car2_ia = multiprocessing.Process(target=move_car_ia, args=(car2, stop_car2))
+    """car2_ia = multiprocessing.Process(target=move_car_ia, args=(car2, stop_car2))
     car2_ia.start()
-    """screen.onkeypress(move_car2_up, "Up")
+    screen.onkeypress(move_car2_up, "Up")
     screen.onkeyrelease(stopev_car2, "Up")
     screen.onkeypress(move_car2_down, "Down")
     screen.onkeyrelease(stopev_car2, "Down")"""
