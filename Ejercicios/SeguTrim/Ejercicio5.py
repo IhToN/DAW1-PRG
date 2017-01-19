@@ -10,7 +10,7 @@ import turtle
 import random
 
 screen = turtle.Screen()
-
+screen.tracer(1, 5)
 car1 = turtle.Turtle()
 car1.shape('square')
 car1.shapesize(1, 5, 2)
@@ -97,10 +97,13 @@ def erasableWrite(turtobj, name, font, align, reuse=None):
 
 
 def move_car(car, fd, event):
-    turtle.tracer(1, 15)
     while not event.is_set() and not check_canvas_car(car, fd < 0):
         car.fd(fd)
-    turtle.tracer(1)
+
+
+def move_car_ia(car, event):
+    while not event.is_set():
+        car.setpos(car.xcor(), ball.ycor())
 
 
 def move_car1_up():
@@ -142,10 +145,12 @@ def main():
     screen.onkeyrelease(stopev_car1, "w")
     screen.onkeypress(move_car1_down, "s")
     screen.onkeyrelease(stopev_car1, "s")
-    screen.onkeypress(move_car2_up, "Up")
+    car2_ia = multiprocessing.Process(target=move_car_ia, args=(car2, stop_car2))
+    car2_ia.start()
+    """screen.onkeypress(move_car2_up, "Up")
     screen.onkeyrelease(stopev_car2, "Up")
     screen.onkeypress(move_car2_down, "Down")
-    screen.onkeyrelease(stopev_car2, "Down")
+    screen.onkeyrelease(stopev_car2, "Down")"""
     screen.listen()
 
 
