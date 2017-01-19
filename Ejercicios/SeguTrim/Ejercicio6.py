@@ -26,7 +26,7 @@ def move_turtle(x, y):
         shapepoly.append((x, y))
 
 
-def toggle_capture():
+def toggle_capture(x=0, y=0):
     """Activamos o desactivamos el modo captura, según toque"""
     global capture_mode
     capture_mode = not capture_mode
@@ -39,6 +39,8 @@ def toggle_capture():
 
 def capture_shape():
     """Capturamos la figura, la colocamos como figura de la tortuga, limpiamos el dibujo y la colocaos en el centro"""
+    if not shapepoly:
+        return
     shapepoly.append(shapepoly[0])
     print(shapepoly)
     screen.register_shape('proshape', tuple(shapepoly))
@@ -51,8 +53,9 @@ def capture_shape():
 
 
 # Capturamos el screenclick para mover la tortuga y el espacio para activar o desactivar el modo captura
-screen.onclick(move_turtle)
 screen.onkey(toggle_capture, 'space')
-screen.listen()
+turtobj_cm.onclick(toggle_capture)
+screen.onclick(move_turtle)
 
+screen.listen()
 turtle.done()
