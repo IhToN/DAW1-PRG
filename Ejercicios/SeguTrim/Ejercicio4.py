@@ -8,7 +8,9 @@ from math import hypot
 
 s = turtle.Screen()
 t = turtle.Turtle()
-t.speed(10)
+s.bgcolor('black')
+t.hideturtle()
+t.speed(0)
 
 
 def color_generator():
@@ -44,6 +46,6 @@ def cuadrados_coloreados(min_size, num_cuadrados):
         t.end_fill()
 
 
-cuadrados_coloreados(150, 40)
+cuadrados_coloreados(150, 55)
 
-turtle.exitonclick()
+turtle.done()
