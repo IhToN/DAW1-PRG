@@ -5,12 +5,12 @@
     c. Colocar una pelota que rebote, añadiendo un ángulo de corrección. Se colocarán dos porterías y
         cuando la pelota entra por alguno de ellos se aumenta el valor de un contador.
 """
-import multiprocessing.dummy as multiprocessing
+import threading as multiprocessing
 import turtle
 import random
 
 enable_ia1, enable_ia2 = True, True
-initial_delay = 5
+initial_delay = 3
 
 screen = turtle.Screen()
 screen.bgcolor('#0f0f0f')
