@@ -8,8 +8,6 @@ turtobj = turtle.Turtle()
 turtobj.speed(7)
 
 
-# [(p1x, p1y, p1d), (p2x, p2y, p2d)]
-
 def pinta_segmento(tortuga, punto1, punto2):
     """ Pintamos el segmento con su respectivo triángulo
 
