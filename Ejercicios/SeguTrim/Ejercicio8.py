@@ -6,6 +6,7 @@ import turtle
 screen = turtle.Screen()
 turtobj = turtle.Turtle()
 turtobj.speed(7)
+turtobj.hideturtle()
 
 
 def pinta_segmento(tortuga, punto1, punto2):
