@@ -59,11 +59,14 @@ def main_function(repeticiones):
         print(segmentos, end="\n")
         for l in range(0, len(segmentos) - 1):
             segmentitos = pinta_segmento(turtobj, segmentos[l], segmentos[l + 1])
+            if subsegs:
+                segmentitos.pop(0)
             for segmentito in segmentitos:
                 subsegs.append(segmentito)
 
 
-repeticiones = int(input("Cuantos triangulitos quieres en el fractal?\n"))
+# repeticiones = int(input("Cuantos triangulitos quieres en el fractal?\n"))
+repeticiones = 5
 main_function(repeticiones)
 
 turtle.done()
