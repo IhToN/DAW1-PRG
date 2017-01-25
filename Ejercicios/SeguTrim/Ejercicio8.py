@@ -25,18 +25,18 @@ def pinta_segmento(tortuga, punto1, punto2):
     ret = []
 
     tortuga.down()
-    ret.append((tortuga.xcor(), tortuga.ycor()))
+    ret.append(tortuga.pos())
     tortuga.fd(distancia)
-    ret.append((tortuga.xcor(), tortuga.ycor()))
+    ret.append(tortuga.pos())
     tortuga.left(60)
     tortuga.fd(distancia)
-    ret.append((tortuga.xcor(), tortuga.ycor()))
+    ret.append(tortuga.pos())
     tortuga.right(120)
     tortuga.fd(distancia)
-    ret.append((tortuga.xcor(), tortuga.ycor()))
+    ret.append(tortuga.pos())
     tortuga.left(60)
     tortuga.fd(distancia)
-    ret.append((tortuga.xcor(), tortuga.ycor()))
+    ret.append(tortuga.pos())
 
     return ret
 
@@ -55,7 +55,8 @@ def main_function(repeticiones):
             segmentos.append(lista_puntos[0])
             segmentos.append(lista_puntos[1])
         subsegs = []
-        print(segmentos)
+        print("Lista de segmentos en la repeticion", i, end="\n")
+        print(segmentos, end="\n")
         for l in range(0, len(segmentos) - 1):
             segmentitos = pinta_segmento(turtobj, segmentos[l], segmentos[l + 1])
             for segmentito in segmentitos:
