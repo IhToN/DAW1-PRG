@@ -46,6 +46,7 @@ def main_function(repeticiones):
     lista_puntos = [(-900, 0), (900, 0)]
     subsegs = []
     for i in range(repeticiones):
+        turtobj.clear()
         segmentos = list()
         if subsegs:
             for subseg in subsegs:
