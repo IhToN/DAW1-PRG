@@ -5,7 +5,7 @@ import turtle
 
 screen = turtle.Screen()
 turtobj = turtle.Turtle()
-turtobj.speed(0)
+turtobj.speed(7)
 
 
 # [(p1x, p1y, p1d), (p2x, p2y, p2d)]
