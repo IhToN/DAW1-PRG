@@ -42,8 +42,8 @@ def pinta_segmento(tortuga, punto1, punto2):
 
 
 def main_function(repeticiones):
-    """ Pinta el fractal"""
-    lista_puntos = [(-900, 0), (900, 0)]
+    """ Pinta el fractal hasta el subnivel 'repeticiones' """
+    lista_puntos = [(-850, 0), (850, 0)]
     subsegs = []
     for i in range(repeticiones):
         turtobj.clear()
@@ -55,6 +55,7 @@ def main_function(repeticiones):
             segmentos.append(lista_puntos[0])
             segmentos.append(lista_puntos[1])
         subsegs = []
+        print(segmentos)
         for l in range(0, len(segmentos) - 1):
             segmentitos = pinta_segmento(turtobj, segmentos[l], segmentos[l + 1])
             for segmentito in segmentitos:
