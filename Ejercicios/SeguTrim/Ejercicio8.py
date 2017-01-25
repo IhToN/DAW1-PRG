@@ -53,7 +53,7 @@ def main_function(repeticiones):
             segmentos.append(lista_puntos[0])
             segmentos.append(lista_puntos[1])
         subsegs = []
-        print("Lista de segmentos en la repeticion", i, end="\n")
+        print("Lista de segmentos en la repeticion", i, end=":\n")
         print(segmentos, end="\n")
         for l in range(0, len(segmentos) - 1):
             segmentitos = pinta_segmento(turtobj, segmentos[l], segmentos[l + 1])
