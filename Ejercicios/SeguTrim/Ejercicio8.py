@@ -33,21 +33,6 @@ def pinta_segmento(tortuga, punto1, punto2):
             tortuga.right(120)
     ret.append(tortuga.pos())
     tortuga.up()
-
-    """tortuga.down()
-    ret.append(tortuga.pos())
-    tortuga.fd(distancia)
-    ret.append(tortuga.pos())
-    tortuga.left(60)
-    tortuga.fd(distancia)
-    ret.append(tortuga.pos())
-    tortuga.right(120)
-    tortuga.fd(distancia)
-    ret.append(tortuga.pos())
-    tortuga.left(60)
-    tortuga.fd(distancia)
-    ret.append(tortuga.pos())"""
-
     return ret
 
 
