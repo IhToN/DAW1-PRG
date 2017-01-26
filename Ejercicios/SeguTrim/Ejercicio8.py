@@ -5,7 +5,7 @@ import turtle
 
 screen = turtle.Screen()
 turtobj = turtle.Turtle()
-turtobj.speed(0)
+turtobj.speed(2)
 turtobj.hideturtle()
 
 
@@ -24,6 +24,17 @@ def pinta_segmento(tortuga, punto1, punto2):
     ret = []
 
     tortuga.down()
+    for i in range(1, 5):
+        ret.append(tortuga.pos())
+        tortuga.fd(distancia)
+        if i % 2:
+            tortuga.left(60)
+        elif i == 2:
+            tortuga.right(120)
+    ret.append(tortuga.pos())
+    tortuga.up()
+
+    """tortuga.down()
     ret.append(tortuga.pos())
     tortuga.fd(distancia)
     ret.append(tortuga.pos())
@@ -35,14 +46,14 @@ def pinta_segmento(tortuga, punto1, punto2):
     ret.append(tortuga.pos())
     tortuga.left(60)
     tortuga.fd(distancia)
-    ret.append(tortuga.pos())
+    ret.append(tortuga.pos())"""
 
     return ret
 
 
 def main_function(repeticiones):
     """ Pinta el fractal hasta el subnivel 'repeticiones' """
-    lista_puntos = [(-350, -350), (-350, 350), (350, 350), (350, -350), (-350, -350)]
+    lista_puntos = [(-300, 0), (300, 0)]
     for i in range(repeticiones):
         turtobj.clear()
         segmentos = lista_puntos[:]
