@@ -14,8 +14,8 @@ def input_a_int():
     except ZeroDivisionError as error:
         print("Toma pete guapo que ha cascao:", error)
         input_a_int()
-    except:
-        print("Toma pete guapo y desconocido que se ha cascao.")
+    except Exception as error:
+        print("Toma pete guapo y desconocido que se ha cascao.", error)
         input_a_int()
     else:
         print("Mira qué numerito más bonito", res)
