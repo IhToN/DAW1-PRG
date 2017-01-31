@@ -4,16 +4,22 @@
 
 
 def input_a_int():
-    """Pide un número al usuario y casca si no lo introduce."""
-    inp = input("Introduce un número, gachón de la capa:\n")
+    """Pide dos números al usuario y devuelve su división."""
+    inp1 = input("Introduce un dividendo, gachón de la capa:\n")
+    inp2 = input("Introduce un divisor, gachón de la capa:\n")
     try:
-        inp = int(inp)
+        val1 = int(inp1)
+        val2 = int(inp2)
+        res = val1 / val2
+    except ZeroDivisionError as error:
+        print("Toma pete guapo que ha cascao:", error)
+        input_a_int()
     except:
-        print("Toma pete guapo que ha cascao")
+        print("Toma pete guapo y desconocido que se ha cascao.")
         input_a_int()
     else:
-        print("Mira qué numerito más bonito", inp)
-        return inp
+        print("Mira qué numerito más bonito", res)
+        return res
 
 
 input_a_int()
