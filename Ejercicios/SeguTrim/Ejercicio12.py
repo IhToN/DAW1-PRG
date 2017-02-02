@@ -16,7 +16,7 @@ def func2():
         func3()
     except ZeroDivisionError as error:
         print("No se puede dividir entre cero")
-        func2()
+        func3()
 
 
 def func3():
