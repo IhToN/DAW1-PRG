@@ -12,6 +12,9 @@ def que_hacer():
         elif do == "escribir":
             escribir()
             do = input('¿Qué quieres hacer?\n')
+        elif do == "agregar":
+            escribir(False)
+            do = input('¿Qué quieres hacer?\n')
     print("Enga, hasta logo.\n")
 
 
@@ -21,19 +24,14 @@ def abrir():
         fichero = open(strf)
         for linea in fichero:
             print(linea)
-        '''
-        linea = fichero.readline()
-        while linea != '':
-            print(linea)
-            linea = fichero.readline()'''
         fichero.close()
     except FileNotFoundError as Error:
         print("El fichero no existe, te va a tocar hacer otra cosita.\n")
 
 
-def escribir():
+def escribir(reemplazar=True):
     strf = input("¿En qué fichero quieres escribir?\n")
-    fichero = open(strf, 'w')
+    fichero = open(strf, 'w' if reemplazar else 'a')
     aescribir = input("Dime una línea que quieras escribir en el fichero:\n")
     while aescribir != '':
         fichero.write(aescribir + "\n")
