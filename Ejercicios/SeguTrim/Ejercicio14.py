@@ -19,7 +19,14 @@ def abrir():
     strf = input("¿Qué fichero quieres abrir?\n")
     try:
         fichero = open(strf)
-        return fichero
+        for linea in fichero:
+            print(linea)
+        '''
+        linea = fichero.readline()
+        while linea != '':
+            print(linea)
+            linea = fichero.readline()'''
+        fichero.close()
     except FileNotFoundError as Error:
         print("El fichero no existe, te va a tocar hacer otra cosita.\n")
 
@@ -27,7 +34,11 @@ def abrir():
 def escribir():
     strf = input("¿En qué fichero quieres escribir?\n")
     fichero = open(strf, 'w')
-    return fichero
+    aescribir = input("Dime una línea que quieras escribir en el fichero:\n")
+    while aescribir != '':
+        fichero.write(aescribir + "\n")
+        aescribir = input("Dime una línea que quieras escribir en el fichero:\n")
+    fichero.close()
 
 
 que_hacer()
