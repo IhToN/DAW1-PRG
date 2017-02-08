@@ -7,7 +7,7 @@
             de tal forma que reconozca los operadores.
 """
 
-separadores = set('.:;,()_-\'')
+separadores = set('.:;,()_-\'\"¿¡?!')
 
 
 def cuenta_palabras(texto):
