@@ -6,8 +6,11 @@
         Hacer una versión de este programa que permita realizar un análisis de un .py,
             de tal forma que reconozca los operadores.
 """
+import keyword
 
 separadores = set('.:·;,()[]{}<>_-=\'\"#¿¡?!')
+for kw in keyword.kwlist:
+    separadores.add(kw)
 
 
 def cuenta_palabras(texto):
@@ -18,7 +21,8 @@ def cuenta_palabras(texto):
     texto = texto.lower().split()
 
     for palabra in texto:
-        ret[palabra] = texto.count(palabra)
+        if palabra not in ret:
+            ret[palabra] = texto.count(palabra)
     return ret
 
 
