@@ -31,6 +31,8 @@ def cuenta_palabras_sep(texto, separadores):
 
 
 def abrir():
+    """ Preguntamos al usuario qué fichero abrir y realizamos el conteo de palabras
+    """
     res = dict()
     strf = input("¿Qué fichero quieres abrir?\n")
     try:

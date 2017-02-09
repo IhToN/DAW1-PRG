@@ -4,6 +4,8 @@
 
 
 def que_hacer():
+    """ Se pregunta al usuario qué quiere hacer: abrir, escribir o agregar
+    """
     do = input('¿Qué quieres hacer?\n')
     while do != "nada" and do != "":
         if do == "abrir":
@@ -19,6 +21,8 @@ def que_hacer():
 
 
 def abrir():
+    """ Preguntamos al usuario qué fichero abrir y mostramos su contenido línea a línea
+    """
     strf = input("¿Qué fichero quieres abrir?\n")
     try:
         fichero = open(strf)
@@ -30,6 +34,9 @@ def abrir():
 
 
 def escribir(reemplazar=True):
+    """ Abrimos un archivo en modo escritura o modo append según el argumento y se escribe en el archivo
+    que el usuario especifique
+    """
     strf = input("¿En qué fichero quieres escribir?\n")
     fichero = open(strf, 'w' if reemplazar else 'a')
     aescribir = input("Dime una línea que quieras escribir en el fichero:\n")
