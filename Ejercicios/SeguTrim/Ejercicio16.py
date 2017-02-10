@@ -20,7 +20,7 @@ def word_in_dic(word):
         fichero.close()
         return False
     except FileNotFoundError as error:
-        print("No se ha podido abrir el archivo.")
+        print("No se ha podido abrir el archivo.", error)
 
 def anagrams_in_dic(word):
     """ Devuelve una lista de todos los anagramas de una palabra siempre que estos estén en el diccionario
