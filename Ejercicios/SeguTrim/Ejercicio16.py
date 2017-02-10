@@ -3,7 +3,7 @@
         Comprobar si una palabra está o no en el diccionario.
         Dada una palabra devolver una lista con todos los anagramas de esa palabra que pertenezcan al castellano.
 """
-from Ejercicios.PrimTrim.Ejercicio47 import lista_anagramas, lista_shifts, add_anagrama
+from Ejercicios.PrimTrim.Ejercicio47 import lista_anagramas
 
 _DICCIONARIO = 'lemario-20101017.txt'
 
