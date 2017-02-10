@@ -31,6 +31,6 @@ def anagrams_in_dic(word):
     for anagrama in lanagrams:
         if word_in_dic(anagrama):
             ret.append(anagrama)
-    return ret
+    return sorted(ret)
 
 print(anagrams_in_dic("roma"))
