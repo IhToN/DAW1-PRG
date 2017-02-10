@@ -3,16 +3,14 @@
     Este programa nos dará dichas palabras y calculará y almacenará todas las palabras posibles que se puedan
     formar con las combinaciones posibles de las letras de cada palabra introducida.
 """
-
+import itertools
 
 def lista_anagramas(palabra):
     """ Devuelve un set con todos los anagramas de una palabra
     """
     ret = set()
-    for i in range(len(palabra)):
-        for elem in lista_shifts(list(palabra), i):
-            for elem2 in lista_shifts(list(elem), i):
-                    ret.add(elem2)
+    for elem in itertools.permutations(palabra):
+        ret.add(''.join(elem))
     return ret
 
 

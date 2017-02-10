@@ -12,7 +12,7 @@ def word_in_dic(word):
     """ Comprueba que word esté en el diccionario de palabras.
     """
     try:
-        fichero = open(_DICCIONARIO)
+        fichero = open(_DICCIONARIO, encoding="utf-8")
         for palabra in fichero:
             if word == palabra.strip():
                 fichero.close()
@@ -33,4 +33,4 @@ def anagrams_in_dic(word):
             ret.append(anagrama)
     return sorted(ret)
 
-print(anagrams_in_dic("roma"))
+print(anagrams_in_dic("zorra"))
