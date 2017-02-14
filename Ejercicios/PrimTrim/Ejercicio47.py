@@ -5,12 +5,18 @@
 """
 import itertools
 
+
 def lista_anagramas(palabra):
     """ Devuelve un set con todos los anagramas de una palabra
     """
     ret = set()
-    for elem in itertools.permutations(palabra):
-        ret.add(''.join(elem))
+    """for elem in itertools.permutations(palabra):
+        ret.add(''.join(elem))"""
+    for i in range(len(palabra)):
+        for elem in lista_shifts(list(palabra), i):
+            for elem2 in lista_shifts(list(elem), i):
+                ret.add(elem2)
+                ret.add(elem2[::-1])
     return ret
 
 
@@ -20,7 +26,7 @@ def lista_shifts(palabra, posicion):
     """
     ret = []
     letra = palabra.pop(posicion)
-    for i in range(len(palabra) + 1):
+    for i in range(len(palabra)):
         combination = ''.join(palabra[:i] + list(letra) + palabra[i:])
         combination2 = ''.join(palabra[i:] + list(letra) + palabra[:i])
         ret.append(combination)
@@ -34,13 +40,12 @@ def add_anagrama(diccionario, palabra):
     diccionario[palabra] = lista_anagramas(palabra)
 
 
-def main():
-    dicc = dict()
+dicc = dict()
 
+palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
+while palabra:
+    add_anagrama(dicc, palabra)
     palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
-    while palabra:
-        add_anagrama(dicc, palabra)
-        palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
 
-    for par in dicc.items():
-        print(len(par[1]), par)
+for par in dicc.items():
+    print(len(par[1]), par)
