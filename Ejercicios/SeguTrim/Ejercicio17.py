@@ -10,12 +10,11 @@ def acertijo_carlos():
     """ Devuelve una lista de nombres propios que no contienen las letras de 'carlos'
     """
     ret = []
-    carlos = set('carlos')
     try:
         fichero = open(_DICNOMBRES, encoding="utf-8")
         for nombre in fichero:
             nombre_formateado = nombre.strip().lower().replace('á', 'a').replace('ó', 'o')
-            if not any(letra in carlos for letra in nombre_formateado):
+            if not any(letra in 'carlos' for letra in nombre_formateado):
                 ret.append(nombre.strip())
         fichero.close()
     except FileNotFoundError as error:
