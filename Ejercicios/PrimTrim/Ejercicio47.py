@@ -40,12 +40,13 @@ def add_anagrama(diccionario, palabra):
     diccionario[palabra] = lista_anagramas(palabra)
 
 
-dicc = dict()
+def main():
+    dicc = dict()
 
-palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
-while palabra:
-    add_anagrama(dicc, palabra)
     palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
+    while palabra:
+        add_anagrama(dicc, palabra)
+        palabra = input("Introduce una palabra a agregar al diccionario de Anagramas:\n")
 
-for par in dicc.items():
-    print(len(par[1]), par)
+    for par in dicc.items():
+        print(len(par[1]), par)
