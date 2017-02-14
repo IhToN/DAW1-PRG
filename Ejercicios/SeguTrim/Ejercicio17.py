@@ -13,8 +13,8 @@ def acertijo_carlos():
     try:
         fichero = open(_DICNOMBRES, encoding="utf-8")
         for nombre in fichero:
-            nombre_formateado = nombre.strip().lower().replace('á', 'a').replace('ó', 'o')
-            if not any(letra in 'carlos' for letra in nombre_formateado):
+            nombre_formateado = nombre.strip().lower()
+            if not any(letra in 'carlosáó' for letra in nombre_formateado):
                 ret.append(nombre.strip())
         fichero.close()
     except FileNotFoundError as error:
