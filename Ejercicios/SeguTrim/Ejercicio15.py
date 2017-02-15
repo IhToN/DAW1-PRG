@@ -8,9 +8,9 @@
 """
 import keyword
 
-separadores = set('.:·;,()[]{}<>_-=\'\"#¿¡?!')
+_SEPARADORES = set('.:·;,()[]{}<>_-=\'\"#¿¡?!')
 for kw in keyword.kwlist:
-    separadores.add(kw)
+    _SEPARADORES.add(kw)
 
 
 def cuenta_palabras(texto):
@@ -43,7 +43,7 @@ def abrir():
     try:
         fichero = open(strf)
         for linea in fichero:
-            newdic = cuenta_palabras_sep(linea, separadores)
+            newdic = cuenta_palabras_sep(linea, _SEPARADORES)
             for key, value in newdic.items():
                 if key in res:
                     res[key] = res[key] + value
