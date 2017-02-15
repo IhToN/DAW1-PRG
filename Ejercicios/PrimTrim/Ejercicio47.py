@@ -5,6 +5,18 @@
 """
 import itertools
 
+def lista_shifts(palabra, posicion):
+    """ Devuelve con todas las posibles "palabras" generadas por el movimiento de una letra
+    de la palabra, especificada por la posicion (de 0 hasta len(palabra)-1)
+    """
+    ret = []
+    letra = palabra.pop(posicion)
+    for i in range(len(palabra)):
+        combination = ''.join(palabra[:i] + list(letra) + palabra[i:])
+        combination2 = ''.join(palabra[i:] + list(letra) + palabra[:i])
+        ret.append(combination)
+        ret.append(combination2)
+    return tuple(ret)
 
 def lista_anagramas(palabra):
     """ Devuelve un set con todos los anagramas de una palabra
@@ -18,20 +30,6 @@ def lista_anagramas(palabra):
                 ret.add(elem2)
                 ret.add(elem2[::-1])
     return ret
-
-
-def lista_shifts(palabra, posicion):
-    """ Devuelve con todas las posibles "palabras" generadas por el movimiento de una letra
-    de la palabra, especificada por la posicion (de 0 hasta len(palabra)-1)
-    """
-    ret = []
-    letra = palabra.pop(posicion)
-    for i in range(len(palabra)):
-        combination = ''.join(palabra[:i] + list(letra) + palabra[i:])
-        combination2 = ''.join(palabra[i:] + list(letra) + palabra[:i])
-        ret.append(combination)
-        ret.append(combination2)
-    return tuple(ret)
 
 
 def add_anagrama(diccionario, palabra):
