@@ -10,13 +10,14 @@ def separar_cadena(cadena, separadores):
     ret = []
     cad = ''
     for letra in cadena:
-        if letra in separadores:
+        if letra not in separadores:
+            cad += letra
+        elif letra in separadores and cad:
             ret.append(cad)
             cad = ''
-        else:
-            cad += letra
+
     ret.append(cad)
     return ret
 
 
-print(separar_cadena('el,per.ro de san r<o>que', _SEPARADORES))
+print(separar_cadena('el,per. .ro de san r<o>que', _SEPARADORES))
