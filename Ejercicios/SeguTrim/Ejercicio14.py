@@ -3,23 +3,6 @@
 """
 
 
-def que_hacer():
-    """ Se pregunta al usuario qué quiere hacer: abrir, escribir o agregar
-    """
-    do = input('¿Qué quieres hacer?\n')
-    while do != "nada" and do != "":
-        if do == "abrir":
-            abrir()
-            do = input('¿Qué quieres hacer?\n')
-        elif do == "escribir":
-            escribir()
-            do = input('¿Qué quieres hacer?\n')
-        elif do == "agregar":
-            escribir(False)
-            do = input('¿Qué quieres hacer?\n')
-    print("Enga, hasta logo.\n")
-
-
 def abrir():
     """ Preguntamos al usuario qué fichero abrir y mostramos su contenido línea a línea
     """
@@ -44,6 +27,23 @@ def escribir(reemplazar=True):
         fichero.write(aescribir + "\n")
         aescribir = input("Dime una línea que quieras escribir en el fichero:\n")
     fichero.close()
+
+
+def que_hacer():
+    """ Se pregunta al usuario qué quiere hacer: abrir, escribir o agregar
+    """
+    do = input('¿Qué quieres hacer?\n')
+    while do != "nada" and do != "":
+        if do == "abrir":
+            abrir()
+            do = input('¿Qué quieres hacer?\n')
+        elif do == "escribir":
+            escribir()
+            do = input('¿Qué quieres hacer?\n')
+        elif do == "agregar":
+            escribir(False)
+            do = input('¿Qué quieres hacer?\n')
+    print("Enga, hasta logo.\n")
 
 
 que_hacer()
