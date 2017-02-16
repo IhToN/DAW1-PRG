@@ -2,15 +2,19 @@
     Crear una clase Persona con un método __str__ de tal forma que devuelva una cadena
     que nos permita visualizar a dicha persona.
 """
+from Ejercicios.SeguTrim.Objetos.Persona import Persona
 
+p1 = Persona('Melchor', 42)
+p2 = Persona('Gaspar', 65)
+p3 = Persona('Basaltar', 38)
 
-class Persona:
-    def __init__(self, nombre, edad):
-        self.nombre = nombre
-        self.edad = edad
+lista_personas = [p1, p2, p3]
+for p in lista_personas:
+    print(p)
 
-    def __str__(self):
-        return "Persona({0}, {1})".format(repr(self.nombre), self.edad)
+x = p1
+print(x, p1)
 
-
-print(Persona("Antonio", 24))
+rave = [Persona('Flipi' + str(i), i) for i in range(1000)]
+for p in rave:
+    print(p)
