@@ -35,5 +35,4 @@ class Persona:
     def desemparejar(self):
         if self.pareja:
             pareja = self.pareja
-            self.pareja = None
-            pareja.pareja = None
+            self.pareja, pareja.pareja = None, None
