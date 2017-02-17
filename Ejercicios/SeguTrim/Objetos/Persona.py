@@ -25,10 +25,9 @@ class Persona:
 
     def emparejar(self, pareja):
         if isinstance(pareja, Persona):
-            self.pareja = pareja
             if pareja.pareja:
                 pareja.pareja.desemparejar()
-            pareja.pareja = self
+            self.pareja, pareja.pareja = pareja, self
         else:
             print("¡{0} no es una persona!".format(pareja))
 

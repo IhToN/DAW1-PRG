@@ -151,8 +151,8 @@
       <file leaf-file-name="Persona.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Ejercicios/SeguTrim/Objetos/Persona.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="505">
-              <caret line="35" column="23" lean-forward="false" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
+            <state relative-caret-position="385">
+              <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -625,6 +625,14 @@
       <option name="presentableId" value="Default" />
       <updated>1487320590578</updated>
     </task>
+    <task id="LOCAL-00001" summary="arg">
+      <created>1487321240822</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1487321240822</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -659,6 +667,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="arg" />
+    <option name="LAST_COMMIT_MESSAGE" value="arg" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1027,8 +1039,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Ejercicios/SeguTrim/Objetos/Persona.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="505">
-          <caret line="35" column="23" lean-forward="false" selection-start-line="35" selection-start-column="23" selection-end-line="35" selection-end-column="23" />
+        <state relative-caret-position="385">
+          <caret line="29" column="12" lean-forward="false" selection-start-line="29" selection-start-column="12" selection-end-line="29" selection-end-column="12" />
           <folding />
         </state>
       </provider>
