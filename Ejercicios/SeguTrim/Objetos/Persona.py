@@ -23,15 +23,15 @@ class Persona:
         output += "soy {0} y tengo {1} años".format(self.nombre, self.edad)
         print(output)
 
-    def emparejar(self, pareja):
-        if isinstance(pareja, Persona):
-            if pareja.pareja:
-                pareja.pareja.desemparejar()
-            self.pareja, pareja.pareja = pareja, self
-        else:
-            print("¡{0} no es una persona!".format(pareja))
-
     def desemparejar(self):
         if self.pareja:
             pareja = self.pareja
             self.pareja, pareja.pareja = None, None
+
+    def emparejar(self, nueva_pareja):
+        if isinstance(nueva_pareja, Persona):
+            if nueva_pareja.pareja:
+                nueva_pareja.pareja.desemparejar()
+            self.pareja, nueva_pareja.pareja = nueva_pareja, self
+        else:
+            print("¡{0} no es una persona!".format(nueva_pareja))
