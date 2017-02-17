@@ -1,80 +1,37 @@
 """
-    Proyecto Personal - Vamos a hacer un generador de Sudokus intentando usar el algoritmo de Backtracking.
-    Este algoritmo lo que hace es generar el Sudoku por pasos reasignando valores anteriores en lugar de
-     desechar todo el proceso en caso de llegar a un Sudoku irresoluble.
+    Vamos a hacer un generador de Sudokus aleatorio, el sistema NO valorará la dificultad de un Sudoku
+    ya que no hay forma empírica de poder valorar la dificultad. La única forma de "calcular" dicha dificultad
+    es contando el número de métodos necesarios para poder resolver el Sudoku.
+    A lo sumo podemos ver el número de valores estáticos y las posibles soluciones del Sudoku y con esos datos
+    presuponer una dificultad para dicho Sudoku.
 """
-
-from Proyecto.Sudoku import *
-import time
+import random
 
 
-def findNextCellToFill(sudoku, fila, columna):
-    for x in range(fila, 10):
-        for y in range(columna, 10):
-            if sudoku.get_numero(x, y) == 0:
-                return x, y
-    for x in range(1, 10):
-        for y in range(1, 10):
-            if sudoku.get_numero(x, y) == 0:
-                return x, y
-    return -1, -1
+def make_board(num_ceros=17):
+    """Return a random filled m**2 x m**2 Sudoku board."""
+    n = 3 ** 2
+    board = [[None for _ in range(n)] for _ in range(n)]
 
+    def search(c=0):
+        i, j = divmod(c, n)
+        i0, j0 = i - i % 3, j - j % 3  # Origin of mxm block
+        numbers = list(range(1, n + 1))
+        random.shuffle(numbers)
+        for x in numbers:
+            if (x not in board[i]  # row
+                and all(row[j] != x for row in board)  # column
+                and all(x not in row[j0:j0 + 3]  # block
+                        for row in board[i0:i])):
+                board[i][j] = x
+                if c + 1 >= n ** 2 or search(c + 1):
+                    return board
+        else:
+            board[i][j] = None
+            return None
 
-def isValid(sudoku, i, j, e):
-    numRegion = 0
-    if 1 <= i <= 3:
-        if 1 <= j <= 3:
-            numRegion = 1
-        elif 4 <= j <= 6:
-            numRegion = 2
-        elif 7 <= j <= 9:
-            numRegion = 3
-    elif 4 <= i <= 6:
-        if 1 <= j <= 3:
-            numRegion = 4
-        elif 4 <= j <= 6:
-            numRegion = 5
-        elif 7 <= j <= 9:
-            numRegion = 6
-    elif 7 <= i <= 9:
-        if 1 <= j <= 3:
-            numRegion = 7
-        elif 4 <= j <= 6:
-            numRegion = 8
-        elif 7 <= j <= 9:
-            numRegion = 9
-    return sudoku.check_duplicated(sudoku.get_nums_filas()[i - 1], e) \
-           and sudoku.check_duplicated(sudoku.get_nums_columnas()[j - 1], e) \
-           and sudoku.check_duplicated(sudoku.get_nums_regiones()[numRegion - 1], e)
-
-
-def solveSudoku(sudoku, fila=1, columna=1):
-    fila, columna = findNextCellToFill(sudoku, fila, columna)
-    if fila == -1:
-        return True
-    for e in range(1, 10):
-        if isValid(sudoku, fila, columna, e):
-            sudoku.set_numero(fila, columna, e)
-            # time.sleep(2)
-            if solveSudoku(sudoku, fila, columna):
-                return True
-            sudoku.set_numero(fila, columna, 0)
-    return False
-
-
-test_sudoku = Sudoku()
-test_sudoku.set_numero(1, 2, 8).set_numero(1, 4, 5).set_numero(1, 5, 7).set_numero(1, 6, 6).set_numero(1, 7, 2) \
-    .set_numero(2, 4, 4).set_numero(2, 6, 2) \
-    .set_numero(3, 5, 3).set_numero(3, 6, 9).set_numero(3, 7, 5).set_numero(1, 8, 4).set_numero(3, 9, 8) \
-    .set_numero(4, 1, 6).set_numero(4, 2, 3).set_numero(4, 4, 9).set_numero(4, 7, 8) \
-    .set_numero(4, 8, 5).set_numero(4, 9, 2) \
-    .set_numero(5, 2, 9).set_numero(5, 4, 2).set_numero(5, 7, 3).set_numero(5, 8, 7) \
-    .set_numero(6, 1, 8).set_numero(6, 5, 5).set_numero(6, 7, 6).set_numero(6, 8, 9).set_numero(6, 9, 4) \
-    .set_numero(7, 1, 2).set_numero(7, 2, 5).set_numero(7, 3, 7).set_numero(7, 4, 6).set_numero(7, 6, 3) \
-    .set_numero(7, 7, 4).set_numero(7, 8, 8).set_numero(7, 8, 9) \
-    .set_numero(8, 1, 3).set_numero(8, 3, 8).set_numero(8, 4, 7).set_numero(8, 8, 2).set_numero(8, 9, 5) \
-    .set_numero(9, 2, 4).set_numero(9, 9, 6)
-solveSudoku(test_sudoku)
-# test_sudoku.set_numero(5, 3, 8)
-for elem in test_sudoku.get_nums_filas():
-    print(elem)
+    search()
+    for _ in range(num_ceros):
+        fil, col = random.randint(0, 8), random.randint(0, 8)
+        board[fil][col] = 0
+    return board

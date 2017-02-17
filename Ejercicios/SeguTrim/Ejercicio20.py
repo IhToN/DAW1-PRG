@@ -16,4 +16,4 @@ def main():
 
 
 for persona in main():
-    print(persona)
+    persona.presentate()
