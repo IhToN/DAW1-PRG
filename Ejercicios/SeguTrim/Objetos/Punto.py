@@ -55,3 +55,5 @@ class Traza:
         """
         if isinstance(punto, Punto):
             self.trazado.append(punto)
+        else:
+            print("¡Ioputa, que en las trazas sólo puede haber puntos y no cosas raras!")
