@@ -14,8 +14,8 @@
 
 class Punto:
     def __init__(self, x=0.0, y=0.0):
-        self.x = x
-        self.y = y
+        self.x = float(x)
+        self.y = float(y)
 
     def __str__(self):
         return "({}, {})".format(self.x, self.y)
@@ -40,6 +40,8 @@ class Traza:
         for arg in args:
             if isinstance(arg, Punto):
                 self.trazado.append(arg)
+            else:
+                print(arg, "no es un punto.")
 
     def __str__(self):
         out = ""
