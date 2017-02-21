@@ -21,7 +21,7 @@ class Punto:
         return "({}, {})".format(self.x, self.y)
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y
+        return self.x, self.y == other.x, other.y
 
     def suma(self, punto):
         """ Devuelve la suma vectorial del punto con otro.
