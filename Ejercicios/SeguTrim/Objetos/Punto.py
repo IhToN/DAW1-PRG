@@ -41,7 +41,7 @@ class Traza:
             if isinstance(arg, Punto):
                 self.trazado.append(arg)
             else:
-                print(arg, "no es un punto.")
+                raise ValueError(arg, "no es un punto.")
 
     def __str__(self):
         out = ""
@@ -58,4 +58,4 @@ class Traza:
         if isinstance(punto, Punto):
             self.trazado.append(punto)
         else:
-            print("¡Ioputa, que en las trazas sólo puede haber puntos y no cosas raras!")
+            raise ValueError("¡Ioputa, que en las trazas sólo puede haber puntos y no cosas raras!")
