@@ -14,7 +14,11 @@ class Punto:
         return "({}, {})".format(self.x, self.y)
 
     def suma(self, punto):
+        """ Devuelve la suma vectorial del punto con otro.
+        """
         return Punto(self.x + punto.x, self.y + punto.y)
 
     def resta(self, punto):
-        return Punto(self.x - punto.x, self.y - punto.y)
+        """ Devuelve la resta vectorial del punto con otro.
+        """
+        return self.suma(-punto)
