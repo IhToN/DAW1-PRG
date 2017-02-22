@@ -11,6 +11,8 @@
         comparar dos trazas (dos trazas serán iguales si sus puntos son iguales)
 """
 
+import math
+
 
 class Punto:
     def __init__(self, x=0.0, y=0.0):
@@ -24,14 +26,19 @@ class Punto:
         return (self.x, self.y) == (other.x, other.y)
 
     def suma(self, punto):
-        """ Devuelve la suma vectorial del punto con otro.
+        """ Devuelve la suma vectorial del punto con otro
         """
         return Punto(self.x + punto.x, self.y + punto.y)
 
     def resta(self, punto):
-        """ Devuelve la resta vectorial del punto con otro.
+        """ Devuelve la resta vectorial del punto con otro
         """
         return self.suma(-punto)
+
+    def distancia(self, punto):
+        """ Devuelve la distancia que hay entre un punto y otro
+        """
+        return math.hypot(self.x - punto.x, self.y - punto.y)
 
 
 class Traza:
@@ -59,3 +66,11 @@ class Traza:
             self.trazado.append(punto)
         else:
             raise ValueError("¡Ioputa, que en las trazas sólo puede haber puntos y no cosas raras!")
+
+    def longitud_traza(self):
+        """ Devuelve la suma de la distancia entre todos los puntos de la traza
+        """
+        ret = 0
+        for p in range(len(self.trazado) - 1):
+            ret += self.trazado[p].distancia(self.trazado[p + 1])
+        return ret
