@@ -20,7 +20,7 @@ class Punto:
         self.y = float(y)
 
     def __str__(self):
-        return "({}, {})".format(self.x, self.y)
+        return "Punto({}, {})".format(self.x, self.y)
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)
@@ -53,7 +53,7 @@ class Traza:
     def __str__(self):
         out = ""
         for punto in self.trazado:
-            out += str(punto)
+            out += str(punto) + " "
         return out
 
     def __eq__(self, other):
@@ -80,7 +80,7 @@ class Traza:
         """
         fichero = open(fichero, 'w', encoding="utf-8")
         for punto in self.trazado:
-            fichero.write(str(punto) + "\n")
+            fichero.write("{},{}\n".format(punto.x, punto.y))
         fichero.close()
 
     def load_traza(self, fichero):
@@ -89,7 +89,7 @@ class Traza:
             self.trazado = []
             for linea in fichero:
                 if linea != "":
-                    punto = linea.replace("(", "").replace(")", "").split(",")
+                    punto = linea.split(",")
                     self.add_punto(Punto(punto[0].strip(), punto[1].strip()))
         except FileNotFoundError:
             print("No existe el fichero.")
