@@ -74,3 +74,53 @@ class Traza:
         for p in range(len(self.trazado) - 1):
             ret += self.trazado[p].distancia(self.trazado[p + 1])
         return ret
+
+    def dump_traza(self, fichero):
+        """ Guardamos la traza en un fichero de trazas
+        """
+        fichero = open(fichero, 'w', encoding="utf-8")
+        for punto in self.trazado:
+            fichero.write(str(punto) + "\n")
+        fichero.close()
+
+    def load_traza(self, fichero):
+        try:
+            fichero = open(fichero, encoding="utf-8")
+            self.trazado = []
+            for linea in fichero:
+                if linea != "":
+                    punto = linea.replace("(", "").replace(")", "").split(",")
+                    self.add_punto(Punto(punto[0].strip(), punto[1].strip()))
+        except FileNotFoundError:
+            print("No existe el fichero.")
+
+    """ Cosa mágica para cargar una lista de trazas
+    def load_traza(self, numlinea):
+        try:
+            fichero = open('trazas.txt', encoding="utf-8")
+            fichero.seek(numlinea)
+            linea = fichero.readline()
+            if linea != "":
+                print(linea)
+                puntos = linea.replace(")(", "//").replace("(", "").replace(")", "").split("//")
+                for punto in puntos:
+                    punto = punto.split(",")
+                    self.trazado = []
+                    self.add_punto(Punto(punto[0].strip(), punto[1].strip()))
+            else:
+                raise ValueError
+        except FileNotFoundError:
+            print("No existe el fichero de trazas.")
+        except ValueError:
+            print("No existe esa traza en el fichero de trazas.")
+    """
+
+
+def test():
+    p = Punto(3, 0)
+    k = Punto(0, 4)
+    tr = Traza(p, k)
+    print(tr)
+    tr.dump_traza("traza.txt")
+    tr.load_traza("traza.txt")
+    print(tr)
