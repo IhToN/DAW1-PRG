@@ -28,7 +28,7 @@ def move_turtle(x, y):
         shapepoly.append((x, y))
 
 
-def toggle_capture(x=0, y=0):
+def toggle_capture():
     """Activamos o desactivamos el modo captura, según toque"""
     screen.tracer(0)
     global capture_mode

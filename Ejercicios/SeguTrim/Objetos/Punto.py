@@ -12,6 +12,7 @@
 """
 
 import math
+import turtle
 
 
 class Punto:
@@ -94,26 +95,35 @@ class Traza:
         except FileNotFoundError:
             print("No existe el fichero.")
 
-    """ Cosa mágica para cargar una lista de trazas
-    def load_traza(self, numlinea):
-        try:
-            fichero = open('trazas.txt', encoding="utf-8")
-            fichero.seek(numlinea)
-            linea = fichero.readline()
-            if linea != "":
-                print(linea)
-                puntos = linea.replace(")(", "//").replace("(", "").replace(")", "").split("//")
-                for punto in puntos:
-                    punto = punto.split(",")
-                    self.trazado = []
-                    self.add_punto(Punto(punto[0].strip(), punto[1].strip()))
-            else:
-                raise ValueError
-        except FileNotFoundError:
-            print("No existe el fichero de trazas.")
-        except ValueError:
-            print("No existe esa traza en el fichero de trazas.")
-    """
+    def dibuja(self, ):
+        tortuga = self.turtle
+        tortuga.down()
+        for punto in self.trazado:
+            tortuga.setpos(punto.x, punto.y)
+        tortuga.up()
+
+    def toggle_capture(self):
+        """Activamos o desactivamos el modo captura, según toque"""
+        self.capture_mode = not self.capture_mode
+        if not self.capture_mode:
+            self.turtle.clear()
+            self.dibuja()
+
+    def toggle_pen(self):
+        """Cambiar estado del lapiz de la tortuga"""
+        tortuga = self.turtle
+        if tortuga.isdown():
+            tortuga.up()
+        else:
+            tortuga.down()
+
+    def move_turtle(self, x, y):
+        """Si estamos en modo captura, movemos la tortuga y vamos guardando los puntos"""
+        tortuga = self.turtle
+        if self.capture_mode:
+            tortuga.setheading(tortuga.towards(x, y))
+            tortuga.setpos(x, y)
+            self.add_punto(Punto(x, y))
 
 
 def test():
@@ -124,3 +134,17 @@ def test():
     tr.dump_traza("traza.txt")
     tr.load_traza("traza.txt")
     print(tr)
+
+    s = turtle.Screen()
+    t = turtle.Turtle()
+    tr.turtle = t
+    tr.capture_mode = False
+
+    s.onkey(tr.toggle_capture, 'space')
+    t.onclick(tr.toggle_pen, btn=1)
+    s.onclick(tr.move_turtle)
+    s.listen()
+
+    tr.dibuja()
+
+    turtle.done()
