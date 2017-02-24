@@ -76,7 +76,7 @@ class Traza:
             ret += self.trazado[p].distancia(self.trazado[p + 1])
         return ret
 
-    def dump_traza(self, fichero):
+    def dump_traza(self, fichero='traza.txt'):
         """ Guardamos la traza en un fichero de trazas
         """
         fichero = open(fichero, 'w', encoding="utf-8")
@@ -95,7 +95,7 @@ class Traza:
         except FileNotFoundError:
             print("No existe el fichero.")
 
-    def dibuja(self, ):
+    def dibuja(self):
         tortuga = self.turtle
         tortuga.down()
         for punto in self.trazado:
@@ -106,16 +106,13 @@ class Traza:
         """Activamos o desactivamos el modo captura, según toque"""
         self.capture_mode = not self.capture_mode
         if not self.capture_mode:
-            self.turtle.clear()
+            self.turtle.reset()
+            self.turtle.up()
+            self.turtle.setpos(self.trazado[0].x, self.trazado[0].y)
             self.dibuja()
-
-    def toggle_pen(self):
-        """Cambiar estado del lapiz de la tortuga"""
-        tortuga = self.turtle
-        if tortuga.isdown():
-            tortuga.up()
-        else:
-            tortuga.down()
+            fichero = self.screen.textinput("Guardar Traza", "Dime el nombre del fichero:")
+            self.dump_traza(fichero + ".txt")
+            print(self)
 
     def move_turtle(self, x, y):
         """Si estamos en modo captura, movemos la tortuga y vamos guardando los puntos"""
@@ -138,13 +135,18 @@ def test():
     s = turtle.Screen()
     t = turtle.Turtle()
     tr.turtle = t
+    tr.screen = s
     tr.capture_mode = False
 
     s.onkey(tr.toggle_capture, 'space')
-    t.onclick(tr.toggle_pen, btn=1)
     s.onclick(tr.move_turtle)
     s.listen()
 
     tr.dibuja()
 
     turtle.done()
+
+    tr.dump_traza("traza.txt")
+
+
+test()
