@@ -41,7 +41,7 @@ class Contacto(Persona):
     contador = 0
 
     def __init__(self, nombre, edad, telefono):
-        Persona.__init__(nombre, edad)
+        Persona.__init__(self, nombre, edad)
         Contacto.contador += 1
         self.numero = Contacto.contador
         self.telefono = telefono
