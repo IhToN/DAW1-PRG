@@ -35,3 +35,13 @@ class Persona:
             self.pareja, nueva_pareja.pareja = nueva_pareja, self
         else:
             print("¡{0} no es una persona!".format(nueva_pareja))
+
+
+class Contacto(Persona):
+    contador = 0
+
+    def __init__(self, nombre, edad, telefono):
+        Persona.__init__(nombre, edad)
+        Contacto.contador += 1
+        self.numero = Contacto.contador
+        self.telefono = telefono
