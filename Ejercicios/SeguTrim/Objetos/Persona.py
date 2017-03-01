@@ -47,4 +47,4 @@ class Contacto(Persona):
         self.telefono = telefono
 
     def __str__(self):
-        return "Alumno({0}, {1}, {2}, {3})".format(self.numero, repr(self.nombre), self.edad, self.telefono)
+        return "Contacto({0}, {1}, {2}, {3})".format(self.numero, repr(self.nombre), self.edad, self.telefono)
