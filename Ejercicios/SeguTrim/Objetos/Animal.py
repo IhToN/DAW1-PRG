@@ -24,7 +24,7 @@ class Animal:
 
 class Perro(Animal):
     def __init__(self):
-        pass
+        Animal.__init__(self)
 
     def ladrar(self):
         print('¡Guau!')
