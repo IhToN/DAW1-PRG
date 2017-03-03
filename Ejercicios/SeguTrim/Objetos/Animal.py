@@ -13,13 +13,18 @@
 
 class Animal:
     def __init__(self):
-        self.estado = False
+        self.moviendose = False
 
     def mover(self):
-        self.estado = True
+        self.moviendose = True
 
     def parar(self):
-        self.estado = False
+        self.moviendose = False
+
+
+class Mascota(Animal):
+    def __init__(self, nombre):
+        self.nombre = nombre
 
 
 class Perro(Animal):
@@ -28,3 +33,9 @@ class Perro(Animal):
 
     def ladrar(self):
         print('¡Guau!')
+
+
+class PerroDomestico(Perro, Mascota):
+    def __init__(self, nombre):
+        Perro.__init__(self)
+        Animal.__init__(self, nombre)
