@@ -5,7 +5,7 @@
     c. Colocar una pelota que rebote, añadiendo un ángulo de corrección. Se colocarán dos porterías y
         cuando la pelota entra por alguno de ellos se aumenta el valor de un contador.
 """
-import threading as multiprocessing
+from multiprocessing import dummy as multiprocessing
 import turtle
 import random
 
