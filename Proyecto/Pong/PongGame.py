@@ -49,7 +49,6 @@ class Pelota(Turtle):
                     and (int(self.partida.jugador1.ycor()) - 50 <= int(self.ycor()) - 10 and int(
                         self.ycor()) + 10 <= int(self.partida.jugador1.ycor()) + 50):
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() - 1)
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() - 2)
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() - 3)
                 self.partida.screen.tracer(0)
                 if self.partida.screen.delay() > 0:
@@ -65,14 +64,12 @@ class Pelota(Turtle):
                 self.partida.screen.tracer(1)
                 self.fd(15)
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() + 3)
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() + 2)
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() + 1)
         else:  # Choque con el jugador 2
             if int(self.partida.jugador2.xcor()) - 20 <= int(self.xcor()) <= int(self.partida.jugador2.xcor()) \
                     and (int(self.partida.jugador2.ycor()) - 50 <= int(self.ycor()) - 10 and int(
                         self.ycor()) + 10 <= int(self.partida.jugador2.ycor()) + 50):
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() + 1)
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() + 2)
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() + 3)
                 self.partida.screen.tracer(0)
                 if self.partida.screen.delay() > 0:
@@ -88,7 +85,6 @@ class Pelota(Turtle):
                 self.partida.screen.tracer(1)
                 self.fd(15)
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() - 3)
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() - 2)
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() - 1)
 
 
