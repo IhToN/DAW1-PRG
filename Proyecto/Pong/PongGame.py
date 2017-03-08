@@ -3,6 +3,8 @@ import random
 import pyglet
 import os
 
+import time
+
 
 class Pelota(Turtle):
     def __init__(self, partida, velocidad=3):
@@ -31,12 +33,13 @@ class Pelota(Turtle):
         if abs(self.xcor()) >= self.partida.screen.window_width() / 2 - 20:
             if self.xcor() < 0:
                 self.partida.marcador.sumarpunto(1)
-                posneg = 1
+                posneg = -1
             if self.xcor() > 0:
                 partida.marcador.sumarpunto(0)
-                posneg = -1
+                posneg = 1
             self.home()
-            self.right(posneg * random.randint(155, 205))
+            self.setheading(90)
+            self.right(posneg * random.randint(45, 75))
             self.partida.screen.delay(self.partida.initial_delay)
             self.partida.marcador.refrescar()
             song = pyglet.media.load(partida.songs['inicioronda'])
@@ -157,12 +160,26 @@ class Marcador(Turtle):
         self.score = [0, 0]
         self.refrescar()
 
+    def __str__(self):
+        return str(self.score[0]) + " | " + str(self.score[1])
+
+    def comprobar_ganador(self):
+        dif = abs(self.score[0] - self.score[1])
+        ganador = None
+        if self.score[0] >= 5 and self.score[0] > self.score[1] and dif >= 2:
+            ganador = "Jugador 1"
+        if self.score[1] >= 5 and self.score[1] > self.score[0] and dif >= 2:
+            ganador = "Jugador 2"
+        if ganador:
+            self.partida.acabar_partida(ganador)
+
     def sumarpunto(self, jugador=0):
         self.score[jugador] += 1
+        self.comprobar_ganador()
 
     def refrescar(self):
         self.clear()
-        self.write(str(self.score[0]) + "          " + str(self.score[1]), align="center",
+        self.write(str(self).replace('|', "        "), align="center",
                    font=("Helvetica", 80, "normal"))
 
 
@@ -172,7 +189,7 @@ class Game:
         self.screen.bgcolor('#0f0f0f')
 
         self.jugando = True
-        self.activar_ia1, self.activar_ia2 = True, True
+        self.activar_ia1, self.activar_ia2 = False, False
         self.initial_delay = 3
 
         self.marcador = Marcador(self)
@@ -213,9 +230,54 @@ class Game:
         self.pelota.pencolor(oldcolor)
         self.pelota.up()
         self.pelota.home()
-        posneg = random.choice([-1, 1])
-        self.pelota.right(posneg * random.randint(155, 205))
+        self.pelota.setheading(90)
+        self.pelota.right(random.choice([-1, 1]) * random.randint(45, 75))
         self.pelota.speed(self.pelota.velocidad)
+
+    def acabar_partida(self, ganador):
+        output = '/=================================\\' + "\n" + \
+                 '|    Ganador: {}'.format(ganador) + "\n" + \
+                 '|    Resultado: {}'.format(str(self.marcador)) + "\n" + \
+                 '\\=================================/' + "\n"
+        fichero = open('historial.txt', 'a', encoding="utf-8")
+        fichero.write(output)
+        fichero.close()
+        print(output)
+        self.jugando = False
+
+
+def followobject(screen, turtobj):
+    llx = (-screen.window_width() / 2) + turtobj.xcor()
+    lly = (-screen.window_height() / 2) + turtobj.ycor()
+    urx = (screen.window_width() / 2) + turtobj.xcor()
+    ury = (+screen.window_height() / 2) + turtobj.ycor()
+
+    setworldcoordinates(partida.screen, llx, lly, urx, ury)
+
+
+def setworldcoordinates(screen, llx, lly, urx, ury):
+    """Set up a user defined coordinate-system.
+
+    Arguments:
+    llx -- coordenada X de la esquina inferior izquierda
+    lly -- coordenada Y de la esquina inferior izquierda
+    urx -- coordenada X de la esquina superior derecha
+    ury -- coordenada Y de la esquina superior derecha
+    """
+    xspan = float(urx - llx)
+    yspan = float(ury - lly)
+    wx, wy = screen._window_size()
+    screen.screensize(wx - 20, wy - 20)
+    oldxscale, oldyscale = screen.xscale, screen.yscale
+    screen.xscale = screen.canvwidth / xspan
+    screen.yscale = screen.canvheight / yspan
+    srx1 = llx * screen.xscale
+    sry1 = -ury * screen.yscale
+    srx2 = screen.canvwidth + srx1
+    sry2 = screen.canvheight + sry1
+    screen._setscrollregion(srx1, sry1, srx2, sry2)
+    screen._rescale(screen.xscale / oldxscale, screen.yscale / oldyscale)
+    screen.update()
 
 
 if __name__ == "__main__":
@@ -248,6 +310,8 @@ if __name__ == "__main__":
         partida.screen.tracer(1)
         partida.pelota.mover_pelota()
 
+        # followobject(partida.screen, partida.pelota)
+
         # canvas.place(height=partida.screen.window_height(), width=partida.screen.window_width(), x=150, y=0)
 
         if partida.jugador1.moviendose:
@@ -264,5 +328,9 @@ if __name__ == "__main__":
                 else:
                     posneg = -1
                 partida.jugador2.fd(posneg * partida.jugador2.velocidad)
+
+    partida.screen.bye()
+    p.delete()
+    time.sleep(5)
 
     partida.screen.mainloop()
