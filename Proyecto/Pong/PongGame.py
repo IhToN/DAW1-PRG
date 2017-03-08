@@ -1,5 +1,7 @@
 from turtle import Turtle, Screen
 import random
+import pyglet
+import os
 
 
 class Pelota(Turtle):
@@ -37,7 +39,11 @@ class Pelota(Turtle):
             self.right(posneg * random.randint(155, 205))
             self.partida.screen.delay(self.partida.initial_delay)
             self.partida.marcador.refrescar()
+            song = pyglet.media.load(partida.songs['inicioronda'])
+            song.play()
         if abs(self.ycor()) >= self.partida.screen.window_height() / 2 - 40:
+            song = pyglet.media.load(partida.songs['rebote'])
+            song.play()
             self.right(self.heading() * 2)
             self.fd(15)
         partida.screen.tracer(1)
@@ -61,6 +67,8 @@ class Pelota(Turtle):
                 if self.ycor() <= self.partida.jugador1.ycor():
                     angle = -angle
                 self.right(180 + angle)
+                song = pyglet.media.load(partida.songs['rebotebate'])
+                song.play()
                 self.partida.screen.tracer(1)
                 self.fd(15)
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() + 3)
@@ -82,6 +90,8 @@ class Pelota(Turtle):
                 if self.ycor() <= self.partida.jugador2.ycor():
                     angle = -angle
                 self.right(180 + angle)
+                song = pyglet.media.load(partida.songs['rebotebate'])
+                song.play()
                 self.partida.screen.tracer(1)
                 self.fd(15)
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() - 3)
@@ -98,9 +108,9 @@ class Bate(Turtle):
         self.shapesize(1, 5, 2)
         self.left(90)
         if izquierda:
-            self.setpos(-partida.screen.window_width() / 2 + 30, 0)
+            self.setpos(-partida.screen.window_width() / 2 + 40, 0)
         else:
-            self.setpos(partida.screen.window_width() / 2 - 30, 0)
+            self.setpos(partida.screen.window_width() / 2 - 40, 0)
 
         self.partida = partida
         self.ia = ia
@@ -162,7 +172,7 @@ class Game:
         self.screen.bgcolor('#0f0f0f')
 
         self.jugando = True
-        self.activar_ia1, self.activar_ia2 = True, False
+        self.activar_ia1, self.activar_ia2 = True, True
         self.initial_delay = 3
 
         self.marcador = Marcador(self)
@@ -172,6 +182,12 @@ class Game:
 
         self.jugador1 = Bate(self, 'red', True, self.activar_ia1)
         self.jugador2 = Bate(self, 'blue', False, self.activar_ia2)
+
+        self.songs = dict()
+        self.songs['musica'] = os.path.join('Resources', 'bgmusic.wav')
+        self.songs['rebote'] = os.path.join('Resources', 'boing.wav')
+        self.songs['rebotebate'] = os.path.join('Resources', 'boing.wav')
+        self.songs['inicioronda'] = os.path.join('Resources', 'startround.wav')
 
     def pintar_campo(self):
         self.pelota.clear()
@@ -205,7 +221,16 @@ class Game:
 if __name__ == "__main__":
     partida = Game()
 
+    song = pyglet.media.load(partida.songs['musica'])
+    looper = pyglet.media.SourceGroup(song.audio_format, None)
+    looper.loop = True
+    looper.queue(song)
+    p = pyglet.media.Player()
+    p.queue(looper)
+    p.play()
+
     partida.screen.delay(partida.initial_delay)
+    # pyglet.app.run()
 
     if not partida.jugador1.ia:
         partida.screen.onkeypress(partida.jugador1.arriba, "w")
@@ -222,6 +247,9 @@ if __name__ == "__main__":
     while partida.jugando:
         partida.screen.tracer(1)
         partida.pelota.mover_pelota()
+
+        # canvas.place(height=partida.screen.window_height(), width=partida.screen.window_width(), x=150, y=0)
+
         if partida.jugador1.moviendose:
             if not partida.jugador1.check_canvas():
                 if partida.jugador1.direccion == "arriba":
