@@ -41,7 +41,7 @@ class Pelota(Turtle):
             self.home()
             self.setheading(90)
             self.right(posneg * random.randint(45, 75))
-            self.speed(self.velocidad_inicial)
+            self.velocidad = self.velocidad_inicial
             self.partida.marcador.refrescar()
             song = pyglet.media.load(partida.songs['inicioronda'])
             song.play()
@@ -55,17 +55,16 @@ class Pelota(Turtle):
     def check_bate(self):
         """Comprobamos si la pelota toca algún jugador"""
         if self.xcor() < 0:  # Choque con el jugador 1
-            if int(self.partida.jugador1.xcor()) - 20 <= int(self.xcor()) <= int(self.partida.jugador1.xcor()) \
-                    and (int(self.partida.jugador1.ycor()) - 50 <= int(self.ycor()) - 10 and int(
-                        self.ycor()) + 10 <= int(self.partida.jugador1.ycor()) + 50):
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() - 1)
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() - 3)
+            if int(self.partida.jugador1.xcor()) <= int(self.xcor()) <= int(self.partida.jugador1.xcor()) + 32 \
+                    and (int(self.partida.jugador1.ycor()) - 140 <= int(self.ycor()) - 10 and int(
+                        self.ycor()) + 10 <= int(self.partida.jugador1.ycor()) + 140):
+                self.partida.jugador1.shape(self.partida.images['redhover'])
                 self.partida.screen.tracer(0)
-                if 0 < self.speed() < 9:
+                if 0 < self.velocidad < 9:
                     if self.partida.jugador1.ia:
-                        self.speed(self.speed() + 2)
+                        self.velocidad += 2
                     else:
-                        self.speed(self.speed() + 1)
+                        self.velocidad += 1
                 angle = self.distance(self.partida.jugador1.xcor(), self.partida.jugador1.ycor()) + random.randint(1,
                                                                                                                    25)
                 if self.ycor() <= self.partida.jugador1.ycor():
@@ -75,22 +74,20 @@ class Pelota(Turtle):
                 song.play()
                 self.partida.screen.tracer(1)
                 self.fd(15)
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() + 3)
-                self.partida.jugador1.setx(self.partida.jugador1.xcor() + 1)
+                self.partida.jugador1.shape(self.partida.images['red'])
         else:  # Choque con el jugador 2
-            if int(self.partida.jugador2.xcor()) - 20 <= int(self.xcor()) <= int(self.partida.jugador2.xcor()) \
-                    and (int(self.partida.jugador2.ycor()) - 50 <= int(self.ycor()) - 10 and int(
-                        self.ycor()) + 10 <= int(self.partida.jugador2.ycor()) + 50):
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() + 1)
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() + 3)
+            if int(self.partida.jugador2.xcor()) - 32 <= int(self.xcor()) <= int(self.partida.jugador2.xcor()) \
+                    and (int(self.partida.jugador2.ycor()) - 140 <= int(self.ycor()) - 10 and int(
+                        self.ycor()) + 10 <= int(self.partida.jugador2.ycor()) + 140):
+                self.partida.jugador2.shape(self.partida.images['bluehover'])
                 self.partida.screen.tracer(0)
-                if 0 < self.speed() < 9:
+                if 0 < self.velocidad < 9:
                     if self.partida.jugador1.ia:
-                        self.speed(self.speed() + 2)
+                        self.velocidad += 2
                     else:
-                        self.speed(self.speed() + 1)
-                angle = self.distance(self.partida.jugador2.xcor(), self.partida.jugador2.ycor()) + random.randint(1,
-                                                                                                                   25)
+                        self.velocidad += 1
+                angle = self.distance(self.partida.jugador2.xcor(),
+                                      self.partida.jugador2.ycor()) + random.randint(1, 25)
                 if self.ycor() <= self.partida.jugador2.ycor():
                     angle = -angle
                 self.right(180 + angle)
@@ -98,23 +95,22 @@ class Pelota(Turtle):
                 song.play()
                 self.partida.screen.tracer(1)
                 self.fd(15)
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() - 3)
-                self.partida.jugador2.setx(self.partida.jugador2.xcor() - 1)
+                self.partida.jugador2.shape(self.partida.images['blue'])
 
 
 class Bate(Turtle):
     def __init__(self, partida, fillcolor='white', izquierda=True, ia=False, velocidad=2):
         Turtle.__init__(self)
         self.up()
-        self.shape('square')
         self.fillcolor(fillcolor)
         self.pencolor('black')
-        self.shapesize(1, 5, 2)
         self.left(90)
         if izquierda:
-            self.setpos(-partida.screen.window_width() / 2 + 40, 0)
+            self.shape(partida.images['red'])
+            self.setpos(-partida.screen.window_width() / 2 + 32, 0)
         else:
-            self.setpos(partida.screen.window_width() / 2 - 40, 0)
+            self.shape(partida.images['blue'])
+            self.setpos(partida.screen.window_width() / 2 - 32, 0)
 
         self.partida = partida
         self.ia = ia
@@ -143,9 +139,9 @@ class Bate(Turtle):
         partida.screen.tracer(0)
         if self.direccion:
             if self.direccion == "abajo":
-                return self.ycor() <= -self.partida.screen.window_height() / 2 + (20 * (self.shapesize()[1] - 1))
+                return self.ycor() <= -self.partida.screen.window_height() / 2 + 140
             elif self.direccion == "arriba":
-                return self.ycor() >= self.partida.screen.window_height() / 2 - (20 * (self.shapesize()[1] - 1))
+                return self.ycor() >= self.partida.screen.window_height() / 2 - 140
         partida.screen.tracer(1)
 
 
@@ -192,6 +188,19 @@ class Game:
         self.jugando = True
         self.activar_ia1, self.activar_ia2 = False, False
 
+        self.images = dict()
+        self.images['red'] = os.path.join('Resources', 'red.gif')
+        self.images['redhover'] = os.path.join('Resources', 'redhover.gif')
+        self.images['blue'] = os.path.join('Resources', 'blue.gif')
+        self.images['bluehover'] = os.path.join('Resources', 'bluehover.gif')
+        self.registrar_shapes()
+
+        self.songs = dict()
+        self.songs['musica'] = os.path.join('Resources', 'bgmusic.wav')
+        self.songs['rebote'] = os.path.join('Resources', 'boing.wav')
+        self.songs['rebotebate'] = os.path.join('Resources', 'boing.wav')
+        self.songs['inicioronda'] = os.path.join('Resources', 'startround.wav')
+
         self.marcador = Marcador(self)
         self.pelota = Pelota(self)
 
@@ -200,11 +209,9 @@ class Game:
         self.jugador1 = Bate(self, 'red', True, self.activar_ia1)
         self.jugador2 = Bate(self, 'blue', False, self.activar_ia2)
 
-        self.songs = dict()
-        self.songs['musica'] = os.path.join('Resources', 'bgmusic.wav')
-        self.songs['rebote'] = os.path.join('Resources', 'boing.wav')
-        self.songs['rebotebate'] = os.path.join('Resources', 'boing.wav')
-        self.songs['inicioronda'] = os.path.join('Resources', 'startround.wav')
+    def registrar_shapes(self):
+        for image in self.images.values():
+            self.screen.register_shape(image)
 
     def pintar_campo(self):
         self.pelota.clear()
@@ -232,7 +239,7 @@ class Game:
         self.pelota.home()
         self.pelota.setheading(90)
         self.pelota.right(random.choice([-1, 1]) * random.randint(45, 75))
-        self.pelota.speed(self.pelota.velocidad)
+        self.pelota.speed(self.pelota.velocidad_inicial)
 
     def acabar_partida(self, ganador):
         output = '/=================================\\' + "\n" + \
@@ -331,5 +338,3 @@ if __name__ == "__main__":
     partida.screen.bye()
     p.delete()
     time.sleep(5)
-
-    partida.screen.mainloop()
