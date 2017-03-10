@@ -14,6 +14,7 @@ class Pelota(Turtle):
         self.pencolor('black')
         self.up()
         self.partida = partida
+        self.velocidad_inicial = velocidad
         self.velocidad = velocidad
         self.moviendose = True
 
@@ -40,7 +41,7 @@ class Pelota(Turtle):
             self.home()
             self.setheading(90)
             self.right(posneg * random.randint(45, 75))
-            self.partida.screen.delay(self.partida.initial_delay)
+            self.speed(self.velocidad_inicial)
             self.partida.marcador.refrescar()
             song = pyglet.media.load(partida.songs['inicioronda'])
             song.play()
@@ -60,11 +61,11 @@ class Pelota(Turtle):
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() - 1)
                 self.partida.jugador1.setx(self.partida.jugador1.xcor() - 3)
                 self.partida.screen.tracer(0)
-                if self.partida.screen.delay() > 0:
+                if 0 < self.speed() < 9:
                     if self.partida.jugador1.ia:
-                        self.partida.screen.delay(self.partida.screen.delay() - 1)
+                        self.speed(self.speed() + 2)
                     else:
-                        self.partida.screen.delay(self.partida.screen.delay() - .5)
+                        self.speed(self.speed() + 1)
                 angle = self.distance(self.partida.jugador1.xcor(), self.partida.jugador1.ycor()) + random.randint(1,
                                                                                                                    25)
                 if self.ycor() <= self.partida.jugador1.ycor():
@@ -83,11 +84,11 @@ class Pelota(Turtle):
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() + 1)
                 self.partida.jugador2.setx(self.partida.jugador2.xcor() + 3)
                 self.partida.screen.tracer(0)
-                if self.partida.screen.delay() > 0:
-                    if self.partida.jugador2.ia:
-                        self.partida.screen.delay(self.partida.screen.delay() - 1)
+                if 0 < self.speed() < 9:
+                    if self.partida.jugador1.ia:
+                        self.speed(self.speed() + 2)
                     else:
-                        self.partida.screen.delay(self.partida.screen.delay() - .5)
+                        self.speed(self.speed() + 1)
                 angle = self.distance(self.partida.jugador2.xcor(), self.partida.jugador2.ycor()) + random.randint(1,
                                                                                                                    25)
                 if self.ycor() <= self.partida.jugador2.ycor():
@@ -190,7 +191,6 @@ class Game:
 
         self.jugando = True
         self.activar_ia1, self.activar_ia2 = False, False
-        self.initial_delay = 3
 
         self.marcador = Marcador(self)
         self.pelota = Pelota(self)
@@ -291,7 +291,6 @@ if __name__ == "__main__":
     p.queue(looper)
     p.play()
 
-    partida.screen.delay(partida.initial_delay)
     # pyglet.app.run()
 
     if not partida.jugador1.ia:
