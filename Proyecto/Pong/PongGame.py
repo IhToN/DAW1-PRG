@@ -99,7 +99,7 @@ class Pelota(Turtle):
 
 
 class Bate(Turtle):
-    def __init__(self, partida, fillcolor='white', izquierda=True, ia=False, velocidad=2):
+    def __init__(self, partida, fillcolor='white', izquierda=True, ia=False, velocidad=4):
         Turtle.__init__(self)
         self.up()
         self.fillcolor(fillcolor)
@@ -183,6 +183,8 @@ class Marcador(Turtle):
 class Game:
     def __init__(self):
         self.screen = Screen()
+        self.screen.screensize()
+        self.screen.setup(width=0.8, height=0.8)
         self.screen.bgcolor('#0f0f0f')
 
         self.jugando = True
