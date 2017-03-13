@@ -38,4 +38,4 @@ class Perro(Animal):
 class PerroDomestico(Perro, Mascota):
     def __init__(self, nombre):
         Perro.__init__(self)
-        Animal.__init__(self, nombre)
+        Mascota.__init__(self, nombre)

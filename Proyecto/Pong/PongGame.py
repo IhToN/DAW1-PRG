@@ -9,28 +9,34 @@ import time
 class Pelota(Turtle):
     def __init__(self, partida, velocidad=3):
         Turtle.__init__(self)
+
         self.shape('circle')
         self.fillcolor('green')
         self.pencolor('black')
+        self.shapesize(2, 2, 2)
+        # self.shape(partida.images['ball'])
         self.up()
         self.partida = partida
         self.velocidad_inicial = velocidad
         self.velocidad = velocidad
         self.moviendose = True
 
+        self.rebote = False
+
     def mover_pelota(self):
         if self.moviendose:
-            self.forward(self.velocidad)
-            self.check_canvas()
+            self.forward(5 * self.velocidad / 2)
             self.check_bate()
+            self.check_canvas()
             if self.partida.jugador1.ia:
                 self.partida.jugador1.sety(self.ycor())
             if self.partida.jugador2.ia:
                 self.partida.jugador2.sety(self.ycor())
+            self.rebote = False
 
     def check_canvas(self):
         """Comprobamos si el objeto está dentro del canvas"""
-        partida.screen.tracer(0)
+        self.partida.screen.tracer(0)
         if abs(self.xcor()) >= self.partida.screen.window_width() / 2 - 20:
             if self.xcor() < 0:
                 self.partida.marcador.sumarpunto(1)
@@ -42,59 +48,66 @@ class Pelota(Turtle):
             self.setheading(90)
             self.right(posneg * random.randint(45, 75))
             self.velocidad = self.velocidad_inicial
-            self.partida.marcador.refrescar()
             song = pyglet.media.load(partida.songs['inicioronda'])
             song.play()
-        if abs(self.ycor()) >= self.partida.screen.window_height() / 2 - 40:
+        if abs(self.ycor()) >= self.partida.screen.window_height() / 2 - 40 and not self.rebote:
+            self.rebote = True
             song = pyglet.media.load(partida.songs['rebote'])
             song.play()
             self.right(self.heading() * 2)
-            self.fd(15)
-        partida.screen.tracer(1)
+            self.fd(5 * self.velocidad / 2)
+            self.rebote = False
+        self.partida.screen.tracer(1)
 
     def check_bate(self):
         """Comprobamos si la pelota toca algún jugador"""
-        if self.xcor() < 0:  # Choque con el jugador 1
-            if int(self.partida.jugador1.xcor()) <= int(self.xcor()) <= int(self.partida.jugador1.xcor()) + 32 \
+        if self.xcor() < 0 and not self.rebote:  # Choque con el jugador 1
+            if int(self.xcor()) <= int(self.partida.jugador1.xcor()) + 32 \
                     and (int(self.partida.jugador1.ycor()) - 140 <= int(self.ycor()) - 10 and int(
                         self.ycor()) + 10 <= int(self.partida.jugador1.ycor()) + 140):
                 self.partida.jugador1.shape(self.partida.images['redhover'])
                 self.partida.screen.tracer(0)
-                if 0 < self.velocidad < 9:
+                self.rebote = True
+                if 0 < self.velocidad < 25:
                     if self.partida.jugador1.ia:
                         self.velocidad += 2
                     else:
                         self.velocidad += 1
-                angle = self.distance(self.partida.jugador1.xcor(), self.partida.jugador1.ycor()) + random.randint(1,
-                                                                                                                   25)
-                if self.ycor() <= self.partida.jugador1.ycor():
+
+                angle = self.distance(self.partida.jugador1.xcor(),
+                                      self.partida.jugador1.ycor()) + random.randint(1, 25)
+                if self.ycor() >= self.partida.jugador1.ycor():
                     angle = -angle
-                self.right(180 + angle)
+                self.setheading(-angle)
+
                 song = pyglet.media.load(partida.songs['rebotebate'])
                 song.play()
-                self.partida.screen.tracer(1)
-                self.fd(15)
+                self.fd(25)
+                self.partida.screen.tracer(15)
                 self.partida.jugador1.shape(self.partida.images['red'])
-        else:  # Choque con el jugador 2
-            if int(self.partida.jugador2.xcor()) - 32 <= int(self.xcor()) <= int(self.partida.jugador2.xcor()) \
+        elif self.xcor() > 0 and not self.rebote:  # Choque con el jugador 2
+            if int(self.partida.jugador2.xcor()) - 32 <= int(self.xcor()) \
                     and (int(self.partida.jugador2.ycor()) - 140 <= int(self.ycor()) - 10 and int(
                         self.ycor()) + 10 <= int(self.partida.jugador2.ycor()) + 140):
                 self.partida.jugador2.shape(self.partida.images['bluehover'])
                 self.partida.screen.tracer(0)
-                if 0 < self.velocidad < 9:
+                self.rebote = True
+                if 0 < self.velocidad < 25:
                     if self.partida.jugador1.ia:
                         self.velocidad += 2
                     else:
                         self.velocidad += 1
+
                 angle = self.distance(self.partida.jugador2.xcor(),
                                       self.partida.jugador2.ycor()) + random.randint(1, 25)
                 if self.ycor() <= self.partida.jugador2.ycor():
                     angle = -angle
-                self.right(180 + angle)
+                self.setheading(180 - angle)
+
                 song = pyglet.media.load(partida.songs['rebotebate'])
                 song.play()
-                self.partida.screen.tracer(1)
-                self.fd(15)
+                self.fd(25)
+                self.partida.screen.tracer(15)
                 self.partida.jugador2.shape(self.partida.images['blue'])
 
 
@@ -172,10 +185,12 @@ class Marcador(Turtle):
 
     def sumarpunto(self, jugador=0):
         self.score[jugador] += 1
+        self.partida.marcador.refrescar()
         self.comprobar_ganador()
 
     def refrescar(self):
         self.clear()
+        print(str(self).replace('|', "        "))
         self.write(str(self).replace('|', "        "), align="center",
                    font=("Helvetica", 80, "normal"))
 
@@ -188,9 +203,10 @@ class Game:
         self.screen.bgcolor('#0f0f0f')
 
         self.jugando = True
-        self.activar_ia1, self.activar_ia2 = False, False
+        self.activar_ia1, self.activar_ia2 = True, True
 
         self.images = dict()
+        self.images['ball'] = os.path.join('Resources', 'ball.gif')
         self.images['red'] = os.path.join('Resources', 'red.gif')
         self.images['redhover'] = os.path.join('Resources', 'redhover.gif')
         self.images['blue'] = os.path.join('Resources', 'blue.gif')
@@ -241,7 +257,7 @@ class Game:
         self.pelota.home()
         self.pelota.setheading(90)
         self.pelota.right(random.choice([-1, 1]) * random.randint(45, 75))
-        self.pelota.speed(self.pelota.velocidad_inicial)
+        self.pelota.speed(0)
 
     def acabar_partida(self, ganador):
         output = '/=================================\\' + "\n" + \
