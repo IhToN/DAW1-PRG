@@ -7,6 +7,16 @@ import time
 
 
 class Pelota(Turtle):
+    """ Clase Pelota
+            Atributos:
+                partida - Clase Partida
+                velocidad - Float
+            Metodos:
+                mover_pelota()
+                comprobar_canvas()
+                comprobar_bate()
+    """
+
     def __init__(self, partida, velocidad=3):
         Turtle.__init__(self)
 
@@ -24,6 +34,9 @@ class Pelota(Turtle):
         self.rebote = False
 
     def mover_pelota(self):
+        """ Si la pelota está en 'movimiento' la movemos en pantalla y comprobamos
+        si no se ha salido del área o rebota en algún bate
+        """
         if self.moviendose:
             self.forward(5 * self.velocidad / 2)
             self.check_bate()
@@ -35,14 +48,15 @@ class Pelota(Turtle):
             self.rebote = False
 
     def check_canvas(self):
-        """Comprobamos si el objeto está dentro del canvas"""
+        """Comprobamos si el objeto está dentro del canvas
+        """
         self.partida.screen.tracer(0)
         if abs(self.xcor()) >= self.partida.screen.window_width() / 2 - 20:
             if self.xcor() < 0:
-                self.partida.marcador.sumarpunto(1)
+                self.partida.marcador.sumar_punto(1)
                 posneg = -1
             if self.xcor() > 0:
-                partida.marcador.sumarpunto(0)
+                partida.marcador.sumar_punto(0)
                 posneg = 1
             self.home()
             self.setheading(90)
@@ -60,7 +74,8 @@ class Pelota(Turtle):
         self.partida.screen.tracer(1)
 
     def check_bate(self):
-        """Comprobamos si la pelota toca algún jugador"""
+        """ Comprobamos si la pelota toca algún jugador
+        """
         if self.xcor() < 0 and not self.rebote:  # Choque con el jugador 1
             if int(self.xcor()) <= int(self.partida.jugador1.xcor()) + 32 \
                     and (int(self.partida.jugador1.ycor()) - 140 <= int(self.ycor()) - 10 and int(
@@ -68,11 +83,12 @@ class Pelota(Turtle):
                 self.partida.jugador1.shape(self.partida.images['redhover'])
                 self.partida.screen.tracer(0)
                 self.rebote = True
-                if 0 < self.velocidad < 25:
+                if 0 < self.velocidad < 15:
                     if self.partida.jugador1.ia:
                         self.velocidad += 2
                     else:
                         self.velocidad += 1
+                    self.speed(self.speed() + 1)
 
                 angle = self.distance(self.partida.jugador1.xcor(),
                                       self.partida.jugador1.ycor()) + random.randint(1, 25)
@@ -92,11 +108,12 @@ class Pelota(Turtle):
                 self.partida.jugador2.shape(self.partida.images['bluehover'])
                 self.partida.screen.tracer(0)
                 self.rebote = True
-                if 0 < self.velocidad < 25:
+                if 0 < self.velocidad < 15:
                     if self.partida.jugador1.ia:
                         self.velocidad += 2
                     else:
                         self.velocidad += 1
+                    self.speed(self.speed() + 1)
 
                 angle = self.distance(self.partida.jugador2.xcor(),
                                       self.partida.jugador2.ycor()) + random.randint(1, 25)
@@ -112,18 +129,39 @@ class Pelota(Turtle):
 
 
 class Bate(Turtle):
-    def __init__(self, partida, fillcolor='white', izquierda=True, ia=False, velocidad=4):
+    """ Clase Pelota
+            Atributos:
+                partida - Clase Partida
+                minimalista - Boolean
+                fillcolor - String
+                izquierda - Boolean
+                IA - Boolean
+                velocidad - Float
+            Metodos:
+                mover(arriba)
+                arriba()
+                abajo()
+                parar()
+                comprobar_canvas()
+    """
+
+    def __init__(self, partida, minimalista=False, fillcolor='white', izquierda=True, ia=False, velocidad=4):
         Turtle.__init__(self)
         self.up()
-        self.fillcolor(fillcolor)
-        self.pencolor('black')
-        self.left(90)
-        if izquierda:
-            self.shape(partida.images['red'])
-            self.setpos(-partida.screen.window_width() / 2 + 32, 0)
+        if minimalista:
+            self.shape('square')
+            self.shapesize(2, 5, 2)
+            self.fillcolor(fillcolor)
+            self.pencolor('black')
         else:
-            self.shape(partida.images['blue'])
-            self.setpos(partida.screen.window_width() / 2 - 32, 0)
+            if izquierda:
+                self.shape(partida.images['red'])
+                self.setpos(-partida.screen.window_width() / 2 + 32, 0)
+            else:
+                self.shape(partida.images['blue'])
+                self.setpos(partida.screen.window_width() / 2 - 32, 0)
+
+        self.left(90)
 
         self.partida = partida
         self.ia = ia
@@ -132,6 +170,8 @@ class Bate(Turtle):
         self.direccion = None
 
     def mover(self, arriba=True):
+        """ Activamos el movimineto del bate bien hacia arriba o hacia abajo
+        """
         self.moviendose = True
         if arriba:
             self.direccion = "arriba"
@@ -139,16 +179,24 @@ class Bate(Turtle):
             self.direccion = "abajo"
 
     def arriba(self):
+        """ Activamos el movimiento del bate hacia arriba
+        """
         self.mover(True)
 
     def abajo(self):
+        """ Activamos el movimiento del bate hacia abajo
+        """
         self.mover(False)
 
     def parar(self):
+        """ Paramos el movimiento del bate
+        """
         self.moviendose = False
         self.direccion = None
 
     def check_canvas(self):
+        """ Comprobamos que el bate no se sale de la pantalla
+        """
         partida.screen.tracer(0)
         if self.direccion:
             if self.direccion == "abajo":
@@ -159,43 +207,60 @@ class Bate(Turtle):
 
 
 class Marcador(Turtle):
+    """ Clase Pelota
+            Atributos:
+                partida - Clase Partida
+                puntuacion - Lista de Enteros
+            Metodos:
+                comprobar_ganador()
+                sumar_punto()
+                refrescar()
+    """
+
     def __init__(self, partida):
         Turtle.__init__(self)
         self.hideturtle()
         self.up()
         self.color('white')
         self.partida = partida
-        self.position = (0, self.partida.screen.window_height() / 2 - 160)
-        self.setpos(self.position)
-        self.score = [0, 0]
+        self.posicion = (0, self.partida.screen.window_height() / 2 - 160)
+        self.setpos(self.posicion)
+        self.puntuacion = [0, 0]
         self.refrescar()
 
     def __str__(self):
-        return str(self.score[0]) + " | " + str(self.score[1])
+        return str(self.puntuacion[0]) + " | " + str(self.puntuacion[1])
 
     def comprobar_ganador(self):
-        dif = abs(self.score[0] - self.score[1])
+        """ Comprobamos si existe un ganador, siendo este aquel que tenga mayor puntuación
+        con una diferencia de dos y a un mínimo de 5 puntos
+        """
+        dif = abs(self.puntuacion[0] - self.puntuacion[1])
         ganador = None
-        if self.score[0] >= 5 and self.score[0] > self.score[1] and dif >= 2:
+        if self.puntuacion[0] >= 5 and self.puntuacion[0] > self.puntuacion[1] and dif >= 2:
             ganador = "Jugador 1"
-        if self.score[1] >= 5 and self.score[1] > self.score[0] and dif >= 2:
+        if self.puntuacion[1] >= 5 and self.puntuacion[1] > self.puntuacion[0] and dif >= 2:
             ganador = "Jugador 2"
         if ganador:
             self.partida.acabar_partida(ganador)
 
-    def sumarpunto(self, jugador=0):
-        self.score[jugador] += 1
+    def sumar_punto(self, jugador=0):
+        """ Sumamos un punto al marcador del jugador
+        """
+        self.puntuacion[jugador] += 1
         self.partida.marcador.refrescar()
         self.comprobar_ganador()
 
     def refrescar(self):
+        """ Actualizamos el marcador en pantalla
+        """
         self.clear()
-        print(str(self).replace('|', "        "))
+        # print(str(self).replace('|', "        "))
         self.write(str(self).replace('|', "        "), align="center",
                    font=("Helvetica", 80, "normal"))
 
 
-class Game:
+class Partida:
     def __init__(self):
         self.screen = Screen()
         self.screen.screensize()
@@ -203,7 +268,7 @@ class Game:
         self.screen.bgcolor('#0f0f0f')
 
         self.jugando = True
-        self.activar_ia1, self.activar_ia2 = True, True
+        self.activar_ia1, self.activar_ia2 = False, True
 
         self.images = dict()
         self.images['ball'] = os.path.join('Resources', 'ball.gif')
@@ -224,8 +289,9 @@ class Game:
 
         self.pintar_campo()
 
-        self.jugador1 = Bate(self, 'red', True, self.activar_ia1)
-        self.jugador2 = Bate(self, 'blue', False, self.activar_ia2)
+        # def __init__(self, partida, minimalista=False, fillcolor='white', izquierda=True, ia=False, velocidad=4):
+        self.jugador1 = Bate(self, False, 'red', True, self.activar_ia1)
+        self.jugador2 = Bate(self, False, 'blue', False, self.activar_ia2)
 
     def registrar_shapes(self):
         for image in self.images.values():
@@ -306,7 +372,7 @@ def setworldcoordinates(screen, llx, lly, urx, ury):
 
 
 if __name__ == "__main__":
-    partida = Game()
+    partida = Partida()
 
     song = pyglet.media.load(partida.songs['musica'])
     looper = pyglet.media.SourceGroup(song.audio_format, None)
