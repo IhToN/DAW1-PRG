@@ -7,11 +7,11 @@ import random
 
 _RESFOLDERS = 'Resources'
 
-_MAXMOVIMIENTO = 30
-_TIEMPOMISIL = 18
-_GRAVEDAD = 11.0
+_MAXMOVIMIENTO = 15
+_TIEMPOMISIL = 25
+_GRAVEDAD = 9.8
 
-_SCREENCOORDS = -10, -10, 2110, 910
+_SCREENCOORDS = -10, -10, 3100, 1100
 
 
 class Direccion(Enum):
@@ -33,7 +33,7 @@ class Gusano(Turtle):
         self.movimiento = _MAXMOVIMIENTO
         self.bazooka = Bazooka()
 
-        self.movimiento = False
+        self.moviendose = False
         self.apuntando = False
         self.dir_movimiento = Direccion.NINGUNO
         self.dir_apunt = Direccion.NINGUNO
@@ -45,21 +45,33 @@ class Gusano(Turtle):
     def __repr__(self):
         return "Gusano({})".format(self.nombre)
 
-    def mover(self):
-        if self.movimiento:
-            self.movimiento = True
-            self.fd(1)
-            self.movimiento -= 1
-        elif self.movimiento:
-            self.parar()
-
     def mover_derecha(self):
-        self.setheading(0)
         self.dir_movimiento = Direccion.DERECHA
+        self.animar_andar()
 
     def mover_izquierda(self):
-        self.setheading(180)
         self.dir_movimiento = Direccion.IZQUIERDA
+        self.animar_andar()
+
+    def animar_andar(self):
+        if self.movimiento <= 0 or self.moviendose or self.bazooka.misil.moviendose:
+            self.parar()
+            return
+
+        self.moviendose = True
+        self.movimiento -= 1
+
+        if self.dir_movimiento == Direccion.IZQUIERDA:
+            anim = 'walk_left_'
+            vel = -1
+        else:
+            anim = 'walk_right_'
+            vel = 1
+
+        for i in range(1, 16):
+            self.fd(vel)
+            self.bazooka.setx(self.bazooka.xcor() + vel)
+            self.shape(Partida.shapes[anim + str(i) + '.gif'])
 
     def apuntar(self, dir_apunt):
         self.apuntando = True
@@ -67,12 +79,14 @@ class Gusano(Turtle):
 
     def apuntar_arriba(self):
         self.apuntar(Direccion.ARRIBA)
+        self.bazooka.cambiar_angulo(0.1)
 
     def apuntar_abajo(self):
         self.apuntar(Direccion.ABAJO)
+        self.bazooka.cambiar_angulo(-0.1)
 
     def parar(self):
-        self.movimiento = False
+        self.moviendose = False
         self.apuntando = False
         self.dir_movimiento = Direccion.NINGUNO
         self.dir_apunt = Direccion.NINGUNO
@@ -85,57 +99,78 @@ class Bazooka(Turtle):
     def __init__(self):
         Turtle.__init__(self)
         self.up()
+        self.radians()
+
+        self.setheading(math.pi / 2)
+        print(self.heading())
 
         self.misil = Misil()
-        self.velx = 55.0
-        self.vely = 32.0
+        self.potencia = 100
 
     def cambiar_potencia(self, velx):
         """ Cambiamos la velocidad inicial de X
         """
         self.velx += velx
 
-    def cambiar_angulo(self, vely):
+    def cambiar_angulo(self, angulo):
         """ Cambiamos la velocidad inicial de y
         """
-        self.vely += vely
+        if math.pi / 2 - angulo < self.heading() < math.pi - angulo:
+            self.left(angulo)
 
     def lanzar_misil(self):
-        self.misil.lanzar((self.xcor(), self.ycor()), (self.velx, self.vely))
+        self.misil.lanzar((self.xcor(), self.ycor(), self.heading() - (math.pi / 2)), self.potencia)
 
 
 class Misil(Turtle):
     def __init__(self):
-        # Turtle.__init__(self, shape=Partida.shapes['missile.gif'], visible=False)
-        Turtle.__init__(self, shape='circle', visible=False)
+        Turtle.__init__(self, shape=Partida.shapes['missile_0.gif'], visible=False)
+        # Turtle.__init__(self, shape='circle', visible=False)
         self.up()
         self.radians()
         self.moviendose = False
 
-    def lanzar(self, posicion, velocidad):
+    def iniciar_lanzamiento(self, posicion):
+        self.moviendose = True
+        self.x0, self.y0, self.angulo0 = posicion
+
+        speed = self.speed()
+        self.speed(0)
+        self.goto(self.x0, self.y0)
+        self.speed(speed)
+
+    def calc_velocidades(self, potencia):
+        vel_inicial = potencia
+        vx = vel_inicial * math.cos(self.angulo0)
+        vy = vel_inicial * math.sin(self.angulo0)
+        return vx, vy
+
+    def lanzar(self, posicion, potencia):
         if not self.moviendose:
-            self.moviendose = True
-            x, y = posicion
-            vx, vy = velocidad
-            speed = self.speed()
-            self.speed(0)
-            self.goto(x, y)
+            self.iniciar_lanzamiento(posicion)
+            vx, vy = self.calc_velocidades(potencia)
+            print("Posicion: {} \n Velocidades Iniciales: {} {}".format(posicion, vx, vy))
 
-            self.showturtle()
-            self.speed(speed)
             for t in range(1, _TIEMPOMISIL + 1):
-                x = x + vx * t
-                y = y + vy * t - _GRAVEDAD / 2 * t ** 2
+                angle_rads = math.atan((vy * t - _GRAVEDAD * t ** 2) / (vx * t))
+                self.setheading(angle_rads)
+                new_shape = 'missile_{}.gif'.format(int(Utilidades.rad_a_deg(angle_rads)))
+                self.shape(Partida.shapes[new_shape])
 
-                self.goto(x, y)
-                print(x, y)
-                angle = math.atan((vy * t - _GRAVEDAD * t ** 2) / (vx * t))
-                self.setheading(angle)
-                self.stamp()
-                if self.comprobar_colision():
-                    self.colision()
+                self.showturtle()
+
+                posx = self.x0 + vx * t
+                posy = self.y0 + vy * t - _GRAVEDAD * t ** 2 / 2
+                print("X e Y para T = {}: {} {}".format(t, posx, posy))
+                self.goto(posx, posy)
+
+                if self.ycor() < 0:
+                    self.limpiar()
                     return
-
+                    # self.stamp()
+                    # if self.comprobar_colision():
+                    #    self.colision()
+                    #    return
             self.limpiar()
 
     def colision(self):
@@ -151,9 +186,11 @@ class Misil(Turtle):
         return False
 
     def limpiar(self):
-        setworldcoordinates(Partida.pantalla, *_SCREENCOORDS)
+        Utilidades.setworldcoordinates(Partida.pantalla, *_SCREENCOORDS)
         self.hideturtle()
+        self.home()
         self.clear()
+        self.shape(Partida.shapes['missile_0.gif'])
         self.moviendose = False
 
 
@@ -191,7 +228,7 @@ class Partida:
             self.guardar_sprite(sprite_path)
 
         # Weapons
-        weapon_images = os.path.join(_RESFOLDERS, 'Weapons', '*.gif')
+        weapon_images = os.path.join(_RESFOLDERS, 'Weapons', '*', '*.gif')
         weapon_list = glob.glob(weapon_images)
         for sprite_path in weapon_list:
             self.guardar_sprite(sprite_path)
@@ -219,40 +256,48 @@ class Partida:
         self.pantalla.listen()
 
 
-def setworldcoordinates(screen, llx, lly, urx, ury):
-    """Set up a user defined coordinate-system.
+class Utilidades:
+    # Utilidades de Turtle
+    @staticmethod
+    def setworldcoordinates(screen, llx, lly, urx, ury):
+        """Set up a user defined coordinate-system.
 
-    Arguments:
-    llx -- coordenada X de la esquina inferior izquierda
-    lly -- coordenada Y de la esquina inferior izquierda
-    urx -- coordenada X de la esquina superior derecha
-    ury -- coordenada Y de la esquina superior derecha
-    """
-    xspan = float(urx - llx)
-    yspan = float(ury - lly)
-    wx, wy = screen._window_size()
-    screen.screensize(wx - 20, wy - 20)
-    oldxscale, oldyscale = screen.xscale, screen.yscale
-    screen.xscale = screen.canvwidth / xspan
-    screen.yscale = screen.canvheight / yspan
-    srx1 = llx * screen.xscale
-    sry1 = -ury * screen.yscale
-    srx2 = screen.canvwidth + srx1
-    sry2 = screen.canvheight + sry1
-    screen._setscrollregion(srx1, sry1, srx2, sry2)
-    screen._rescale(screen.xscale / oldxscale, screen.yscale / oldyscale)
-    screen.update()
+        Arguments:
+        llx -- coordenada X de la esquina inferior izquierda
+        lly -- coordenada Y de la esquina inferior izquierda
+        urx -- coordenada X de la esquina superior derecha
+        ury -- coordenada Y de la esquina superior derecha
+        """
+        xspan = float(urx - llx)
+        yspan = float(ury - lly)
+        wx, wy = screen._window_size()
+        screen.screensize(wx - 20, wy - 20)
+        oldxscale, oldyscale = screen.xscale, screen.yscale
+        screen.xscale = screen.canvwidth / xspan
+        screen.yscale = screen.canvheight / yspan
+        srx1 = llx * screen.xscale
+        sry1 = -ury * screen.yscale
+        srx2 = screen.canvwidth + srx1
+        sry2 = screen.canvheight + sry1
+        screen._setscrollregion(srx1, sry1, srx2, sry2)
+        screen._rescale(screen.xscale / oldxscale, screen.yscale / oldyscale)
+        screen.update()
 
+    @staticmethod
+    def followobject(screen, turtobj):
+        slx, sly, srx, sry = _SCREENCOORDS
 
-def followobject(screen, turtobj):
-    slx, sly, srx, sry = _SCREENCOORDS
+        llx = (-screen.window_width() / 4) + turtobj.xcor()
+        lly = (-screen.window_height() / 4) + turtobj.ycor()
+        urx = (screen.window_width() / 4) + turtobj.xcor()
+        ury = (+screen.window_height() / 4) + turtobj.ycor()
 
-    llx = (-screen.window_width() / 4) + turtobj.xcor()
-    lly = (-screen.window_height() / 4) + turtobj.ycor()
-    urx = (screen.window_width() / 4) + turtobj.xcor()
-    ury = (+screen.window_height() / 4) + turtobj.ycor()
+        Utilidades.setworldcoordinates(Partida.pantalla, llx, lly, urx, ury)
 
-    setworldcoordinates(Partida.pantalla, llx, lly, urx, ury)
+    # Utilidades Matemáticas
+    @staticmethod
+    def rad_a_deg(angle_rads):
+        return (math.degrees(angle_rads) + 360) % 360
 
 
 if __name__ == "__main__":

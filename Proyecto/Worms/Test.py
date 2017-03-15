@@ -1,33 +1,20 @@
-from time import sleep
-from turtle import *
+import os
+import glob
+from PIL import Image
 
+weapon_images = os.path.join('Resources', 'Weapons', '*.gif')
+weapon_list = glob.glob(weapon_images)
+for sprite_path in weapon_list:
+    nombre_sprite = sprite_path.split('\\')[-1].split('.')
+    image = Image.open(sprite_path)
+    image = image.convert('RGBA')
 
-def parabolaY(x, a=-1, b=5, c=0):
-    return a * x ** 2 + b * x + c
+    for i in range(0, 360):
+        new_image = nombre_sprite[0] + "_" + str(i) + "." + nombre_sprite[1]
+        imRotate = image.rotate(i, resample=Image.BICUBIC, expand=0)
+        rotated = Image.new('RGBA', image.size, (255, 255, 255, 0))
+        # rotated.paste(imRotate, (30, 30), imRotate)
+        rotated = Image.composite(rotated, imRotate, rotated)
 
-
-screen = Screen()
-screen.setworldcoordinates(-10, -10, 310, 110)
-pen = Turtle()
-pen.up()
-
-pen.down()
-pen.setpos(0, -10)
-pen.setheading(90)
-pen.fd(110)
-pen.up()
-pen.setpos(-10, 0)
-pen.down()
-pen.setheading(0)
-pen.fd(310)
-pen.up()
-
-for x in range(-10, 10):
-    pen.goto(x, parabolaY(x))
-    pen.down()
-pen.up()
-
-pen.goto(-10, -10)
-pen.color('green')
-pen.write("Listo")
-screen.exitonclick()
+        # imRotate.show()
+        rotated.save(os.path.join('Resources', 'Weapons', 'Missile', new_image), format='PNG')
