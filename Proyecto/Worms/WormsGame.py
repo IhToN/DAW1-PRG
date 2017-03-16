@@ -8,7 +8,7 @@ import random
 _RESFOLDERS = 'Resources'
 
 _MAXMOVIMIENTO = 15
-_TIEMPOMISIL = 25
+_TIEMPOMISIL = 5000
 _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
@@ -119,7 +119,7 @@ class Bazooka(Turtle):
             self.left(angulo)
 
     def lanzar_misil(self):
-        self.misil.lanzar((self.xcor(), self.ycor(), self.heading() - (math.pi / 2)), self.potencia)
+        self.misil.lanzar((self.xcor(), self.ycor(), self.heading() - (math.pi / 2), self.potencia))
 
 
 class Misil(Turtle):
@@ -132,7 +132,7 @@ class Misil(Turtle):
 
     def iniciar_lanzamiento(self, posicion):
         self.moviendose = True
-        self.x0, self.y0, self.angulo0 = posicion
+        self.x0, self.y0, self.angulo0, self.potencia = posicion
 
         speed = self.speed()
         self.speed(0)
@@ -145,24 +145,27 @@ class Misil(Turtle):
         vy = vel_inicial * math.sin(self.angulo0)
         return vx, vy
 
-    def lanzar(self, posicion, potencia):
+    def mover_parabola(self, posx):
+        tracerspeed = Partida.pantalla.tracer()
+        Partida.pantalla.tracer(0)
+        self.showturtle()
+        self.down()
+
+        posy = Utilidades.tiro_parabolico(self.x0, self.y0, posx, self.angulo0, self.potencia)
+        print("X e Y: {} {}".format(posx, posy))
+
+        self.setheading(self.towards(posx, posy) - math.pi / 2)
+        new_shape = 'missile_{}.gif'.format(int(Utilidades.rad_a_deg(self.heading())))
+        self.shape(Partida.shapes[new_shape])
+        Partida.pantalla.tracer(tracerspeed)
+        self.goto(posx, posy)
+
+    def lanzar(self, posicion):
         if not self.moviendose:
             self.iniciar_lanzamiento(posicion)
-            vx, vy = self.calc_velocidades(potencia)
-            print("Posicion: {} \n Velocidades Iniciales: {} {}".format(posicion, vx, vy))
 
-            for t in range(1, _TIEMPOMISIL + 1):
-                angle_rads = math.atan((vy * t - _GRAVEDAD * t ** 2) / (vx * t))
-                self.setheading(angle_rads)
-                new_shape = 'missile_{}.gif'.format(int(Utilidades.rad_a_deg(angle_rads)))
-                self.shape(Partida.shapes[new_shape])
-
-                self.showturtle()
-
-                posx = self.x0 + vx * t
-                posy = self.y0 + vy * t - _GRAVEDAD * t ** 2 / 2
-                print("X e Y para T = {}: {} {}".format(t, posx, posy))
-                self.goto(posx, posy)
+            for posx in range(int(self.x0), int(self.x0) + _TIEMPOMISIL + 1, 10):
+                self.mover_parabola(posx)
 
                 if self.ycor() < 0:
                     self.limpiar()
@@ -187,10 +190,12 @@ class Misil(Turtle):
 
     def limpiar(self):
         Utilidades.setworldcoordinates(Partida.pantalla, *_SCREENCOORDS)
+        self.up()
         self.hideturtle()
         self.home()
         self.clear()
         self.shape(Partida.shapes['missile_0.gif'])
+
         self.moviendose = False
 
 
@@ -298,6 +303,22 @@ class Utilidades:
     @staticmethod
     def rad_a_deg(angle_rads):
         return (math.degrees(angle_rads) + 360) % 360
+
+    @staticmethod
+    def tiro_parabolico(x0, y0, posx, angulo, potencia):
+        vel_inicial = potencia
+        vx = vel_inicial * math.cos(angulo)
+        vy = vel_inicial * math.sin(angulo)
+        posy = y0 + vy * ((posx - x0) / vx) - 1 / 2 * _GRAVEDAD * ((posx - x0) / vx) ** 2
+        """posy = y0 + posx * math.tan(angulo) - (_GRAVEDAD * (posx + x0) ** 2) / \
+                                              (2 * vel_inicial ** 2 * math.cos(angulo) ** 2)"""
+        return posy
+
+    @staticmethod
+    def tiro_parabolico_tiempo(x0, y0, vx, vy, t):
+        posx = x0 + vx * t
+        posy = y0 + vy * t - _GRAVEDAD * t ** 2 / 2
+        return posx, posy
 
 
 if __name__ == "__main__":
