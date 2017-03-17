@@ -111,8 +111,8 @@ class Bazooka(Turtle):
         self.setheading(math.pi / 2)
         print(self.heading())
 
-        self.misil = Misil(self.posicion_misil())
         self.potencia = 100
+        self.misil = Misil(self.posicion_misil())
 
     def cambiar_potencia(self, potencia):
         """ Cambiamos la velocidad inicial de X
@@ -239,6 +239,7 @@ class Partida:
         return Gusano(nombre)
 
     def iniciar_sprites(self):
+        """
         # Walk Animation
         walk_images = os.path.join(_RESFOLDERS, 'Walk', '*.gif')
         walk_list = glob.glob(walk_images)
@@ -249,7 +250,12 @@ class Partida:
         weapon_images = os.path.join(_RESFOLDERS, 'Weapons', '*', '*.gif')
         weapon_list = glob.glob(weapon_images)
         for sprite_path in weapon_list:
-            self.guardar_sprite(sprite_path)
+            self.guardar_sprite(sprite_path)"""
+
+        res_gifs = os.path.join(_RESFOLDERS, '**', '*.gif')
+        gifs_list = glob.glob(res_gifs, recursive=True)
+        for gif in gifs_list:
+            self.guardar_sprite(gif)
 
     def guardar_sprite(self, path):
         nombre_sprite = path.split('\\')[-1]
