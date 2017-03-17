@@ -1,13 +1,14 @@
 from enum import Enum
-from turtle import Turtle, Screen, Vec2D
+from turtle import Turtle, Screen
 import glob
 import os
 import math
 import random
+import Proyecto.Worms.Utilidades as Utilidades
 
 _RESFOLDERS = 'Resources'
 
-_MAXMOVIMIENTO = 15
+_MAXMOVIMIENTO = 1500
 _TIEMPOMISIL = 5000
 _GRAVEDAD = 9.8
 
@@ -85,6 +86,12 @@ class Gusano(Turtle):
         self.apuntar(Direccion.ABAJO)
         self.bazooka.cambiar_angulo(-0.1)
 
+    def subir_potencia(self):
+        self.bazooka.cambiar_potencia(5)
+
+    def bajar_potencia(self):
+        self.bazooka.cambiar_potencia(-5)
+
     def parar(self):
         self.moviendose = False
         self.apuntando = False
@@ -104,13 +111,14 @@ class Bazooka(Turtle):
         self.setheading(math.pi / 2)
         print(self.heading())
 
-        self.misil = Misil()
+        self.misil = Misil(self.posicion_misil())
         self.potencia = 100
 
-    def cambiar_potencia(self, velx):
+    def cambiar_potencia(self, potencia):
         """ Cambiamos la velocidad inicial de X
         """
-        self.velx += velx
+        self.potencia += potencia
+        print("Potencia del Bazooka: {}".format(self.potencia))
 
     def cambiar_angulo(self, angulo):
         """ Cambiamos la velocidad inicial de y
@@ -119,15 +127,20 @@ class Bazooka(Turtle):
             self.left(angulo)
 
     def lanzar_misil(self):
-        self.misil.lanzar((self.xcor(), self.ycor(), self.heading() - (math.pi / 2), self.potencia))
+        self.misil.lanzar(self.posicion_misil())
+
+    def posicion_misil(self):
+        return self.xcor(), self.ycor(), self.heading() - (math.pi / 2), self.potencia
 
 
 class Misil(Turtle):
-    def __init__(self):
+    def __init__(self, posicion):
         Turtle.__init__(self, shape=Partida.shapes['missile_0.gif'], visible=False)
         # Turtle.__init__(self, shape='circle', visible=False)
         self.up()
         self.radians()
+
+        self.x0, self.y0, self.angulo0, self.potencia = posicion
         self.moviendose = False
 
     def iniciar_lanzamiento(self, posicion):
@@ -151,8 +164,8 @@ class Misil(Turtle):
         self.showturtle()
         self.down()
 
-        posy = Utilidades.tiro_parabolico(self.x0, self.y0, posx, self.angulo0, self.potencia)
-        print("X e Y: {} {}".format(posx, posy))
+        posy = Utilidades.tiro_parabolico(self.x0, self.y0, posx, self.angulo0, self.potencia, _GRAVEDAD)
+        # print("X e Y: {} {}".format(posx, posy))
 
         self.setheading(self.towards(posx, posy) - math.pi / 2)
         new_shape = 'missile_{}.gif'.format(int(Utilidades.rad_a_deg(self.heading())))
@@ -257,68 +270,12 @@ class Partida:
         self.pantalla.onkeyrelease(self.jugador_actual.parar, "Up")
         self.pantalla.onkeyrelease(self.jugador_actual.parar, "Down")
 
+        # Generales
+        self.pantalla.onkey(self.jugador_actual.subir_potencia, "x")
+        self.pantalla.onkey(self.jugador_actual.bajar_potencia, "z")
+
         # Listen
         self.pantalla.listen()
-
-
-class Utilidades:
-    # Utilidades de Turtle
-    @staticmethod
-    def setworldcoordinates(screen, llx, lly, urx, ury):
-        """Set up a user defined coordinate-system.
-
-        Arguments:
-        llx -- coordenada X de la esquina inferior izquierda
-        lly -- coordenada Y de la esquina inferior izquierda
-        urx -- coordenada X de la esquina superior derecha
-        ury -- coordenada Y de la esquina superior derecha
-        """
-        xspan = float(urx - llx)
-        yspan = float(ury - lly)
-        wx, wy = screen._window_size()
-        screen.screensize(wx - 20, wy - 20)
-        oldxscale, oldyscale = screen.xscale, screen.yscale
-        screen.xscale = screen.canvwidth / xspan
-        screen.yscale = screen.canvheight / yspan
-        srx1 = llx * screen.xscale
-        sry1 = -ury * screen.yscale
-        srx2 = screen.canvwidth + srx1
-        sry2 = screen.canvheight + sry1
-        screen._setscrollregion(srx1, sry1, srx2, sry2)
-        screen._rescale(screen.xscale / oldxscale, screen.yscale / oldyscale)
-        screen.update()
-
-    @staticmethod
-    def followobject(screen, turtobj):
-        slx, sly, srx, sry = _SCREENCOORDS
-
-        llx = (-screen.window_width() / 4) + turtobj.xcor()
-        lly = (-screen.window_height() / 4) + turtobj.ycor()
-        urx = (screen.window_width() / 4) + turtobj.xcor()
-        ury = (+screen.window_height() / 4) + turtobj.ycor()
-
-        Utilidades.setworldcoordinates(Partida.pantalla, llx, lly, urx, ury)
-
-    # Utilidades Matemáticas
-    @staticmethod
-    def rad_a_deg(angle_rads):
-        return (math.degrees(angle_rads) + 360) % 360
-
-    @staticmethod
-    def tiro_parabolico(x0, y0, posx, angulo, potencia):
-        vel_inicial = potencia
-        vx = vel_inicial * math.cos(angulo)
-        vy = vel_inicial * math.sin(angulo)
-        posy = y0 + vy * ((posx - x0) / vx) - 1 / 2 * _GRAVEDAD * ((posx - x0) / vx) ** 2
-        """posy = y0 + posx * math.tan(angulo) - (_GRAVEDAD * (posx + x0) ** 2) / \
-                                              (2 * vel_inicial ** 2 * math.cos(angulo) ** 2)"""
-        return posy
-
-    @staticmethod
-    def tiro_parabolico_tiempo(x0, y0, vx, vy, t):
-        posx = x0 + vx * t
-        posy = y0 + vy * t - _GRAVEDAD * t ** 2 / 2
-        return posx, posy
 
 
 if __name__ == "__main__":
