@@ -9,6 +9,7 @@ import Proyecto.Worms.Utilidades as Utilidades
 import Proyecto.Worms.Excepciones as Excepciones
 
 _RESFOLDERS = 'Resources'
+_FUENTE = ("Helvetica", 10, "bold")
 
 _MAXMOVIMIENTO = 1500
 _TIEMPOMISIL = 5000
@@ -48,7 +49,7 @@ class Gusano(Turtle):
         self.barra_vida = Turtle()
         self.posicionar_barra_vida()
 
-        self.nombre = nombre
+        self.nombre = nombre.title()
         self.vida = 100
         self.movimiento = _MAXMOVIMIENTO
         self.bazooka = Bazooka()
@@ -255,7 +256,7 @@ class Misil(Turtle):
         self.goto(posx, posy)
         new_shape = 'Missile_{}.gif'.format(int(Utilidades.rad_a_deg(self.heading())))
         self.shape(Partida.shapes[new_shape])
-
+        #Utilidades.followobject(Partida.pantalla, _SCREENCOORDS, self)
         Partida.pantalla.tracer(Partida.tracer_speed)
 
     def lanzar(self, posicion):
@@ -337,6 +338,8 @@ class Partida:
         Partida.pantalla.tracer(self.tracer_speed)
 
     def iniciar_pantalla(self):
+        Partida.pantalla.title("Wormtanks Wars")
+        Partida.pantalla._root.resizable(0,0)
         Partida.pantalla.setup(0.8, 0.8)
         Partida.pantalla.setworldcoordinates(*_SCREENCOORDS)
         Partida.pantalla.bgpic(os.path.join(_RESFOLDERS, 'background.gif'))
@@ -394,8 +397,10 @@ class Partida:
     def actualizar_marcador(cls):
         nombre_jugador, potencia_bazooka = cls.jugador_actual.nombre, cls.jugador_actual.bazooka.potencia
         cls.marcador.clear()
-        cls.marcador.setpos(2600, 900)
-        cls.marcador.write("Turno de {}\nPotencia del Bazooka: {}".format(nombre_jugador, potencia_bazooka))
+        cls.marcador.setpos(2460, 925)
+        cls.marcador.write('Turno de {}'.format(nombre_jugador), align='center', font=_FUENTE)
+        cls.marcador.setpos(2300, 890)
+        cls.marcador.write('Potencia del Bazooka: {}'.format(potencia_bazooka), font=_FUENTE)
         cls.marcador.setpos(cls.jugador_actual.xcor(), cls.jugador_actual.ycor() + 40)
 
     @classmethod
