@@ -74,7 +74,7 @@ def calcular_damage(max_distancia, cur_distancia, max_damage):
 
 def posiciones_aleatorias(min_x, max_x, max_posiciones):
     paso = (abs(max_x) + abs(min_x)) // max_posiciones
-    return [x for x in range(min_x + paso//2, max_x - paso//2, paso)]
+    return [x for x in range(min_x + paso // 2, max_x, paso)]
 
 
 # Utilidades de Sistema

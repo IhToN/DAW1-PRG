@@ -15,8 +15,9 @@ _TIEMPOMISIL = 5000
 _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
-_JUGADORES = 2
+_JUGADORES = 5
 _POSICIONES = Utilidades.posiciones_aleatorias(_SCREENCOORDS[0], _SCREENCOORDS[2], _JUGADORES)
+print("Posiciones: {}".format(_POSICIONES))
 
 
 class Direccion(Enum):
@@ -35,12 +36,15 @@ class Gusano(Turtle):
         # Iniciar la parte de la tortuga
         Turtle.__init__(self, shape=Partida.shapes['walk_right_1.gif'])
         self.up()
-        if len(_POSICIONES) > 2:
-            randpos = random.randint(0, len(_POSICIONES))
+
+        if len(_POSICIONES) - 1 >= 1:
+            randpos = random.randint(0, len(_POSICIONES) - 1)
         else:
             randpos = 0
         xpos = _POSICIONES.pop(randpos)
-        self.setpos(xpos, 0)
+        print("Posiciones: {}".format(_POSICIONES))
+
+        self.setpos(xpos, 20)
         self.barra_vida = Turtle()
         self.posicionar_barra_vida()
 
@@ -95,7 +99,7 @@ class Gusano(Turtle):
         self.animar_andar()
 
     def puede_moverse(self):
-        return self.movimiento <= 0 or self.moviendose or self.bazooka.misil.moviendose
+        return self.movimiento >= 1 and not self.moviendose and not self.bazooka.misil.moviendose
 
     def direccion_animacion(self):
         Partida.pantalla.tracer(0)
@@ -112,18 +116,17 @@ class Gusano(Turtle):
 
     def animar_andar(self):
         if self.puede_moverse():
+
+            self.moviendose = True
+            self.movimiento -= 1
+
+            anim, vel = self.direccion_animacion()
+            for i in range(1, 16):
+                self.fd(vel)
+                self.bazooka.setx(self.bazooka.xcor() + vel)
+                self.barra_vida.setx(self.barra_vida.xcor() + vel)
+                self.shape(Partida.shapes[anim + str(i) + '.gif'])
             self.parar()
-            return
-
-        self.moviendose = True
-        self.movimiento -= 1
-
-        anim, vel = self.direccion_animacion()
-        for i in range(1, 16):
-            self.fd(vel)
-            self.bazooka.setx(self.bazooka.xcor() + vel)
-            self.barra_vida.setx(self.barra_vida.xcor() + vel)
-            self.shape(Partida.shapes[anim + str(i) + '.gif'])
 
     def apuntar(self, dir_apunt):
         self.dir_apunt = dir_apunt
@@ -306,8 +309,6 @@ class Misil(Turtle):
         Partida.actualizar_jugador()
         Partida.pantalla.tracer(Partida.tracer_speed)
 
-        # Partida.actualizar_pantalla()
-
 
 class Partida:
     pantalla = Screen()
@@ -334,6 +335,8 @@ class Partida:
     def iniciar_pantalla(self):
         Partida.pantalla.setup(0.8, 0.8)
         Partida.pantalla.setworldcoordinates(*_SCREENCOORDS)
+        Partida.pantalla.bgpic(os.path.join(_RESFOLDERS, 'background.gif'))
+
 
     def iniciar_jugadores(self, num_jugadores):
         Partida.jugadores.clear()
@@ -393,8 +396,8 @@ class Partida:
         cls.pantalla.onkeypress(cls.jugador_actual.disparar, 'space')
 
         # Release
-        cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
-        cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
+        #cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
+        #cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
         cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Up")
         cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Down")
 
@@ -409,7 +412,7 @@ class Partida:
 if __name__ == "__main__":
     try:
         partida = Partida(_JUGADORES)
-        print(partida.jugadores)
+        print("Jugadores: {}".format(partida.jugadores))
         Partida.pantalla.mainloop()
     except Excepciones.FinalizarPartida as error:
         print("Jajá, peté: {}".format(error))
