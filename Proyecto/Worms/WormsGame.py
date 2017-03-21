@@ -126,6 +126,7 @@ class Gusano(Turtle):
                 self.bazooka.setx(self.bazooka.xcor() + vel)
                 self.barra_vida.setx(self.barra_vida.xcor() + vel)
                 self.shape(Partida.shapes[anim + str(i) + '.gif'])
+                Partida.actualizar_pos_marcador()
             self.parar()
 
     def apuntar(self, dir_apunt):
@@ -171,7 +172,7 @@ class Bazooka(Turtle):
         """ Cambiamos la potencia de disparo
         """
         self.potencia += potencia
-        print("Potencia del Bazooka: {}".format(self.potencia))
+        Partida.actualizar_marcador()
 
     def cambiar_angulo(self, angulo):
         """ Cambiar el ángulo de disparo
@@ -326,8 +327,11 @@ class Partida:
 
         self.iniciar_jugadores(num_jugadores)
 
-        Partida.jugador_actual_index = random.randint(0, _JUGADORES)
+        Partida.jugador_actual_index = random.randint(0, _JUGADORES - 1)
         Partida.jugador_actual = Partida.jugadores[Partida.jugador_actual_index]
+
+        self.iniciar_marcador()
+        self.actualizar_marcador()
 
         Partida.iniciar_teclas()
         Partida.pantalla.tracer(self.tracer_speed)
@@ -336,7 +340,6 @@ class Partida:
         Partida.pantalla.setup(0.8, 0.8)
         Partida.pantalla.setworldcoordinates(*_SCREENCOORDS)
         Partida.pantalla.bgpic(os.path.join(_RESFOLDERS, 'background.gif'))
-
 
     def iniciar_jugadores(self, num_jugadores):
         Partida.jugadores.clear()
@@ -379,12 +382,34 @@ class Partida:
         Partida.shapes[nombre_sprite] = path
 
     @classmethod
+    def iniciar_marcador(cls):
+        cls.marcador = Turtle()
+        cls.marcador.up()
+        cls.marcador.radians()
+        cls.marcador.speed(0)
+        cls.marcador.color('white')
+        cls.marcador.setheading(0)
+
+    @classmethod
+    def actualizar_marcador(cls):
+        nombre_jugador, potencia_bazooka = cls.jugador_actual.nombre, cls.jugador_actual.bazooka.potencia
+        cls.marcador.clear()
+        cls.marcador.setpos(2600, 900)
+        cls.marcador.write("Turno de {}\nPotencia del Bazooka: {}".format(nombre_jugador, potencia_bazooka))
+        cls.marcador.setpos(cls.jugador_actual.xcor(), cls.jugador_actual.ycor() + 40)
+
+    @classmethod
+    def actualizar_pos_marcador(cls):
+        cls.marcador.setpos(cls.jugador_actual.xcor(), cls.jugador_actual.ycor() + 40)
+
+    @classmethod
     def actualizar_jugador(cls):
         cls.jugador_actual_index += 1
         if cls.jugador_actual_index >= _JUGADORES:
             cls.jugador_actual_index = 0
         cls.jugador_actual = Partida.jugadores[cls.jugador_actual_index]
         cls.iniciar_teclas()
+        cls.actualizar_marcador()
 
     @classmethod
     def iniciar_teclas(cls):
@@ -396,8 +421,8 @@ class Partida:
         cls.pantalla.onkeypress(cls.jugador_actual.disparar, 'space')
 
         # Release
-        #cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
-        #cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
         cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Up")
         cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Down")
 
