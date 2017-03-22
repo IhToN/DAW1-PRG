@@ -64,12 +64,12 @@ def tiro_parabolico_tiempo(x0, y0, vx, vy, t, gravedad):
 
 
 def calcular_damage(max_distancia, cur_distancia, max_damage):
-    x = (cur_distancia - max_distancia) / (300 - max_distancia)
-    if x < 0:
-        x = 0
-    elif x > 1:
-        x = 1
-    return max_damage - x * max_damage
+    multiplicador = 0
+    if cur_distancia == 0:
+        multiplicador = 1
+    elif cur_distancia <= max_distancia:
+        multiplicador = 1 - cur_distancia / max_distancia
+    return multiplicador * max_damage
 
 
 def posiciones_aleatorias(min_x, max_x, max_posiciones):

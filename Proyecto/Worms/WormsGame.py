@@ -8,15 +8,18 @@ import math
 import Proyecto.Worms.Utilidades as Utilidades
 import Proyecto.Worms.Excepciones as Excepciones
 
+_ARCHIVO_RANKING = 'ranking.txt'
 _RESFOLDERS = 'Resources'
 _FUENTE = ("Helvetica", 10, "bold")
+_TUMBAS = 0, 11
 
 _MAXMOVIMIENTO = 1500
 _TIEMPOMISIL = 5000
 _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
-_JUGADORES = 5
+_JUGADORES = 2
+_ALTURA_MAPA = 30
 _POSICIONES = Utilidades.posiciones_aleatorias(_SCREENCOORDS[0], _SCREENCOORDS[2], _JUGADORES)
 print("Posiciones: {}".format(_POSICIONES))
 
@@ -45,7 +48,7 @@ class Gusano(Turtle):
         xpos = _POSICIONES.pop(randpos)
         print("Posiciones: {}".format(_POSICIONES))
 
-        self.setpos(xpos, 20)
+        self.setpos(xpos, _ALTURA_MAPA)
         self.barra_vida = Turtle()
         self.posicionar_barra_vida()
 
@@ -66,6 +69,9 @@ class Gusano(Turtle):
     def __repr__(self):
         return "Gusano({})".format(self.nombre)
 
+    def esta_vivo(self):
+        return self.vida > 0
+
     def posicionar_barra_vida(self):
         self.barra_vida.up()
         self.barra_vida.shape('square')
@@ -73,6 +79,16 @@ class Gusano(Turtle):
         self.barra_vida.fillcolor('pink')
         self.barra_vida.pencolor('black')
         self.barra_vida.setpos(self.xcor(), self.ycor() + 30)
+
+    def morir(self):
+        self.barra_vida.hideturtle()
+        self.bazooka.hideturtle()
+        Partida.jugadores.remove(self)
+        tumba_aleatoria = str(random.randint(*_TUMBAS))
+        self.shape(Partida.shapes['Gravestone_' + tumba_aleatoria + '.gif'])
+        if Partida.jugador_actual == self:
+            Partida.actualizar_jugador()
+        Partida.actualizar_ranking(self)
 
     def recibir_damage(self, damage):
         self.vida -= damage
@@ -89,7 +105,7 @@ class Gusano(Turtle):
             elif self.vida >= 1:
                 self.barra_vida.fillcolor('red')
         else:
-            self.barra_vida.hideturtle()
+            self.morir()
 
     def mover_derecha(self):
         self.dir_movimiento = Direccion.DERECHA
@@ -100,7 +116,7 @@ class Gusano(Turtle):
         self.animar_andar()
 
     def puede_moverse(self):
-        return self.movimiento >= 1 and not self.moviendose and not self.bazooka.misil.moviendose
+        return self.movimiento >= 1 and not self.moviendose and not self.bazooka.misil.moviendose and self.esta_vivo()
 
     def direccion_animacion(self):
         Partida.pantalla.tracer(0)
@@ -132,20 +148,26 @@ class Gusano(Turtle):
 
     def apuntar(self, dir_apunt):
         self.dir_apunt = dir_apunt
+        if dir_apunt == Direccion.ARRIBA:
+            self.bazooka.cambiar_angulo(0.1)
+        elif dir_apunt == Direccion.ABAJO:
+            self.bazooka.cambiar_angulo(-0.1)
 
     def apuntar_arriba(self):
-        self.apuntar(Direccion.ARRIBA)
-        self.bazooka.cambiar_angulo(0.1)
+        if self.puede_moverse():
+            self.apuntar(Direccion.ARRIBA)
 
     def apuntar_abajo(self):
-        self.apuntar(Direccion.ABAJO)
-        self.bazooka.cambiar_angulo(-0.1)
+        if self.puede_moverse():
+            self.apuntar(Direccion.ABAJO)
 
     def subir_potencia(self):
-        self.bazooka.cambiar_potencia(5)
+        if self.puede_moverse():
+            self.bazooka.cambiar_potencia(5)
 
     def bajar_potencia(self):
-        self.bazooka.cambiar_potencia(-5)
+        if self.puede_moverse():
+            self.bazooka.cambiar_potencia(-5)
 
     def parar(self):
         self.moviendose = False
@@ -154,7 +176,8 @@ class Gusano(Turtle):
         self.dir_apunt = Direccion.NINGUNO
 
     def disparar(self):
-        self.bazooka.lanzar_misil()
+        if self.puede_moverse():
+            self.bazooka.lanzar_misil()
 
 
 class Bazooka(Turtle):
@@ -256,7 +279,7 @@ class Misil(Turtle):
         self.goto(posx, posy)
         new_shape = 'Missile_{}.gif'.format(int(Utilidades.rad_a_deg(self.heading())))
         self.shape(Partida.shapes[new_shape])
-        #Utilidades.followobject(Partida.pantalla, _SCREENCOORDS, self)
+        # Utilidades.followobject(Partida.pantalla, _SCREENCOORDS, self)
         Partida.pantalla.tracer(Partida.tracer_speed)
 
     def lanzar(self, posicion):
@@ -274,7 +297,8 @@ class Misil(Turtle):
     def colision(self):
         for jugador in Partida.jugadores:
             distancia = self.distance(jugador.xcor(), jugador.ycor())
-            damage = math.ceil(Utilidades.calcular_damage(50, distancia, 50))
+            damage = math.ceil(Utilidades.calcular_damage(250, distancia, 50))
+            print("Daño para", jugador, "--", damage, "para la distancia", distancia)
             if damage > 0:
                 jugador.recibir_damage(damage)
         self.limpiar()
@@ -289,7 +313,7 @@ class Misil(Turtle):
         """
         for enemigo in Partida.jugadores:
             if enemigo != Partida.jugador_actual:
-                if self.distance(enemigo.xcor(), enemigo.ycor()) <= 15:
+                if self.distance(enemigo.xcor(), enemigo.ycor()) <= 35:
                     return True
         return False
 
@@ -297,7 +321,7 @@ class Misil(Turtle):
         """Comprobamos si el misil está dentro de la pantalla
         """
         llx, lly, urx, ury = _SCREENCOORDS
-        return self.xcor() <= llx or self.xcor() >= urx or self.ycor() <= lly
+        return self.xcor() <= llx + _ALTURA_MAPA or self.xcor() >= urx - _ALTURA_MAPA or self.ycor() <= lly + _ALTURA_MAPA
 
     def limpiar(self):
         Utilidades.setworldcoordinates(Partida.pantalla, *_SCREENCOORDS)
@@ -318,6 +342,7 @@ class Partida:
     pantalla.tracer(0)
     shapes = {}
     jugadores = []
+    ranking = []
 
     def __init__(self, num_jugadores=2):
         if num_jugadores < 2:
@@ -339,7 +364,7 @@ class Partida:
 
     def iniciar_pantalla(self):
         Partida.pantalla.title("Wormtanks Wars")
-        Partida.pantalla._root.resizable(0,0)
+        Partida.pantalla._root.resizable(0, 0)
         Partida.pantalla.setup(0.8, 0.8)
         Partida.pantalla.setworldcoordinates(*_SCREENCOORDS)
         Partida.pantalla.bgpic(os.path.join(_RESFOLDERS, 'background.gif'))
@@ -410,11 +435,17 @@ class Partida:
     @classmethod
     def actualizar_jugador(cls):
         cls.jugador_actual_index += 1
-        if cls.jugador_actual_index >= _JUGADORES:
+        if cls.jugador_actual_index >= len(cls.jugadores):
             cls.jugador_actual_index = 0
         cls.jugador_actual = Partida.jugadores[cls.jugador_actual_index]
         cls.iniciar_teclas()
         cls.actualizar_marcador()
+
+    @classmethod
+    def actualizar_ranking(cls, jugador):
+        cls.ranking.insert(0, jugador)
+        if len(Partida.jugadores) <= 1:
+            cls.finalizar_partida()
 
     @classmethod
     def iniciar_teclas(cls):
@@ -428,8 +459,8 @@ class Partida:
         # Release
         # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
         # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
-        cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Up")
-        cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Down")
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Up")
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Down")
 
         # Generales
         cls.pantalla.onkey(cls.jugador_actual.subir_potencia, "x")
@@ -437,6 +468,19 @@ class Partida:
 
         # Listen
         cls.pantalla.listen()
+
+    @classmethod
+    def finalizar_partida(cls):
+        historial = open(_ARCHIVO_RANKING, 'a', encoding='UTF-8')
+        output = '/***********************************\\' + '\n'
+        output += '1. {}\n'.format(Partida.jugador_actual)
+        for pos in Partida.ranking:
+            output += '{}. {}\n'.format(pos + 2, Partida.ranking[pos])
+        output += '\\***********************************/' + '\n\n'
+        historial.write(output)
+        historial.close()
+        print(output)
+        Utilidades.cerrar_programa()
 
 
 if __name__ == "__main__":
