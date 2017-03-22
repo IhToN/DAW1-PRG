@@ -474,7 +474,7 @@ class Partida:
         historial = open(_ARCHIVO_RANKING, 'a', encoding='UTF-8')
         output = '/***********************************\\' + '\n'
         output += '1. {}\n'.format(Partida.jugador_actual)
-        for pos in Partida.ranking:
+        for pos in range(len(Partida.ranking)):
             output += '{}. {}\n'.format(pos + 2, Partida.ranking[pos])
         output += '\\***********************************/' + '\n\n'
         historial.write(output)
