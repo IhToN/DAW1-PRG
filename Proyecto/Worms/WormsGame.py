@@ -45,7 +45,7 @@ class Gusano(Turtle):
             randpos = random.randint(0, len(_POSICIONES) - 1)
         else:
             randpos = 0
-        xpos = _POSICIONES.pop(randpos)
+        xpos = _POSICIONES.pop(randpos) + random.randint(-150, 150)
         print("Posiciones: {}".format(_POSICIONES))
 
         self.setpos(xpos, _ALTURA_MAPA)
@@ -306,13 +306,14 @@ class Misil(Turtle):
             self.limpiar()
 
     def colision(self):
+        print("------------/ Lista de Daños \\------------")
         for jugador in Partida.jugadores:
             distancia = self.distance(jugador.xcor(), jugador.ycor())
             damage = math.ceil(Utilidades.calcular_damage(250, distancia, 50))
-            print("------------/\\------------\n")
             print("Daño para", jugador, "--", damage, "para la distancia", distancia)
             if damage > 0:
                 jugador.recibir_damage(damage)
+        print("--------------------\\/--------------------\n")
         self.limpiar()
 
     def comprobar_colision(self):
