@@ -499,11 +499,12 @@ class Partida:
             # Limpiar y Ocultar Jugadores
             j.hide()
         # Colocar Marcador
-        Partida.marcador.clear()
-        Partida.marcador.hideturtle()
+        # Partida.marcador.clear()
+        Partida.marcador.shape(Partida.shapes['ranking.gif'])
         llx, lly, urx, ury = _SCREENCOORDS
         posicion = (llx + urx) / 2, (lly + ury) / 2
         Partida.marcador.setpos(*posicion)
+        cls.marcador.color('black')
         Partida.marcador.write(cls.ranking_mensaje(), align='center', font=_FUENTE)
 
     @classmethod
