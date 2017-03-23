@@ -19,7 +19,7 @@ _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
 _JUGADORES = 2
-_ALTURA_MAPA = 30
+_ALTURA_MAPA = 60
 _POSICIONES = Utilidades.posiciones_aleatorias(_SCREENCOORDS[0], _SCREENCOORDS[2], _JUGADORES)
 print("Posiciones: {}".format(_POSICIONES))
 
@@ -79,6 +79,17 @@ class Gusano(Turtle):
         self.barra_vida.fillcolor('pink')
         self.barra_vida.pencolor('black')
         self.barra_vida.setpos(self.xcor(), self.ycor() + 30)
+
+    def hide(self):
+        self.clear()
+        self.barra_vida.clear()
+        self.bazooka.clear()
+        self.bazooka.misil.clear()
+
+        self.hideturtle()
+        self.barra_vida.hideturtle()
+        self.bazooka.hideturtle()
+        self.bazooka.misil.hideturtle()
 
     def morir(self):
         self.barra_vida.hideturtle()
@@ -298,6 +309,7 @@ class Misil(Turtle):
         for jugador in Partida.jugadores:
             distancia = self.distance(jugador.xcor(), jugador.ycor())
             damage = math.ceil(Utilidades.calcular_damage(250, distancia, 50))
+            print("------------/\\------------\n")
             print("Daño para", jugador, "--", damage, "para la distancia", distancia)
             if damage > 0:
                 jugador.recibir_damage(damage)
@@ -470,17 +482,38 @@ class Partida:
         cls.pantalla.listen()
 
     @classmethod
+    def ranking_mensaje(cls):
+        mensaje = '/***********************************\\' + '\n'
+        mensaje += '     1. {}\n'.format(Partida.jugador_actual)
+        for pos in range(len(Partida.ranking)):
+            mensaje += '     {}. {}\n'.format(pos + 2, Partida.ranking[pos])
+        mensaje += '\\***********************************/' + '\n\n'
+        return mensaje
+
+    @classmethod
+    def mensaje_finalizar(cls):
+        jugadores = cls.ranking[:]
+        jugadores.append(Partida.jugador_actual)
+        for j in jugadores:
+            # Limpiar y Ocultar Jugadores
+            j.hide()
+        # Colocar Marcador
+        Partida.marcador.clear()
+        Partida.marcador.hideturtle()
+        llx, lly, urx, ury = _SCREENCOORDS
+        posicion = (llx + urx) / 2, (lly + ury) / 2
+        Partida.marcador.setpos(*posicion)
+        Partida.marcador.write(cls.ranking_mensaje(), align='center', font=_FUENTE)
+
+    @classmethod
     def finalizar_partida(cls):
         historial = open(_ARCHIVO_RANKING, 'a', encoding='UTF-8')
-        output = '/***********************************\\' + '\n'
-        output += '1. {}\n'.format(Partida.jugador_actual)
-        for pos in range(len(Partida.ranking)):
-            output += '{}. {}\n'.format(pos + 2, Partida.ranking[pos])
-        output += '\\***********************************/' + '\n\n'
+        output = cls.ranking_mensaje()
         historial.write(output)
         historial.close()
         print(output)
-        Utilidades.cerrar_programa()
+        cls.mensaje_finalizar()
+        Utilidades.cerrar_programa(Partida.pantalla)
 
 
 if __name__ == "__main__":

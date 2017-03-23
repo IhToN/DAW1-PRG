@@ -1,4 +1,6 @@
 import math
+import time
+from turtle import _Screen as Screen
 
 # Utilidades de Turtle
 import sys
@@ -78,5 +80,8 @@ def posiciones_aleatorias(min_x, max_x, max_posiciones):
 
 
 # Utilidades de Sistema
-def cerrar_programa():
+def cerrar_programa(pantalla=None):
+    if pantalla and isinstance(pantalla, Screen):
+        time.sleep(5)
+        pantalla.bye()
     sys.exit(0)
