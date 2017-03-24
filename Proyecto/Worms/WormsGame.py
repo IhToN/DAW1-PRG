@@ -1,9 +1,10 @@
-import random
 from enum import Enum
 from turtle import Turtle, Screen
 import glob
 import os
+import sys
 import math
+import random
 
 import Proyecto.Worms.Utilidades as Utilidades
 import Proyecto.Worms.Excepciones as Excepciones
@@ -19,6 +20,9 @@ _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
 _JUGADORES = 2
+if len(sys.argv) == 2:
+    _JUGADORES = int(sys.argv[1])
+
 _ALTURA_MAPA = 60
 _POSICIONES = Utilidades.posiciones_aleatorias(_SCREENCOORDS[0], _SCREENCOORDS[2], _JUGADORES)
 print("Posiciones: {}".format(_POSICIONES))
@@ -45,7 +49,7 @@ class Gusano(Turtle):
             randpos = random.randint(0, len(_POSICIONES) - 1)
         else:
             randpos = 0
-        xpos = _POSICIONES.pop(randpos) + random.randint(-150, 150)
+        xpos = _POSICIONES.pop(randpos) + random.randint(-350, 350)
         print("Posiciones: {}".format(_POSICIONES))
 
         self.setpos(xpos, _ALTURA_MAPA)
@@ -463,21 +467,23 @@ class Partida:
     @classmethod
     def iniciar_teclas(cls):
         # Press
-        cls.pantalla.onkeypress(cls.jugador_actual.mover_derecha, "Right")
-        cls.pantalla.onkeypress(cls.jugador_actual.mover_izquierda, "Left")
-        cls.pantalla.onkeypress(cls.jugador_actual.apuntar_arriba, "Up")
-        cls.pantalla.onkeypress(cls.jugador_actual.apuntar_abajo, "Down")
+        cls.pantalla.onkeypress(cls.jugador_actual.mover_derecha, 'Right')
+        cls.pantalla.onkeypress(cls.jugador_actual.mover_izquierda, 'Left')
+        cls.pantalla.onkeypress(cls.jugador_actual.apuntar_arriba, 'Up')
+        cls.pantalla.onkeypress(cls.jugador_actual.apuntar_abajo, 'Down')
         cls.pantalla.onkeypress(cls.jugador_actual.disparar, 'space')
+        cls.pantalla.onkeypress(cls.jugador_actual.subir_potencia, 'x')
+        cls.pantalla.onkeypress(cls.jugador_actual.bajar_potencia, 'z')
 
         # Release
-        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Right")
-        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Left")
-        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Up")
-        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, "Down")
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, 'Right')
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, 'Left')
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, 'Up')
+        # cls.pantalla.onkeyrelease(cls.jugador_actual.parar, 'Down')
 
         # Generales
-        cls.pantalla.onkey(cls.jugador_actual.subir_potencia, "x")
-        cls.pantalla.onkey(cls.jugador_actual.bajar_potencia, "z")
+        # cls.pantalla.onkeypress(cls.jugador_actual.subir_potencia, 'x')
+        # cls.pantalla.onkeypress(cls.jugador_actual.bajar_potencia, 'z')
 
         # Listen
         cls.pantalla.listen()
@@ -524,5 +530,5 @@ if __name__ == "__main__":
         print("Jugadores: {}".format(partida.jugadores))
         Partida.pantalla.mainloop()
     except Excepciones.FinalizarPartida as error:
-        print("Jajá, peté: {}".format(error))
+        print("Ha habido un error curiosete: {}".format(error))
         Utilidades.cerrar_programa()
