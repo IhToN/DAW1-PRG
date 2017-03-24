@@ -402,7 +402,7 @@ class Partida:
         self.pantalla.tracer(self.tracer_speed)
 
     def iniciar_pantalla(self):
-        self.pantalla.title("Wormtanks Wars")
+        self.pantalla.title("Tankworms Wars")
         self.pantalla._root.resizable(0, 0)
         self.pantalla.setup(0.8, 0.8)
         self.pantalla.setworldcoordinates(*_SCREENCOORDS)
