@@ -12,7 +12,7 @@ import Proyecto.Worms.Excepciones as Excepciones
 _ARCHIVO_RANKING = 'ranking.txt'
 _RESFOLDERS = 'Resources'
 _FUENTE = ("Helvetica", 10, "bold")
-_TUMBAS = 0, 11
+_TUMBAS = 0, 10
 
 _MAXMOVIMIENTO = 1500
 _TIEMPOMISIL = 5000
