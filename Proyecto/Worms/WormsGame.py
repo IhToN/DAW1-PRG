@@ -498,6 +498,7 @@ class Partida:
         return mensaje
 
     def mensaje_finalizar(self):
+        self.pantalla.tracer(0)
         jugadores = self.ranking[:]
         jugadores.append(self.jugador_actual)
         for j in jugadores:
@@ -511,6 +512,7 @@ class Partida:
         self.marcador.setpos(*posicion)
         self.marcador.color('black')
         self.marcador.write(self.ranking_mensaje(), align='center', font=_FUENTE)
+        self.pantalla.tracer(self.tracer_speed)
 
     def finalizar_partida(self):
         historial = open(_ARCHIVO_RANKING, 'a', encoding='UTF-8')
