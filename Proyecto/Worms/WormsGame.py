@@ -19,7 +19,7 @@ _TIEMPOMISIL = 5000
 _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
-_JUGADORES = 2
+_JUGADORES = 5
 if len(sys.argv) == 2:
     _JUGADORES = int(sys.argv[1])
 
