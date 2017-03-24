@@ -47,14 +47,7 @@ class Gusano(Turtle):
 
         self.partida = partida
 
-        if len(_POSICIONES) - 1 >= 1:
-            randpos = random.randint(0, len(_POSICIONES) - 1)
-        else:
-            randpos = 0
-        xpos = _POSICIONES.pop(randpos) + random.randint(-350, 350)
-        print("Posiciones: {}".format(_POSICIONES))
-
-        self.setpos(xpos, _ALTURA_MAPA)
+        self.setpos(self.xpos_inicial(), _ALTURA_MAPA)
         self.barra_vida = Turtle()
         self.posicionar_barra_vida()
 
@@ -74,6 +67,18 @@ class Gusano(Turtle):
 
     def __repr__(self):
         return "Gusano({})".format(self.nombre)
+
+    def xpos_inicial(self):
+        if len(_POSICIONES) - 1 >= 1:
+            randpos = random.randint(0, len(_POSICIONES) - 1)
+        else:
+            randpos = 0
+        xpos = _POSICIONES.pop(randpos) + random.randint(-350, 350)
+        if xpos >= _SCREENCOORDS[2] - _ALTURA_MAPA:
+            xpos -= random.randint(100, 500)
+        elif xpos <= _SCREENCOORDS[2] + _ALTURA_MAPA:
+            xpos += random.randint(100, 500)
+        return xpos
 
     def esta_vivo(self):
         return self.vida > 0
@@ -124,13 +129,24 @@ class Gusano(Turtle):
         else:
             self.morir()
 
+    def comprobar_canvas_derecho(self):
+        return self.xcor() >= _SCREENCOORDS[2] - _ALTURA_MAPA
+
+    def comprobar_canvas_izquierdo(self):
+        return self.xcor() <= _SCREENCOORDS[2] + _ALTURA_MAPA
+
+    def comprobar_canvas(self):
+        return self.comprobar_canvas_derecho() or self.comprobar_canvas_izquierdo()
+
     def mover_derecha(self):
-        self.dir_movimiento = Direccion.DERECHA
-        self.animar_andar()
+        if not self.comprobar_canvas_derecho():
+            self.dir_movimiento = Direccion.DERECHA
+            self.animar_andar()
 
     def mover_izquierda(self):
-        self.dir_movimiento = Direccion.IZQUIERDA
-        self.animar_andar()
+        if not self.comprobar_canvas_izquierdo():
+            self.dir_movimiento = Direccion.IZQUIERDA
+            self.animar_andar()
 
     def puede_moverse(self):
         return self.movimiento >= 1 and not self.moviendose and not self.bazooka.misil.moviendose and self.esta_vivo()
@@ -360,7 +376,6 @@ class Misil(Turtle):
 
 
 class Partida:
-
     def __init__(self, num_jugadores=2):
         if num_jugadores < 2:
             raise Excepciones.FinalizarPartida("No se puede iniciar la partida con menos de dos jugadores.")
@@ -504,8 +519,8 @@ class Partida:
         for j in jugadores:
             # Limpiar y Ocultar Jugadores
             j.hide()
-        # Colocar Marcador
-        # self.marcador.clear()
+            # Colocar Marcador
+            # self.marcador.clear()
             self.marcador.shape(self.shapes['ranking.gif'])
         llx, lly, urx, ury = _SCREENCOORDS
         posicion = (llx + urx) / 2, (lly + ury) / 2
