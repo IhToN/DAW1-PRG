@@ -403,6 +403,7 @@ class Partida:
 
     def iniciar_pantalla(self):
         self.pantalla.title("Tankworms Wars")
+        self.pantalla._root.iconbitmap(os.path.join(_RESFOLDERS, 'icono.ico'))
         self.pantalla._root.resizable(0, 0)
         self.pantalla.setup(0.8, 0.8)
         self.pantalla.setworldcoordinates(*_SCREENCOORDS)
