@@ -76,7 +76,7 @@ class Gusano(Turtle):
         xpos = _POSICIONES.pop(randpos) + random.randint(-350, 350)
         if xpos >= _SCREENCOORDS[2] - _ALTURA_MAPA:
             xpos -= random.randint(100, 500)
-        elif xpos <= _SCREENCOORDS[2] + _ALTURA_MAPA:
+        elif xpos <= _SCREENCOORDS[0] + _ALTURA_MAPA:
             xpos += random.randint(100, 500)
         return xpos
 
@@ -130,21 +130,21 @@ class Gusano(Turtle):
             self.morir()
 
     def comprobar_canvas_derecho(self):
-        return self.xcor() >= _SCREENCOORDS[2] - _ALTURA_MAPA
+        return self.xcor() <= _SCREENCOORDS[2] - _ALTURA_MAPA
 
     def comprobar_canvas_izquierdo(self):
-        return self.xcor() <= _SCREENCOORDS[2] + _ALTURA_MAPA
+        return self.xcor() >= _SCREENCOORDS[0] + _ALTURA_MAPA
 
     def comprobar_canvas(self):
         return self.comprobar_canvas_derecho() or self.comprobar_canvas_izquierdo()
 
     def mover_derecha(self):
-        if not self.comprobar_canvas_derecho():
+        if self.comprobar_canvas_derecho():
             self.dir_movimiento = Direccion.DERECHA
             self.animar_andar()
 
     def mover_izquierda(self):
-        if not self.comprobar_canvas_izquierdo():
+        if self.comprobar_canvas_izquierdo():
             self.dir_movimiento = Direccion.IZQUIERDA
             self.animar_andar()
 
