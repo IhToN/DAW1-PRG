@@ -506,11 +506,11 @@ class Partida:
         self.pantalla.listen()
 
     def ranking_mensaje(self):
-        mensaje = '/***********************************\\' + '\n'
-        mensaje += '     1. {}\n'.format(self.jugador_actual)
+        mensaje = '------------/ Ranking de Jugadores \\------------' + '\n'
+        mensaje += '     1º. {}\n'.format(self.jugador_actual)
         for pos in range(len(self.ranking)):
-            mensaje += '     {}. {}\n'.format(pos + 2, self.ranking[pos])
-        mensaje += '\\***********************************/' + '\n\n'
+            mensaje += '     {}º. {}\n'.format(pos + 2, self.ranking[pos])
+        mensaje += '--------------------\\/--------------------' + '\n\n'
         return mensaje
 
     def mensaje_finalizar(self):
