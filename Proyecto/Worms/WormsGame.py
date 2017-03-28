@@ -449,22 +449,22 @@ class Partida:
         self.pantalla.register_shape(path)
         self.shapes[nombre_sprite] = path
 
-    def iniciar_marcador(cls):
-        cls.marcador = Turtle()
-        cls.marcador.up()
-        cls.marcador.radians()
-        cls.marcador.speed(0)
-        cls.marcador.color('white')
-        cls.marcador.setheading(0)
+    def iniciar_marcador(self):
+        self.marcador = Turtle()
+        self.marcador.up()
+        self.marcador.radians()
+        self.marcador.speed(0)
+        self.marcador.color('white')
+        self.marcador.setheading(0)
 
-    def actualizar_marcador(cls):
-        nombre_jugador, potencia_bazooka = cls.jugador_actual.nombre, cls.jugador_actual.bazooka.potencia
-        cls.marcador.clear()
-        cls.marcador.setpos(2460, 925)
-        cls.marcador.write('Turno de {}'.format(nombre_jugador), align='center', font=_FUENTE)
-        cls.marcador.setpos(2300, 890)
-        cls.marcador.write('Potencia del Bazooka: {}'.format(potencia_bazooka), font=_FUENTE)
-        cls.marcador.setpos(cls.jugador_actual.xcor(), cls.jugador_actual.ycor() + 40)
+    def actualizar_marcador(self):
+        nombre_jugador, potencia_bazooka = self.jugador_actual.nombre, self.jugador_actual.bazooka.potencia
+        self.marcador.clear()
+        self.marcador.setpos(2460, 925)
+        self.marcador.write('Turno de {}'.format(nombre_jugador), align='center', font=_FUENTE)
+        self.marcador.setpos(2300, 890)
+        self.marcador.write('Potencia del Bazooka: {}'.format(potencia_bazooka), font=_FUENTE)
+        self.marcador.setpos(self.jugador_actual.xcor(), self.jugador_actual.ycor() + 40)
 
     def actualizar_pos_marcador(self):
         self.marcador.setpos(self.jugador_actual.xcor(), self.jugador_actual.ycor() + 40)
