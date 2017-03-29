@@ -507,9 +507,9 @@ class Partida:
 
     def ranking_mensaje(self):
         mensaje = '------------/ Ranking de Jugadores \\------------' + '\n'
-        mensaje += '     1º. {}\n'.format(self.jugador_actual)
+        mensaje += '     1º. {}    [Vida Restante: {}]\n'.format(self.jugador_actual.nombre, self.jugador_actual.vida)
         for pos in range(len(self.ranking)):
-            mensaje += '     {}º. {}\n'.format(pos + 2, self.ranking[pos])
+            mensaje += '     {}º. {}\n'.format(pos + 2, self.ranking[pos].nombre)
         mensaje += '--------------------\\/--------------------' + '\n\n'
         return mensaje
 
