@@ -151,6 +151,9 @@ class Gusano(Turtle):
     def puede_moverse(self):
         return self.movimiento >= 1 and not self.moviendose and not self.bazooka.misil.moviendose and self.esta_vivo()
 
+    def puede_disparar(self):
+        return not self.moviendose and not self.bazooka.misil.moviendose and self.esta_vivo()
+
     def direccion_animacion(self):
         self.partida.pantalla.tracer(0)
         if self.dir_movimiento == Direccion.IZQUIERDA:
@@ -187,19 +190,19 @@ class Gusano(Turtle):
             self.bazooka.cambiar_angulo(-0.1)
 
     def apuntar_arriba(self):
-        if self.puede_moverse():
+        if self.puede_disparar():
             self.apuntar(Direccion.ARRIBA)
 
     def apuntar_abajo(self):
-        if self.puede_moverse():
+        if self.puede_disparar():
             self.apuntar(Direccion.ABAJO)
 
     def subir_potencia(self):
-        if self.puede_moverse():
+        if self.puede_disparar():
             self.bazooka.cambiar_potencia(5)
 
     def bajar_potencia(self):
-        if self.puede_moverse():
+        if self.puede_disparar():
             self.bazooka.cambiar_potencia(-5)
 
     def parar(self):
@@ -209,7 +212,7 @@ class Gusano(Turtle):
         self.dir_apunt = Direccion.NINGUNO
 
     def disparar(self):
-        if self.puede_moverse():
+        if self.puede_disparar():
             self.bazooka.lanzar_misil()
 
 
