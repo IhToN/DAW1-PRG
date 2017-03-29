@@ -20,7 +20,7 @@ _GRAVEDAD = 9.8
 
 _SCREENCOORDS = -10, -10, 3100, 1100
 _JUGADORES = 2
-if len(sys.argv) == 2:
+if len(sys.argv) >= 2:
     _JUGADORES = int(sys.argv[1])
 
 _ALTURA_MAPA = 60
@@ -474,6 +474,7 @@ class Partida:
         if self.jugador_actual_index >= len(self.jugadores):
             self.jugador_actual_index = 0
         self.jugador_actual = self.jugadores[self.jugador_actual_index]
+        self.jugador_actual.movimiento = _MAXMOVIMIENTO
         self.iniciar_teclas()
         self.actualizar_marcador()
 
