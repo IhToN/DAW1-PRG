@@ -45,6 +45,7 @@ class Punto:
 class Traza:
     def __init__(self, *args):
         self.trazado = []
+        self.i = -1
         for arg in args:
             if isinstance(arg, Punto):
                 self.trazado.append(arg)
@@ -59,6 +60,16 @@ class Traza:
 
     def __eq__(self, other):
         return self.trazado == other.trazado
+
+    def __next__(self):
+        self.i += 1
+        if self.i < len(self.trazado):
+            return self.trazado[self.i]
+        else:
+            raise StopIteration
+
+    def __iter__(self):
+        return self
 
     def add_punto(self, punto):
         """ Añade un punto nuevo a la Traza
