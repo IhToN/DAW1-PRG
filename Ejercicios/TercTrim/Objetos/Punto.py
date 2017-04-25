@@ -19,12 +19,43 @@ class Punto:
     def __init__(self, x=0.0, y=0.0):
         self.x = float(x)
         self.y = float(y)
+        self.modulo = math.hypot(x, y)
 
     def __str__(self):
         return "Punto({}, {})".format(self.x, self.y)
 
     def __eq__(self, other):
         return (self.x, self.y) == (other.x, other.y)
+
+    def __ne__(self, other):
+        return (self.x, self.y) != (other.x, other.y)
+
+    def __gt__(self, other):
+        return self.modulo > other.modulo
+
+    def __ge__(self, other):
+        return self.modulo >= other.modulo
+
+    def __lt__(self, other):
+        return self.modulo < other.modulo
+
+    def __le__(self, other):
+        return self.modulo <= other.modulo
+
+    def __bool__(self):
+        return (self.x, self.y) == (0, 0)
+
+    def __add__(self, other):
+        return Punto(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return Punto(self.x - other.x, self.y - other.y)
+
+    def __neg__(self):
+        return Punto(-self.x, -self.y)
+
+    def __abs__(self):
+        return math.hypot(self.x, self.y)
 
     def suma(self, punto):
         """ Devuelve la suma vectorial del punto con otro
@@ -51,6 +82,7 @@ class Traza:
                 self.trazado.append(arg)
             else:
                 raise ValueError(arg, "no es un punto.")
+        self.j = len(self.trazado)
 
     def __str__(self):
         out = ""
@@ -68,8 +100,21 @@ class Traza:
         else:
             raise StopIteration
 
+    def __reversed__(self):
+        self.j -= 1
+        if self.i >= 0:
+            return self.trazado[self.j]
+        else:
+            raise StopIteration
+
     def __iter__(self):
         return self
+
+    def __len__(self):
+        return len(self.trazado)
+
+    def __contains__(self, item):
+        return item in self.trazado
 
     def add_punto(self, punto):
         """ Añade un punto nuevo a la Traza
