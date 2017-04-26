@@ -47,9 +47,12 @@ class Contacto(Persona):
         self.telefono = telefono
         self.email = email
 
-    def __str__(self):
+    def __repr__(self):
         return "Contacto({0}, {1}, {2}, {3}, {4})" \
             .format(self.numero, repr(self.nombre), self.edad, self.telefono, self.email)
+
+    def serialize(self):
+        return self.nombre, self.edad, self.telefono, self.email
 
 
 class Agenda:

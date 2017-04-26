@@ -21,7 +21,7 @@ class Punto:
         self.y = float(y)
         self.modulo = math.hypot(x, y)
 
-    def __str__(self):
+    def __repr__(self):
         return "Punto({}, {})".format(self.x, self.y)
 
     def __eq__(self, other):
@@ -84,7 +84,7 @@ class Traza:
                 raise ValueError(arg, "no es un punto.")
         self.j = len(self.trazado)
 
-    def __str__(self):
+    def __repr__(self):
         out = ""
         for punto in self.trazado:
             out += str(punto) + " "
