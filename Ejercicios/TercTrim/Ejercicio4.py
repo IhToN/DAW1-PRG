@@ -47,14 +47,16 @@ def obtener_datos():
 
 def ejemplo():
     agenda = Persona.Agenda()
-    initDB()
-    lista_contactos = [('Antonio', 24, 666555444, 'asd@fgh.jkl'),
-                       ('Francisco', 29, 666555444, 'asd@fgh.jkl'),
-                       ('Joan', 28, 666555444, 'asd@fgh.jkl')]
-    print(lista_contactos)
-    for contacto in lista_contactos:
-        agenda.nuevo_contacto(contacto[0], contacto[1], contacto[2], contacto[3], True)
-    obtener_datos()
+    agenda.cargar_agenda()
+    if not len(agenda):
+        initDB()
+        lista_contactos = [('Antonio', 24, 666555444, 'asd@fgh.jkl'),
+                           ('Francisco', 29, 666555444, 'asd@fgh.jkl'),
+                           ('Joan', 28, 666555444, 'asd@fgh.jkl')]
+        print(lista_contactos)
+        for contacto in lista_contactos:
+            agenda.nuevo_contacto(contacto[0], contacto[1], contacto[2], contacto[3], True)
+        obtener_datos()
 
 
 try:

@@ -113,7 +113,7 @@ class Agenda:
 
     def nuevo_contacto(self, nombre, edad, telefono, email, en_db=False):
         id_contacto = 0
-        if len(self.contactos):
+        if len(self):
             id_contacto = list(self.contactos.keys())[-1] + 1
         self.contactos[id_contacto] = Contacto(id_contacto, nombre, edad, telefono, email)
 
