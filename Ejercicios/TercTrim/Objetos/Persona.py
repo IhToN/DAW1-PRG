@@ -4,6 +4,7 @@
         Edad
         Pareja
 """
+import sqlite3
 
 
 class Persona:
@@ -38,21 +39,18 @@ class Persona:
 
 
 class Contacto(Persona):
-    contador = 0
-
-    def __init__(self, nombre, edad, telefono, email):
+    def __init__(self, id, nombre, edad, telefono, email):
         super().__init__(nombre, edad)
-        Contacto.contador += 1
-        self.numero = Contacto.contador
+        self.id = id
         self.telefono = telefono
         self.email = email
 
     def __repr__(self):
         return "Contacto({0}, {1}, {2}, {3}, {4})" \
-            .format(self.numero, repr(self.nombre), self.edad, self.telefono, self.email)
+            .format(self.id, repr(self.nombre), self.edad, self.telefono, self.email)
 
     def serialize(self):
-        return self.nombre, self.edad, self.telefono, self.email
+        return self.id, self.nombre, self.edad, self.telefono, self.email
 
 
 class Agenda:
@@ -61,20 +59,66 @@ class Agenda:
         self.i = -1
         for contacto in contactos:
             if isinstance(contacto, Contacto):
-                self.contactos[contacto.nombre] = contacto
+                self.contactos[contacto.id] = contacto
             else:
                 raise ValueError(contacto, "no es un contacto.")
 
     def __next__(self):
         self.i += 1
         if self.i < len(self.contactos):
-            cont_name = sorted(list(self.contactos))[self.i]
-            return self.contactos[cont_name]
+            return self.contactos[self.i]
         else:
             raise StopIteration
 
     def __iter__(self):
         return self
+
+    def cargar_contacto(self, id=-1, nombre=None):
+        """ Devuelve un contacto según su ID o su Nombre.
+        La función da preferencia a la ID.
+        """
+        conn = sqlite3.connect('contacto.db')
+        cursor = conn.cursor()
+
+        if id > 0:
+            cursor.execute('''SELECT * FROM contactos WHERE id = {}'''.format(id))
+        elif nombre:
+            cursor.execute('''SELECT * FROM contactos WHERE nombre = {}'''.format(nombre))
+
+        result = cursor.fetchall()
+
+        conn.close()
+        return result
+
+    def cargar_agenda(self):
+        self.contactos = {}
+        self.i = -1
+
+        conn = sqlite3.connect('contacto.db')
+        cursor = conn.cursor()
+
+        for contacto in cursor.execute('SELECT * FROM contactos'):
+            self.contactos[contacto[0]] = Contacto(*contacto)
+
+        conn.close()
+
+    def guardar_contacto(self, contacto):
+        conn = sqlite3.connect('contacto.db')
+        cursor = conn.cursor()
+
+        cursor.execute('INSERT INTO contactos VALUES (?, ?, ?, ?, ?)', contacto.serialize())
+
+        conn.commit()
+        conn.close()
+
+    def nuevo_contacto(self, nombre, edad, telefono, email, en_db=False):
+        id_contacto = 0
+        if len(self.contactos):
+            id_contacto = list(self.contactos.keys())[-1] + 1
+        self.contactos[id_contacto] = Contacto(id_contacto, nombre, edad, telefono, email)
+
+        if en_db:
+            self.guardar_contacto(self.contactos[id_contacto])
 
 
 if __name__ == '__main__':
