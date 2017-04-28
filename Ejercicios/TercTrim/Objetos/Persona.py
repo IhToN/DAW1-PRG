@@ -13,7 +13,7 @@ class Persona:
         self.edad = edad
         self.pareja = None
 
-    def __str__(self):
+    def __repr__(self):
         return "Persona({0}, {1})".format(repr(self.nombre), self.edad)
 
     def presentate(self, a_quien=None):
@@ -66,7 +66,9 @@ class Agenda:
     def __next__(self):
         self.i += 1
         if self.i < len(self.contactos):
-            return self.contactos[self.i]
+            key = list(self.contactos)[self.i]
+            value = self.contactos[key]
+            return value
         else:
             raise StopIteration
 
@@ -90,7 +92,7 @@ class Agenda:
         conn.close()
         return result
 
-    def cargar_agenda(self):
+    def cargar_basedatos(self):
         self.contactos = {}
         self.i = -1
 
@@ -101,6 +103,19 @@ class Agenda:
             self.contactos[contacto[0]] = Contacto(*contacto)
 
         conn.close()
+
+    def cargar_fichero(self, fichero='contactos.csv'):
+        """ Lee un fichero de contactos tal que: Nombre, Edad, Telefono, Email
+        Los carga en la agenda y los guarda en la base de datos."""
+        abierto = open(fichero)
+        for linea in abierto:
+            array_contacto = linea.split(',')
+            if len(array_contacto) == 4:
+                self.nuevo_contacto(Contacto(str(array_contacto[0]), int(array_contacto[1]), int(array_contacto[2]),
+                                             str(array_contacto[3])))
+            else:
+                print('Hay un error en el contacto con los siguientes datos: {}'.format(array_contacto))
+        abierto.close()
 
     def guardar_contacto(self, contacto):
         conn = sqlite3.connect('contacto.db')
@@ -122,11 +137,11 @@ class Agenda:
 
 
 if __name__ == '__main__':
-    c1 = Contacto('Antonio', 24, 111222333, 'trolo@lolo.com')
-    c2 = Contacto('Fran', 24, 111222333, 'trolo@lolo.com')
-    c3 = Contacto('Joan', 24, 111222333, 'trolo@lolo.com')
+    c1 = Contacto(1, 'Antonio', 24, 111222333, 'trolo@lolo.com')
+    c2 = Contacto(2, 'Fran', 24, 111222333, 'trolo@lolo.com')
+    c3 = Contacto(3, 'Joan', 24, 111222333, 'trolo@lolo.com')
 
     agenda = Agenda(c1, c2, c3)
 
-    for cont in agenda:
-        print(cont)
+    for contc in agenda:
+        print(contc)
