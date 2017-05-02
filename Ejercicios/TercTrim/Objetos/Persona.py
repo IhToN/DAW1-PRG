@@ -79,17 +79,22 @@ class Agenda:
         """ Devuelve un contacto según su ID o su Nombre.
         La función da preferencia a la ID.
         """
-        conn = sqlite3.connect('contacto.db')
-        cursor = conn.cursor()
+        result = []
 
-        if id > 0:
-            cursor.execute('''SELECT * FROM contactos WHERE id = {}'''.format(id))
-        elif nombre:
-            cursor.execute('''SELECT * FROM contactos WHERE nombre = {}'''.format(nombre))
-
-        result = cursor.fetchall()
-
-        conn.close()
+        try:
+            conn = sqlite3.connect('contacto.db')
+            cursor = conn.cursor()
+            if id > 0:
+                cursor.execute('''SELECT * FROM contactos WHERE id = {}'''.format(id))
+            elif nombre:
+                cursor.execute('''SELECT * FROM contactos WHERE nombre = {}'''.format(nombre))
+            result = cursor.fetchall()
+        except sqlite3.DatabaseError as e:
+            print('Error con la base de datos: {}'.format(e))
+        except sqlite3.OperationalError as e:
+            print('Error de operación: {}'.format(e))
+        finally:
+            conn.close()
         return result
 
     def cargar_basedatos(self):
@@ -99,10 +104,15 @@ class Agenda:
         conn = sqlite3.connect('contacto.db')
         cursor = conn.cursor()
 
-        for contacto in cursor.execute('SELECT * FROM contactos'):
-            self.contactos[contacto[0]] = Contacto(*contacto)
-
-        conn.close()
+        try:
+            for contacto in cursor.execute('SELECT * FROM contactos'):
+                self.contactos[contacto[0]] = Contacto(*contacto)
+        except sqlite3.DatabaseError as e:
+            print('Error con la base de datos: {}'.format(e))
+        except sqlite3.OperationalError as e:
+            print('Error de operación: {}'.format(e))
+        finally:
+            conn.close()
 
     def cargar_fichero(self, fichero='contactos.csv'):
         """ Lee un fichero de contactos tal que: Nombre, Edad, Telefono, Email
@@ -118,13 +128,19 @@ class Agenda:
         abierto.close()
 
     def guardar_contacto(self, contacto):
-        conn = sqlite3.connect('contacto.db')
-        cursor = conn.cursor()
+        try:
+            conn = sqlite3.connect('contacto.db')
+            cursor = conn.cursor()
 
-        cursor.execute('INSERT INTO contactos VALUES (?, ?, ?, ?, ?)', contacto.serialize())
+            cursor.execute('INSERT INTO contactos VALUES (?, ?, ?, ?, ?)', contacto.serialize())
 
-        conn.commit()
-        conn.close()
+            conn.commit()
+        except sqlite3.DatabaseError as e:
+            print('Error con la base de datos: {}'.format(e))
+        except sqlite3.OperationalError as e:
+            print('Error de operación: {}'.format(e))
+        finally:
+            conn.close()
 
     def nuevo_contacto(self, nombre, edad, telefono, email, en_db=False):
         id_contacto = 0
