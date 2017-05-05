@@ -54,7 +54,7 @@ class Contacto(Persona):
 
 
 class Agenda:
-    def __init__(self, *contactos):
+    def __init__(self, contactos=()):
         self.contactos = {}
         self.i = -1
         for contacto in contactos:
