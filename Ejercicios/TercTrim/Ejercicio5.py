@@ -44,17 +44,23 @@ def show_clients_buyouts(conn, clientid):
     """Query que de todos los pedidos de un cliente - mostrar Orders(orderNumber), products(productCode, productName), orderdetails(quantityOrdered, priceEeach)
             Sacar un listado de todos los pedidos de un cliente, con el total de lineas y de pedidos."""
     cursor = conn.cursor()
-    query = """SELECT O.orderNumber, P.productCode, P.productName, OD.quantityOrdered, OD.priceEach, 
-    (SELECT COUNT(*) FROM orders WHERE orders.customerNumber = {}) as Compras,
-    (SELECT COUNT(*) FROM orderdetails, orders WHERE orderdetails.orderNumber = orders.orderNumber AND orders.customerNumber = {}) as Lineas
+    query = """SELECT O.orderNumber, OD.orderLineNumber, P.productCode, P.productName, OD.quantityOrdered, OD.priceEach 
     FROM orders O, products P, orderdetails OD
     WHERE O.orderNumber = OD.orderNumber AND OD.productCode = P.productCode
-    AND O.customerNumber = {}""".format(clientid, clientid, clientid)
+    AND O.customerNumber = {}
+    ORDER BY O.orderNumber, OD.orderLineNumber""".format(clientid)
+    compras = "SELECT COUNT(*) FROM orders WHERE orders.customerNumber = {}".format(clientid)
+    lineas = "SELECT COUNT(*) FROM orderdetails, orders WHERE orderdetails.orderNumber = orders.orderNumber AND orders.customerNumber = {}".format(clientid)
     cursor.execute(query)
-    print('Compras del cliente ', clientid)
-    print('·', '(orderNumber, productCode, productName, quantityOrdered, priceEach, Compras, Lineas)')
+    print('Compras del cliente', clientid)
+    # '(orderNumber, orderLineNumber, productCode, productName, quantityOrdered, priceEach)')
     for compra in cursor:
-        print('·', compra)
+        print("· Pedido: {}\n· Linea de Pedido: {}\n· Código de Producto: {}\n· Nombre de Producto: {}\n· Cantidad "
+              "Comprada: {}\n· Precio por Unidad: {}\n".format(*compra))
+    cursor.execute(compras)
+    print("· Total de Compras: {}".format(cursor.fetchone()[0]))
+    cursor.execute(lineas)
+    print("· Total de Líneas: {}".format(cursor.fetchone()[0]))
     cursor.close()
 
 
