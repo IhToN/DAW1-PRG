@@ -4,6 +4,11 @@
         Imprimir los clientes que son de un país
         Query que de todos los pedidos de un cliente - mostrar Orders(orderNumber), products(productCode, productName), orderdetails(quantityOrdered, priceEeach)
             Sacar un listado de todos los pedidos de un cliente, con el total de lineas, de pedidos y en total.
+    
+    Ahora toca hacer algo más curioso.
+        Producir una lista con los pedidos de un cliente, con su fecha y su cuantía, comprobando si el cliente
+            está al corriente de sus pagos o no.
+        Procesar toda la lista de clientes para el conjunto de clientes de una lista.
 """
 import mysql.connector
 from mysql.connector import errorcode
@@ -40,9 +45,10 @@ def show_clients_from(conn, country='Spain'):
     cursor.close()
 
 
-def show_clients_buyouts(conn, clientid):
-    """Query que de todos los pedidos de un cliente - mostrar Orders(orderNumber), products(productCode, productName), orderdetails(quantityOrdered, priceEeach)
-            Sacar un listado de todos los pedidos de un cliente, con el total de lineas y de pedidos."""
+def show_client_buyouts(conn, clientid, print_info=False):
+    """ Query que de todos los pedidos de un cliente - mostrar Orders(orderNumber), products(productCode, productName), orderdetails(quantityOrdered, priceEeach)
+            Sacar un listado de todos los pedidos de un cliente, con el total de lineas y de pedidos.
+    """
     cursor = conn.cursor()
 
     query = """SELECT O.orderNumber, OD.orderLineNumber, P.productCode, P.productName, OD.quantityOrdered, OD.priceEach 
@@ -54,20 +60,55 @@ def show_clients_buyouts(conn, clientid):
     WHERE OD.orderNumber = O.orderNumber AND O.customerNumber = {}
     GROUP BY OD.orderNumber""".format(clientid)
 
-    cursor.execute(query)
-    print('Compras del cliente', clientid)
-    # '(orderNumber, orderLineNumber, productCode, productName, quantityOrdered, priceEach)')
-    for compra in cursor:
-        print("· Pedido: {}\n· Linea de Pedido: {}\n· Código de Producto: {}\n· Nombre de Producto: {}\n· Cantidad "
-              "Comprada: {}\n· Precio por Unidad: {}\n".format(*compra))
+    if print_info:
+        cursor.execute(query)
+        print('\nCompras del cliente', clientid)
+        # '(orderNumber, orderLineNumber, productCode, productName, quantityOrdered, priceEach)')
+        for compra in cursor:
+            print("· Pedido: {}\n· Linea de Pedido: {}\n· Código de Producto: {}\n· Nombre de Producto: {}\n· Cantidad "
+                  "Comprada: {}\n· Precio por Unidad: {}\n".format(*compra))
+
     cursor.execute(subtotal)
 
     total = 0
     for precio in cursor:
-        print("· Pedido: {}     · Subtotal: {}".format(*precio))
+        if print_info:
+            print("· Pedido: {}     · Subtotal: {}".format(*precio))
         total += precio[1]
-    print("· Monto total: {}".format(total))
+    if print_info:
+        print("· Monto total: {}".format(total))
     cursor.close()
+
+    return total
+
+
+def show_client_payments(conn, clientid, print_info=False):
+    """ Producir una lista con los pedidos de un cliente, con su fecha y su cuantía, comprobando
+    si el cliente está al corriente de sus pagos o no.
+    """
+    cursor = conn.cursor()
+    total_deuda = show_client_buyouts(conn, clientid, True)
+    total_pagado = 0
+
+    query = """SELECT P.paymentDate, P.amount 
+        FROM payments P
+        WHERE P.customerNumber = {}
+        ORDER BY P.paymentDate""".format(clientid)
+
+    cursor.execute(query)
+    if print_info: print('\nPagos del cliente', clientid)
+    # '(orderNumber, orderLineNumber, productCode, productName, quantityOrdered, priceEach)')
+    for pago in cursor:
+        if print_info: print("· Fecha: {}\n· Cantidad: {}\n".format(*pago))
+        total_pagado += pago[1]
+
+    cursor.close()
+
+    if total_pagado < total_deuda:
+        print("El cliente {} tiene una deuda de {} euros.".format(clientid, total_deuda - total_pagado))
+    else:
+        print("Las cuentas del cliente {} están saneadas.".format(clientid))
+    return total_pagado < total_deuda
 
 
 if __name__ == '__main__':
@@ -75,7 +116,7 @@ if __name__ == '__main__':
         cnx = mysql.connector.connect(**config)
         show_tables(cnx)
         show_clients_from(cnx, 'Spain')
-        show_clients_buyouts(cnx, 103)
+        show_client_payments(cnx, 103, True)
 
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
