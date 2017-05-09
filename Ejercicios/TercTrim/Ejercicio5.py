@@ -27,7 +27,7 @@ def show_tables(conn):
     cursor = conn.cursor()
     query = "SHOW TABLES"
     cursor.execute(query)
-    print('Lista de tablas')
+    print('\nLista de tablas')
     for (tabla,) in cursor:
         print('·', tabla)
     cursor.close()
@@ -39,7 +39,7 @@ def show_clients_from(conn, country='Spain'):
     query = """SELECT C.customerNumber, C.customerName, C.phone, C.city , C.country
     FROM customers C WHERE C.country='{}'""".format(country)
     cursor.execute(query)
-    print('Clientes de', country)
+    print('\nClientes de', country)
     for cliente in cursor:
         print('·', cliente)
     cursor.close()
@@ -105,10 +105,28 @@ def show_client_payments(conn, clientid, print_info=False):
     cursor.close()
 
     if total_pagado < total_deuda:
-        print("El cliente {} tiene una deuda de {} euros.".format(clientid, total_deuda - total_pagado))
+        print("\033[91m\nEl cliente {} tiene una deuda de {} euros.\033[99m".format(clientid, total_deuda - total_pagado))
     else:
-        print("Las cuentas del cliente {} están saneadas.".format(clientid))
+        print("\033[92m\nLas cuentas del cliente {} están saneadas.\033[99m".format(clientid))
     return total_pagado < total_deuda
+
+
+def show_clients_payments(conn, clients=None):
+    """ Procesar toda la lista de clientes para el conjunto de clientes de una lista.
+    Si la lista original está vacía lo hará para todos los clientes de la base de datos.
+    """
+    if not clients:
+        clients = []
+        cursor = conn.cursor()
+        query = "SELECT C.customerNumber FROM customers C"
+        cursor.execute(query)
+        for client in cursor:
+            clients.append(client[0])
+        cursor.close()
+
+    for client in clients:
+        print("\033[94m\n------ Cuentas del cliente {} ------\033[99m".format(client))
+        show_client_payments(conn, client)
 
 
 if __name__ == '__main__':
@@ -117,6 +135,7 @@ if __name__ == '__main__':
         show_tables(cnx)
         show_clients_from(cnx, 'Spain')
         show_client_payments(cnx, 103, True)
+        show_clients_payments(cnx)
 
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
