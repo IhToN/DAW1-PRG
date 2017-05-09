@@ -56,7 +56,7 @@ def show_client_buyouts(conn, clientid, print_info=False):
     WHERE O.orderNumber = OD.orderNumber AND OD.productCode = P.productCode
     AND O.customerNumber = {}
     ORDER BY O.orderNumber, OD.orderLineNumber""".format(clientid)
-    subtotal = """SELECT OD.orderNumber, OD.priceEach * OD.quantityOrdered FROM orderdetails OD, orders o
+    subtotal = """SELECT OD.orderNumber, SUM(OD.priceEach * OD.quantityOrdered) FROM orderdetails OD, orders o
     WHERE OD.orderNumber = O.orderNumber AND O.customerNumber = {}
     GROUP BY OD.orderNumber""".format(clientid)
 
