@@ -133,9 +133,9 @@ if __name__ == '__main__':
     try:
         cnx = mysql.connector.connect(**config)
         show_tables(cnx)
-        show_clients_from(cnx, 'Spain')
-        show_client_payments(cnx, 103, True)
-        show_clients_payments(cnx)
+        #show_clients_from(cnx, 'Spain')
+        show_client_payments(cnx, 450, True)
+        #show_clients_payments(cnx)
 
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
