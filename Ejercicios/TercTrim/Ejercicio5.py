@@ -105,7 +105,8 @@ def show_client_payments(conn, clientid, print_info=False):
     cursor.close()
 
     if total_pagado < total_deuda:
-        print("\033[91m\nEl cliente {} tiene una deuda de {} euros.\033[99m".format(clientid, total_deuda - total_pagado))
+        print(
+            "\033[91m\nEl cliente {} tiene una deuda de {} euros.\033[99m".format(clientid, total_deuda - total_pagado))
     else:
         print("\033[92m\nLas cuentas del cliente {} están saneadas.\033[99m".format(clientid))
     return total_pagado < total_deuda
@@ -133,9 +134,9 @@ if __name__ == '__main__':
     try:
         cnx = mysql.connector.connect(**config)
         show_tables(cnx)
-        #show_clients_from(cnx, 'Spain')
+        # show_clients_from(cnx, 'Spain')
+        # show_client_buyouts(cnx, 450, True)
         show_client_payments(cnx, 450, True)
-        #show_clients_payments(cnx)
 
     except mysql.connector.Error as err:
         if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:

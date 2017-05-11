@@ -10,8 +10,10 @@ cnxConfig = {
 
 
 class ControlBD:
-    def __init__(self):
-        self.cnx = self.conectar()
+    def __init__(self, auto_initialize=True):
+        self.cnx = None
+        if auto_initialize:
+            self.conectar()
 
     def conectar(self, config=cnxConfig):
         try:
@@ -25,7 +27,10 @@ class ControlBD:
                 print(err)
         else:
             self.cnx.close()
-        return self.cnx
+
+    def descoenctar(self):
+        self.cnx.close()
+        self.cnx = None
 
     def insertar_cliente(self, cliente):
         cursor = self.cnx.cursor()
