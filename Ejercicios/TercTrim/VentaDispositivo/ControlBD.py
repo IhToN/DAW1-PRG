@@ -9,50 +9,45 @@ cnxConfig = {
 }
 
 
-def conectar(config=cnxConfig):
-    try:
-        cnx = mysql.connector.connect(**config)
-    except mysql.connector.Error as err:
-        if err.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password")
-        elif err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
-            print("Database does not exist")
+class ControlBD:
+    def __init__(self):
+        self.cnx = self.conectar()
+
+    def conectar(self, config=cnxConfig):
+        try:
+            self.cnx = mysql.connector.connect(**config)
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with your user name or password")
+            elif err.errno == mysql.connector.errorcode.ER_BAD_DB_ERROR:
+                print("Database does not exist")
+            else:
+                print(err)
         else:
-            print(err)
-    else:
-        cnx.close()
-    return cnx
+            self.cnx.close()
+        return self.cnx
 
+    def insertar_cliente(self, cliente):
+        cursor = self.cnx.cursor()
 
-# region Cliente
-def insertar_cliente(cliente):
-    cnx = conectar()
-    cursor = cnx.cursor()
+        query = """INSERT INTO customers(customerNumber, customerName, phone, addressLine1, city)
+                    VALUES ({}, {}, {}, {}, {})""".format(cliente.ncliente, cliente.nombre, cliente.telefono,
+                                                          cliente.direccion, cliente.ciudad)
+        try:
+            cursor.execute(query)
+            self.cnx.commit()
+        except mysql.connector.Error as err:
+            print('Error en la inserción de un nuevo cliente:', err)
+        finally:
+            cursor.close()
 
-    query = """INSERT INTO customers(customerNumber, customerName, phone, addressLine1, city)
-                VALUES ({}, {}, {}, {}, {})""".format(cliente.ncliente, cliente.nombre, cliente.telefono,
-                                                      cliente.direccion, cliente.ciudad)
-    try:
-        cursor.execute(query)
-        cnx.commit()
-    except mysql.connector.Error as err:
-        print('Error en la inserción de un nuevo cliente:', err)
-    finally:
-        cursor.close()
-        cnx.close()
+    def obtener_clientes(self):
+        cursor = self.cnx.cursor()
 
-
-def obtener_clientes():
-    cnx = conectar()
-    cursor = cnx.cursor()
-
-    query = """SELECT customerNumber, customerName, phone, addressLine1, city FROM customers"""
-    try:
-        cursor.execute(query)
-    except mysql.connector.Error as err:
-        print('Error en la inserción de un nuevo cliente:', err)
-    finally:
-        cnx.close()
-        return cursor
-
-# endregion Cliente
+        query = """SELECT customerNumber, customerName, phone, addressLine1, city FROM customers"""
+        try:
+            cursor.execute(query)
+        except mysql.connector.Error as err:
+            print('Error en la inserción de un nuevo cliente:', err)
+        finally:
+            return cursor
