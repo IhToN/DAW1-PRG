@@ -1,9 +1,10 @@
-from Ejercicios.TercTrim.VentaDispositivo import Clases, ControlBD
+from Ejercicios.TercTrim.VentaDispositivo import Clases
+from Ejercicios.TercTrim.VentaDispositivo.ControlBD import ControlBD
 
 
 class ColeccionClientes:
     def __init__(self):
-        self.cbd = ControlBD.ControlBD()
+        self.cbd = ControlBD()
         self.clientes = dict()
         self.cargar_clientes()
 
@@ -12,11 +13,14 @@ class ColeccionClientes:
 
     def cargar_clientes(self):
         for cliente in self.cbd.obtener_clientes():
-            self.clientes[cliente[0]] = Clases.Cliente(*cliente)
+            ncliente, nombre, telefono, direccion, ciudad = cliente
+            self.clientes[cliente[0]] = Clases.Cliente(ncliente, nombre, telefono, direccion, ciudad)
+        self.cbd.descoenctar()
 
     def nuevo_cliente(self, ncliente, nombre, telefono, direccion, ciudad):
         cliente = Clases.Cliente(ncliente, nombre, telefono, direccion, ciudad)
         if ncliente not in self.clientes:
             self.clientes[ncliente] = cliente
             self.cbd.insertar_cliente(cliente)
+        self.cbd.descoenctar()
         return cliente
