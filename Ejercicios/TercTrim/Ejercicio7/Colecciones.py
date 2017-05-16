@@ -1,5 +1,5 @@
-from Ejercicios.TercTrim.VentaDispositivo import Clases
-from Ejercicios.TercTrim.VentaDispositivo.ControlBD import ControlBD
+from Ejercicios.TercTrim.Ejercicio7 import Clases
+from Ejercicios.TercTrim.Ejercicio7.ControlBD import ControlBD
 
 
 class ColeccionClientes:
