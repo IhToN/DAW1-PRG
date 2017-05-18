@@ -1,0 +1,9 @@
+class Client:
+    def __init__(self, dni, nombre, apellido1, apellido2, direccion, cod_postal, ciudad):
+        self.dni = dni
+        self.nombre = nombre
+        self.apellido1 = apellido1
+        self.apellido2 = apellido2
+        self.direccion = direccion
+        self.cod_postal = cod_postal
+        self.ciudad = ciudad
