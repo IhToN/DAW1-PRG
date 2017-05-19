@@ -1,4 +1,4 @@
-import Facturacion.DBManager as dbm
+import Facturacion.Controllers.DBManager as dbm
 from Facturacion.Misc import Config
 
 
@@ -17,7 +17,7 @@ class BillsController:
 
     def get_items(self, cod_factura):
         with dbm.DB(Config.database) as db:
-            query = 'SELECT * FROM ItemLine WHERE cod_factura = {}'.format(cod_factura)
+            query = 'SELECT * FROM ItemLines WHERE cod_factura = {}'.format(cod_factura)
             return db.execute(query)
 
 
@@ -25,4 +25,11 @@ class ClientsController:
     def get_clients(self):
         with dbm.DB(Config.database) as db:
             query = 'SELECT * FROM Clients'
+            return db.execute(query)
+
+
+class VendorsController:
+    def get_vendors(self):
+        with dbm.DB(Config.database) as db:
+            query = 'SELECT * FROM Vendors'
             return db.execute(query)

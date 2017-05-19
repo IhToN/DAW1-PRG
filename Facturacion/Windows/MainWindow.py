@@ -1,4 +1,5 @@
 import tkinter
+from Facturacion.Windows.BillsList import BillsListWindow
 
 
 class MainWindow(tkinter.Frame):
@@ -27,8 +28,8 @@ class MainWindow(tkinter.Frame):
         self.lbl_todo = tkinter.Label(self, text='¿Qué quieres hacer?', font=('TkHeadingFont', 16), height=2)
         self.lbl_todo.grid(row=0, column=1)
 
-        self.btn_ver_factura = tkinter.Button(self, text='Ver Facturas', bg='white')
-        self.btn_ver_factura.grid(row=1, column=1)
+        self.btn_ver_facturas = tkinter.Button(self, text='Ver Facturas', bg='white', command=self.init_bills_window)
+        self.btn_ver_facturas.grid(row=1, column=1)
 
         self.btn_crear_factura = tkinter.Button(self, text='Crear Factura', bg='white')
         self.btn_crear_factura.grid(row=2, column=0)
@@ -41,6 +42,9 @@ class MainWindow(tkinter.Frame):
 
     def callback(self, event):
         self.focus_set()
+
+    def init_bills_window(self):
+        win = BillsListWindow()
 
 
 def main():

@@ -1,12 +1,10 @@
-from Facturacion.Controllers.ControlDB import ClientsController
 from Facturacion.Objects.Client import Client
+from Facturacion.Controllers.ControlDB import ClientsController
 
 
 class Clients:
-    def __init__(self):
-        self.clientes = {}
-        self.controller = ClientsController()
-        self.load_clients()
+    clientes = {}
+    controller = ClientsController()
 
     def load_clients(self):
         for client in self.controller.get_clients():

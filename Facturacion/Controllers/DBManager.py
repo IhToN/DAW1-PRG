@@ -103,12 +103,12 @@ if __name__ == '__main__':
     queries = [statement.format(table) for table in tables]
 
     with DB(database, queries) as dbt:
-        dbt.execute(["INSERT INTO tabla1 (id, texto) VALUES (8, 'reference.txt');"])
+        dbt.execute(["INSERT INTO tabla1 (id, texto) VALUES (1, 'abcdef');"])
 
-        dbt.execute(["INSERT INTO tabla2 (id, texto) VALUES (8, 'one.txt');",
-                    "INSERT INTO tabla2 (id, texto) VALUES (9, 'two.txt');"])
+        dbt.execute(["INSERT INTO tabla2 (id, texto) VALUES (1, 'fedcba');",
+                    "INSERT INTO tabla2 (id, texto) VALUES (2, 'gfedcba');"])
 
-        dbt.execute(["INSERT INTO tabla2 (id, texto) VALUES (10, 'three.txt');"])
+        dbt.execute(["INSERT INTO tabla2 (id, texto) VALUES (3, 'hgfedcba');"])
 
         selects = ['SELECT * FROM tabla1;', 'SELECT * FROM tabla2;']
 

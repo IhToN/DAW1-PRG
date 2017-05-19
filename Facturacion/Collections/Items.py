@@ -1,12 +1,10 @@
-from Facturacion.Controllers.ControlDB import ItemsController
 from Facturacion.Objects.Item import Item
+from Facturacion.Controllers.ControlDB import ItemsController
 
 
 class Items:
-    def __init__(self):
-        self.articulos = {}
-        self.controller = ItemsController()
-        self.load_items()
+    articulos = {}
+    controller = ItemsController()
 
     def load_items(self):
         for item in self.controller.get_items():
