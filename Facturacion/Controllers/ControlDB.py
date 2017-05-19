@@ -33,3 +33,11 @@ class VendorsController:
         with dbm.DB(Config.database) as db:
             query = 'SELECT * FROM Vendors'
             return db.execute(query)
+
+    def add_vendor(self, vendor):
+        with dbm.DB(Config.database) as db:
+            # cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad
+            query = "INSERT INTO Vendors VALUES ('{}', '{}', '{}', '{}', '{}', {}, '{}');"
+            query = query.format(vendor.cif, vendor.nombre, vendor.apellido1, vendor.apellido2, vendor.direccion,
+                                 vendor.cod_postal, vendor.ciudad)
+            db.execute(query)

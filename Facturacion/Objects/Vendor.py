@@ -1,6 +1,6 @@
 class Vendor:
-    def __init__(self, dni, nombre, apellido1, apellido2, direccion, cod_postal, ciudad):
-        self.dni = dni
+    def __init__(self, cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad):
+        self.cif = cif
         self.nombre = nombre
         self.apellido1 = apellido1
         self.apellido2 = apellido2

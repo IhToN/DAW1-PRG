@@ -1,3 +1,3 @@
 class Config:
-    database = 'faturacion.db'
+    database = 'facturacion.db'
     IVA = 4

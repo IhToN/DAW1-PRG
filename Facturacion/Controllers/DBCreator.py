@@ -32,7 +32,7 @@ class Creator:
 
     def clients(self):
         table = Table('Clients')
-        table.add_column('dni', 'VARCHAR(9) PRIMARY KEY')
+        table.add_column('cif', 'VARCHAR(9) PRIMARY KEY')
         table.add_column('nombre', 'VARCHAR(255)')
         table.add_column('apellido1', 'VARCHAR(255)')
         table.add_column('apellido2', 'VARCHAR(255)')
@@ -43,7 +43,7 @@ class Creator:
 
     def vendors(self):
         table = Table('Vendors')
-        table.add_column('dni', 'VARCHAR(9) PRIMARY KEY')
+        table.add_column('cif', 'VARCHAR(9) PRIMARY KEY')
         table.add_column('nombre', 'VARCHAR(255)')
         table.add_column('apellido1', 'VARCHAR(255)')
         table.add_column('apellido2', 'VARCHAR(255)')
@@ -73,8 +73,10 @@ class Creator:
         table.add_column('cantidad', 'INT')
         return table
 
-    def create_db(self):
+    def create_db(self, test=True):
         with dbm.DB(Config.database) as db:
             for tabla in self.tablas:
-                print(tabla)
-                #db.execute(tabla)
+                if test:
+                    print(tabla)
+                else:
+                    db.execute(repr(tabla))
