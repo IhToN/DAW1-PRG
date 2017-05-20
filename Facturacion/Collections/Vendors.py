@@ -6,15 +6,17 @@ class Vendors:
     vendedores = {}
     controller = VendorsController()
 
-    def load_vendors(self):
-        for vendedor in Vendors.controller.get_vendors():
-            Vendors.vendedores[vendedor[0]] = Vendor(vendedor[0], vendedor[1], vendedor[2],
-                                                     vendedor[3], vendedor[4], vendedor[5],
-                                                     vendedor[6])
+    @classmethod
+    def load_vendors(cls):
+        for vendedor in cls.controller.get_vendors():
+            cls.vendedores[vendedor[0]] = Vendor(vendedor[0], vendedor[1], vendedor[2],
+                                                 vendedor[3], vendedor[4], vendedor[5],
+                                                 vendedor[6])
 
-    def add_vendor(self, cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad):
-        if cif in Vendors.vendedores:
+    @classmethod
+    def add_vendor(cls, cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad):
+        if cif in cls.vendedores:
             return
         vendedor = Vendor(cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad)
-        Vendors.vendedores[cif] = vendedor
-        Vendors.controller.add_vendor(vendedor)
+        cls.vendedores[cif] = vendedor
+        cls.controller.add_vendor(vendedor)

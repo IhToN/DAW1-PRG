@@ -1,11 +1,11 @@
 import Facturacion.Controllers.DBManager as dbm
 from Facturacion.Misc import Config
-
+from collections import OrderedDict
 
 class Table:
     def __init__(self, nombre):
         self.nombre = nombre
-        self.columnas = {}
+        self.columnas = OrderedDict()
 
     def add_column(self, columna, parametros):
         self.columnas[columna] = parametros

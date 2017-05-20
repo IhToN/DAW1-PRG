@@ -7,3 +7,6 @@ class Vendor:
         self.direccion = direccion
         self.cod_postal = cod_postal
         self.ciudad = ciudad
+
+    def __repr__(self):
+        return '{} - {} {}'.format(self.cif, self.nombre, self.apellido1)

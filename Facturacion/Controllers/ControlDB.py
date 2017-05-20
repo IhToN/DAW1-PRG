@@ -8,6 +8,13 @@ class ItemsController:
             query = 'SELECT * FROM Items;'
             return db.execute(query)
 
+    def add_item(self, articulo):
+        with dbm.DB(Config.database) as db:
+            # cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad
+            query = "INSERT INTO Items VALUES ({}, '{}', '{}');"
+            query = query.format(articulo.cod_articulo, articulo.nombre, articulo.precio)
+            db.execute(query)
+
 
 class BillsController:
     def get_bills(self):
@@ -24,14 +31,21 @@ class BillsController:
 class ClientsController:
     def get_clients(self):
         with dbm.DB(Config.database) as db:
-            query = 'SELECT * FROM Clients'
+            query = 'SELECT * FROM Clients;'
             return db.execute(query)
 
+    def add_client(self, cliente):
+        with dbm.DB(Config.database) as db:
+            # cif, nombre, apellido1, apellido2, direccion, cod_postal, ciudad
+            query = "INSERT INTO Clients VALUES ('{}', '{}', '{}', '{}', '{}', {}, '{}');"
+            query = query.format(cliente.cif, cliente.nombre, cliente.apellido1, cliente.apellido2, cliente.direccion,
+                                 cliente.cod_postal, cliente.ciudad)
+            db.execute(query)
 
 class VendorsController:
     def get_vendors(self):
         with dbm.DB(Config.database) as db:
-            query = 'SELECT * FROM Vendors'
+            query = 'SELECT * FROM Vendors;'
             return db.execute(query)
 
     def add_vendor(self, vendor):
