@@ -14,7 +14,7 @@ class Items:
     @classmethod
     def get_max_code(cls):
         if not cls.articulos:
-            return 0
+            return 1
         return max(cls.articulos, key=int) + 1
 
     @classmethod

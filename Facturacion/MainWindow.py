@@ -43,7 +43,7 @@ class MainWindow(tkinter.Frame):
         self.lbl_todo.grid(row=0, column=1)
 
         self.btn_add_bill = tkinter.Button(self, text='Crear Factura', bg='white',
-                                             command=self.init_cbill_window)
+                                           command=self.init_cbill_window)
         self.btn_add_bill.grid(row=1, column=0)
         self.btn_bills_list = tkinter.Button(self, text='Ver Facturas', bg='white',
                                              command=self.init_bills_window)
@@ -69,27 +69,27 @@ class MainWindow(tkinter.Frame):
 
     def init_bills_window(self):
         if not self.opened:
-            self.opened = tlw.BillsListWindow()
+            self.opened = tlw.BillsListWindow(self)
             self.opened.protocol("WM_DELETE_WINDOW", self.close_tl_window)
 
     def init_cvendor_window(self):
         if not self.opened:
-            self.opened = tlw.CreateVendorWindow()
+            self.opened = tlw.CreateVendorWindow(self)
             self.opened.protocol("WM_DELETE_WINDOW", self.close_tl_window)
 
     def init_cclient_window(self):
         if not self.opened:
-            self.opened = tlw.CreateClientWindow()
+            self.opened = tlw.CreateClientWindow(self)
             self.opened.protocol("WM_DELETE_WINDOW", self.close_tl_window)
 
     def init_citem_window(self):
         if not self.opened:
-            self.opened = tlw.CreateItemWindow()
+            self.opened = tlw.CreateItemWindow(self)
             self.opened.protocol("WM_DELETE_WINDOW", self.close_tl_window)
 
     def init_cbill_window(self):
         if not self.opened:
-            self.opened = tlw.CreateBillWindow()
+            self.opened = tlw.CreateBillWindow(self)
             self.opened.protocol("WM_DELETE_WINDOW", self.close_tl_window)
 
 

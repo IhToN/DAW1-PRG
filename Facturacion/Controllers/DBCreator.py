@@ -57,6 +57,7 @@ class Creator:
         table.add_column('cod_factura', 'INT PRIMARY KEY')
         table.add_column('vendedor', 'VARCHAR(9)')
         table.add_column('cliente', 'VARCHAR(9)')
+        table.add_column('fecha', 'VARCHAR(10)')
         return table
 
     def items(self):

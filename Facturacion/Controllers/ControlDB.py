@@ -24,8 +24,21 @@ class BillsController:
 
     def get_items(self, cod_factura):
         with dbm.DB(Config.database) as db:
-            query = 'SELECT * FROM ItemLines WHERE cod_factura = {}'.format(cod_factura)
+            query = 'SELECT * FROM ItemLines WHERE cod_factura = {};'.format(cod_factura)
             return db.execute(query)
+
+    def add_bill(self, bill):
+        with dbm.DB(Config.database) as db:
+            query = "INSERT INTO Bills VALUES ({}, '{}', '{}', '{}');".format(bill.cod_factura, bill.vendedor.cif,
+                                                                              bill.cliente.cif, bill.fecha)
+            db.execute(query)
+
+    def add_line(self, item_line):
+        with dbm.DB(Config.database) as db:
+            query = "INSERT INTO ItemLines VALUES ({}, {}, {});".format(item_line.factura.cod_factura,
+                                                                        item_line.articulo.cod_articulo,
+                                                                        item_line.cantidad)
+            db.execute(query)
 
 
 class ClientsController:
@@ -41,6 +54,7 @@ class ClientsController:
             query = query.format(cliente.cif, cliente.nombre, cliente.apellido1, cliente.apellido2, cliente.direccion,
                                  cliente.cod_postal, cliente.ciudad)
             db.execute(query)
+
 
 class VendorsController:
     def get_vendors(self):
