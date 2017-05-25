@@ -1,11 +1,6 @@
 import tkinter
 import Facturacion.TLWindows as tlw
 
-from Facturacion.Collections.Vendors import Vendors
-from Facturacion.Collections.Clients import Clients
-from Facturacion.Collections.Bills import Bills
-from Facturacion.Collections.Items import Items
-
 
 class MainWindow(tkinter.Frame):
     def __init__(self, parent):
@@ -13,23 +8,10 @@ class MainWindow(tkinter.Frame):
         self.parent = parent
         self.opened = None
 
-        print("Cargando datos")
-        self.init_collections()
-
         print("Iniciando ventana principal")
         self.init_ui()
 
         self.bind("<Button-1>", self.callback)
-
-    def init_collections(self):
-        Vendors.load_vendors()
-        print("Vendedores cargados:", Vendors.vendedores.values())
-        Clients.load_clients()
-        print("Clientes cargados:", Clients.clientes.values())
-        Items.load_items()
-        print("Artículos cargados:", Items.articulos.values())
-        Bills.load_bills()
-        print("Facturas cargadas:", Bills.facturas.values())
 
     def init_ui(self):
         '''Interfaz Gráfico'''

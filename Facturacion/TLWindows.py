@@ -1,5 +1,6 @@
 import tkinter
 import tkinter.ttk as ttk
+
 from Facturacion.Collections.Vendors import Vendors
 from Facturacion.Collections.Clients import Clients
 from Facturacion.Collections.Bills import Bills
@@ -10,10 +11,28 @@ class CloseableWindow(tkinter.Toplevel):
     def __init__(self, main):
         tkinter.Toplevel.__init__(self)
         self.main = main
+        self.vcif = (self.register(self.validate_cif), '%d', '%P')
+        self.vzip = (self.register(self.validate_cod_postal), '%d', '%P')
+        self.vflt = (self.register(self.validate_float), '%d', '%P')
 
     def close(self):
         self.destroy()
         self.main.close_tl_window()
+
+    def validate_cif(self, action, value_if_allowed):
+        if action != '1':
+            return True
+        return len(value_if_allowed) <= 9
+
+    def validate_cod_postal(self, action, value_if_allowed):
+        if action != '1':
+            return True
+        return value_if_allowed.isdigit() and len(value_if_allowed) <= 5
+
+    def validate_float(self, action, value_if_allowed):
+        if action != '1':
+            return True
+        return value_if_allowed.isnumeric()
 
 
 class BillsListWindow(CloseableWindow):
@@ -69,6 +88,7 @@ class CreateVendorWindow(CloseableWindow):
         self.vc_sn2 = tkinter.StringVar()
         self.vc_adr = tkinter.StringVar()
         self.vc_zip = tkinter.IntVar()
+        self.vc_zip.set('')
         self.vc_cty = tkinter.StringVar()
 
         self.create_ui()
@@ -79,7 +99,7 @@ class CreateVendorWindow(CloseableWindow):
 
         self.lbl_cif = tkinter.Label(self.frame, text='CIF')
         self.lbl_cif.grid(row=1, column=0, sticky=tkinter.W)
-        self.etr_cif = tkinter.Entry(self.frame, textvariable=self.vc_cif)
+        self.etr_cif = tkinter.Entry(self.frame, textvariable=self.vc_cif, validate='key', validatecommand=self.vcif)
         self.etr_cif.grid(row=1, column=1)
 
         self.lbl_name = tkinter.Label(self.frame, text='Nombre')
@@ -104,7 +124,7 @@ class CreateVendorWindow(CloseableWindow):
 
         self.lbl_zip = tkinter.Label(self.frame, text='Cód. Postal')
         self.lbl_zip.grid(row=6, column=0, sticky=tkinter.W)
-        self.etr_zip = tkinter.Entry(self.frame, textvariable=self.vc_zip)
+        self.etr_zip = tkinter.Entry(self.frame, textvariable=self.vc_zip, validate='key', validatecommand=self.vzip)
         self.etr_zip.grid(row=6, column=1)
 
         self.lbl_cty = tkinter.Label(self.frame, text='Ciudad')
@@ -137,6 +157,7 @@ class CreateClientWindow(CloseableWindow):
         self.vc_sn2 = tkinter.StringVar()
         self.vc_adr = tkinter.StringVar()
         self.vc_zip = tkinter.IntVar()
+        self.vc_zip.set('')
         self.vc_cty = tkinter.StringVar()
 
         self.create_ui()
@@ -147,7 +168,7 @@ class CreateClientWindow(CloseableWindow):
 
         self.lbl_cif = tkinter.Label(self.frame, text='CIF')
         self.lbl_cif.grid(row=1, column=0, sticky=tkinter.W)
-        self.etr_cif = tkinter.Entry(self.frame, textvariable=self.vc_cif)
+        self.etr_cif = tkinter.Entry(self.frame, textvariable=self.vc_cif, validate='key', validatecommand=self.vcif)
         self.etr_cif.grid(row=1, column=1)
 
         self.lbl_name = tkinter.Label(self.frame, text='Nombre')
@@ -172,7 +193,7 @@ class CreateClientWindow(CloseableWindow):
 
         self.lbl_zip = tkinter.Label(self.frame, text='Cód. Postal')
         self.lbl_zip.grid(row=6, column=0, sticky=tkinter.W)
-        self.etr_zip = tkinter.Entry(self.frame, textvariable=self.vc_zip)
+        self.etr_zip = tkinter.Entry(self.frame, textvariable=self.vc_zip, validate='key', validatecommand=self.vzip)
         self.etr_zip.grid(row=6, column=1)
 
         self.lbl_cty = tkinter.Label(self.frame, text='Ciudad')
@@ -213,7 +234,7 @@ class CreateItemWindow(CloseableWindow):
 
         self.lbl_cod = tkinter.Label(self.frame, text='Cód. Artículo')
         self.lbl_cod.grid(row=1, column=0, sticky=tkinter.W)
-        self.etr_cod = tkinter.Entry(self.frame, textvariable=self.vc_cod)
+        self.etr_cod = tkinter.Entry(self.frame, textvariable=self.vc_cod, validate='key', validatecommand=self.vzip)
         self.etr_cod.grid(row=1, column=1)
 
         self.lbl_name = tkinter.Label(self.frame, text='Nombre')
@@ -223,7 +244,7 @@ class CreateItemWindow(CloseableWindow):
 
         self.lbl_prc = tkinter.Label(self.frame, text='Precio')
         self.lbl_prc.grid(row=7, column=0, sticky=tkinter.W)
-        self.etr_prc = tkinter.Entry(self.frame, textvariable=self.vc_prc)
+        self.etr_prc = tkinter.Entry(self.frame, textvariable=self.vc_prc, validate='key', validatecommand=self.vflt)
         self.etr_prc.grid(row=7, column=1)
 
         self.btn_yes = tkinter.Button(self.frame, text='Guardar Nuevo Artículo', command=self.save_item)
@@ -264,7 +285,7 @@ class CreateBillWindow(CloseableWindow):
 
         self.lbl_cod = tkinter.Label(self.frame, text='Cód. Factura')
         self.lbl_cod.grid(row=1, column=0, sticky=tkinter.W)
-        self.etr_cod = tkinter.Entry(self.frame, textvariable=self.vc_cod)
+        self.etr_cod = tkinter.Entry(self.frame, textvariable=self.vc_cod, state=tkinter.DISABLED)
         self.etr_cod.grid(row=1, column=1, columnspan=5)
 
         self.lbl_vnd = tkinter.Label(self.frame, text='Vendedor')

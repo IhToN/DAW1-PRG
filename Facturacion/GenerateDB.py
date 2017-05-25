@@ -1,5 +1,10 @@
 import Facturacion.Controllers.DBCreator as dbc
 
-if __name__ == '__main__':
+
+def generateDB(is_test=True):
     creator = dbc.Creator()
-    creator.create_db(True)
+    creator.create_db(is_test)
+
+
+if __name__ == '__main__':
+    generateDB()
